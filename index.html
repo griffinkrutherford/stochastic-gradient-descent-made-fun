@@ -1,0 +1,3711 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Stochastic Gradient Descent Made Fun</title>
+    <link rel="icon" href="assets/favicon.png" type="image/png">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=STIX+Two+Math&family=STIX+Two+Text:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'STIX Two Text', 'Times New Roman', serif;
+            background: #000;
+            color: #fff;
+            padding: 20px;
+            font-size: 20px;
+            line-height: 1.78;
+        }
+
+        .home-link {
+            position: fixed;
+            top: 20px;
+            left: 20px;
+            z-index: 1000;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 10px 16px;
+            border-radius: 999px;
+            border: 2px solid #e10600;
+            background: rgba(10, 10, 10, 0.92);
+            color: #fff;
+            text-decoration: none;
+            font-weight: 700;
+            box-shadow: 0 8px 18px rgba(0, 0, 0, 0.35);
+            transition: transform 0.2s ease, box-shadow 0.2s ease, background 0.2s ease;
+        }
+
+        .home-link:hover {
+            transform: translateY(-1px);
+            background: rgba(225, 6, 0, 0.12);
+            box-shadow: 0 10px 22px rgba(225, 6, 0, 0.2);
+        }
+
+        .container {
+            max-width: 1040px;
+            margin: 60px auto 0;
+            background: #0a0a0a;
+            padding: 44px;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.35);
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 40px;
+            padding-bottom: 20px;
+            border-bottom: 3px solid #e10600;
+        }
+
+        h1 {
+            color: #e10600;
+            font-size: 2.5em;
+            margin-bottom: 10px;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+        }
+
+        h2 {
+            color: #fff;
+            font-size: 1.8em;
+            margin-bottom: 5px;
+        }
+
+        h3 {
+            color: #cfcfcf;
+            font-size: 1.2em;
+            margin-bottom: 20px;
+            font-style: italic;
+        }
+
+        .question {
+            background: rgba(225, 6, 0, 0.08);
+            padding: 30px;
+            margin: 34px 0;
+            border-radius: 10px;
+            border-left: 5px solid #e10600;
+        }
+
+        .question .question-number,
+        .question .formula,
+        .question .wordvec-title,
+        .question .wordvec-time-label,
+        .question .value-display,
+        .question [style*="color: #e10600"] {
+            color: #fff !important;
+            text-decoration: underline;
+            text-decoration-color: #e10600;
+            text-decoration-thickness: 3px;
+            text-underline-offset: 5px;
+        }
+
+        .question-number {
+            color: #e10600;
+            font-weight: bold;
+            font-size: 1.42em;
+            margin-bottom: 15px;
+        }
+
+        .question-text {
+            font-size: 1.22em;
+            margin-bottom: 15px;
+            line-height: 1.85;
+        }
+
+        input[type="text"], textarea {
+            width: 100%;
+            padding: 12px;
+            margin: 10px 0;
+            background: #111;
+            border: 2px solid #3a3a3a;
+            border-radius: 5px;
+            color: #fff;
+            font-size: 1.12em;
+            line-height: 1.6;
+            font-family: 'STIX Two Text', 'Times New Roman', serif;
+        }
+
+        textarea {
+            min-height: 80px;
+            resize: vertical;
+        }
+
+        input[type="text"]:focus, textarea:focus {
+            outline: none;
+            border-color: #e10600;
+            box-shadow: 0 0 10px rgba(225, 6, 0, 0.3);
+        }
+
+        .canvas-container {
+            background: #000;
+            border: 3px solid #e10600;
+            border-radius: 10px;
+            margin: 20px 0;
+            padding: 10px;
+        }
+
+        canvas {
+            display: block;
+            width: 100%;
+            border-radius: 5px;
+            cursor: crosshair;
+        }
+
+        .controls {
+            display: flex;
+            gap: 15px;
+            margin: 20px 0;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+
+        button {
+            background: #e10600;
+            color: #fff;
+            border: 2px solid #e10600;
+            padding: 13px 26px;
+            border-radius: 25px;
+            font-size: 1.08em;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 10px rgba(225, 6, 0, 0.3);
+        }
+
+        button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 15px rgba(225, 6, 0, 0.5);
+        }
+
+        button.reset {
+            background: transparent;
+            color: #fff;
+            border: 2px solid #e10600;
+        }
+
+        .info-box {
+            background: rgba(225, 6, 0, 0.08);
+            padding: 20px;
+            border-radius: 10px;
+            border: 2px solid #e10600;
+            margin: 20px 0;
+        }
+
+        .formula {
+            background: #111;
+            padding: 15px;
+            border-radius: 5px;
+            font-family: 'STIX Two Math', 'STIX Two Text', 'Times New Roman', serif;
+            text-align: center;
+            font-size: 1.35em;
+            line-height: 1.5;
+            letter-spacing: 0.01em;
+            font-weight: 700;
+            margin: 15px 0;
+            color: #e10600;
+        }
+
+        .math-inline {
+            display: inline-block;
+            font-family: 'STIX Two Math', 'STIX Two Text', 'Times New Roman', serif;
+            font-size: 1.08em;
+            font-weight: 700;
+            letter-spacing: 0.01em;
+            color: #fff;
+            white-space: nowrap;
+        }
+
+        .answer .math-inline,
+        .question-text .math-inline,
+        .info-box .math-inline {
+            color: #fff;
+        }
+
+        .speaker-bio {
+            background: #0f0f0f;
+            padding: 30px;
+            margin-top: 50px;
+            border-radius: 10px;
+            border: 2px solid #e10600;
+        }
+
+        .ig-post {
+            display: flex;
+            justify-content: center;
+            margin-top: 24px;
+        }
+
+        .ig-post a {
+            display: block;
+            width: min(100%, 320px);
+        }
+
+        .ig-post img {
+            display: block;
+            width: 100%;
+            aspect-ratio: 1 / 1;
+            object-fit: cover;
+            object-position: center center;
+            border: 2px solid #e10600;
+            border-radius: 12px;
+            background: #0a0a0a;
+        }
+
+        .slider-container {
+            margin: 20px 0;
+        }
+
+        .slider-container label {
+            display: block;
+            margin-bottom: 10px;
+            color: #fff;
+            font-weight: bold;
+        }
+
+        input[type="range"] {
+            width: 100%;
+            height: 8px;
+            border-radius: 5px;
+            background: #333;
+            outline: none;
+        }
+
+        input[type="range"]::-webkit-slider-thumb {
+            appearance: none;
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            background: #e10600;
+            cursor: pointer;
+        }
+
+        .value-display {
+            text-align: center;
+            font-size: 1.2em;
+            color: #e10600;
+            margin-top: 10px;
+        }
+
+        .submit-answer {
+            margin-top: 12px;
+        }
+
+        .answer {
+            display: none;
+            margin-top: 12px;
+            padding: 12px;
+            background: #0c0c0c;
+            border-left: 3px solid #e10600;
+            border-radius: 6px;
+            color: #fff;
+            font-size: 1.1em;
+            line-height: 1.7;
+        }
+
+        .answer.visible {
+            display: block;
+        }
+
+        .mode-toggle {
+            display: flex;
+            justify-content: center;
+            gap: 12px;
+            margin-top: 16px;
+        }
+
+        .mode-toggle input {
+            display: none;
+        }
+
+        .mode-toggle label {
+            padding: 10px 20px;
+            border: 2px solid #e10600;
+            border-radius: 999px;
+            cursor: pointer;
+            background: transparent;
+            color: #fff;
+            font-weight: bold;
+            transition: all 0.2s ease;
+        }
+
+        .mode-toggle input:checked + label {
+            background: #e10600;
+            color: #fff;
+        }
+
+        .question-asset {
+            width: 100%;
+            max-width: 760px;
+            display: block;
+            margin: 15px auto;
+            border: 2px solid #e10600;
+            border-radius: 10px;
+            background: #0a0a0a;
+        }
+
+        .flatland-prelude-assets {
+            display: grid;
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+            gap: 16px;
+            margin: 18px auto;
+            max-width: 900px;
+        }
+
+        .flatland-prelude-assets .question-asset {
+            height: 100%;
+            margin: 0;
+            object-fit: cover;
+        }
+
+        .wordvec-visualizer {
+            margin: 24px 0;
+            padding: 22px;
+            border: 2px solid #e10600;
+            border-radius: 10px;
+            background: #050505;
+        }
+
+        .wordvec-title {
+            color: #e10600;
+            font-weight: 700;
+            font-size: 1.28em;
+            line-height: 1.35;
+            margin-bottom: 8px;
+            text-align: center;
+        }
+
+        .wordvec-note {
+            color: #cfcfcf;
+            font-size: 1.08em;
+            line-height: 1.62;
+            margin: 0 auto 16px;
+            max-width: 840px;
+            text-align: center;
+        }
+
+        .wordvec-stage {
+            position: relative;
+            background: #000;
+            border: 1px solid rgba(225, 6, 0, 0.75);
+            border-radius: 8px;
+            overflow: hidden;
+        }
+
+        .wordvec-stage canvas {
+            border-radius: 0;
+            cursor: grab;
+        }
+
+        .wordvec-stage canvas:active {
+            cursor: grabbing;
+        }
+
+        .training-loop-grid {
+            display: grid;
+            grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+            gap: 14px;
+            align-items: stretch;
+        }
+
+        .output-probability-panel {
+            max-width: 640px;
+            margin: 14px auto 0;
+            width: 100%;
+        }
+
+        .training-loop-panel {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .training-loop-panel-title {
+            color: #fff;
+            font-weight: 700;
+            font-size: 1.08em;
+            line-height: 1.35;
+            text-align: center;
+        }
+
+        .wordvec-controls {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 12px;
+            margin-top: 16px;
+        }
+
+        .wordvec-controls label {
+            color: #fff;
+            font-weight: 700;
+        }
+
+        .wordvec-control-row {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 12px;
+            flex-wrap: wrap;
+        }
+
+        .auto-rotate-button.is-active {
+            background: #64f4ac;
+            border-color: #64f4ac;
+            color: #050505;
+            box-shadow: 0 4px 12px rgba(100, 244, 172, 0.28);
+        }
+
+        .pause-animation-button.is-paused {
+            background: #ffd166;
+            border-color: #ffd166;
+            color: #050505;
+            box-shadow: 0 4px 12px rgba(255, 209, 102, 0.25);
+        }
+
+        .wordvec-time-label {
+            color: #e10600;
+            font-weight: 700;
+            text-align: center;
+        }
+
+        .wordvec-legend {
+            display: flex;
+            justify-content: center;
+            gap: 14px;
+            flex-wrap: wrap;
+            margin-top: 12px;
+            color: #cfcfcf;
+            font-size: 1.03em;
+        }
+
+        .sgd-simulator {
+            margin: 24px 0;
+            padding: 24px;
+            border: 2px dashed #49a7ff;
+            border-radius: 12px;
+            background: #080808;
+            text-align: center;
+        }
+
+        .sgd-canvas-container {
+            position: relative;
+            background: #000;
+            border: 1px solid #49a7ff;
+            border-radius: 8px;
+            margin: 15px 0;
+            overflow: hidden;
+            height: 350px;
+        }
+
+        .sgd-controls {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            max-width: 760px;
+            margin: 0 auto;
+        }
+
+        .sgd-loop-track {
+            width: 100%;
+            height: 10px;
+            border-radius: 999px;
+            background: #151515;
+            border: 1px solid rgba(73, 167, 255, 0.65);
+            overflow: hidden;
+        }
+
+        .sgd-loop-track span {
+            display: block;
+            width: 0%;
+            height: 100%;
+            border-radius: inherit;
+            background: linear-gradient(90deg, #49a7ff, #64f4ac, #ffd166);
+            transition: width 0.08s linear;
+        }
+
+        .legend-item {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            white-space: nowrap;
+        }
+
+        .legend-dot {
+            width: 11px;
+            height: 11px;
+            border-radius: 999px;
+            display: inline-block;
+        }
+
+        .modal {
+            position: fixed;
+            inset: 0;
+            background: rgba(0, 0, 0, 0.85);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 999;
+            padding: 20px;
+        }
+
+        .modal-content {
+            width: min(95vw, 1200px);
+            max-height: 90vh;
+            overflow-x: auto;
+            overflow-y: hidden;
+            scrollbar-width: auto;
+            scrollbar-color: #e10600 #111;
+            background: #0a0a0a;
+            border: 2px solid #e10600;
+            border-radius: 12px;
+            padding: 72px 20px 20px;
+            position: relative;
+        }
+
+        .modal-content::-webkit-scrollbar {
+            height: 12px;
+        }
+
+        .modal-content::-webkit-scrollbar-track {
+            background: #111;
+            border-radius: 999px;
+        }
+
+        .modal-content::-webkit-scrollbar-thumb {
+            background: #e10600;
+            border-radius: 999px;
+            border: 2px solid #111;
+        }
+
+        .modal-header {
+            position: fixed;
+            top: 28px;
+            right: 28px;
+            display: flex;
+            justify-content: flex-end;
+            z-index: 1001;
+        }
+
+        .modal-close {
+            background: #e10600;
+            color: #fff;
+            border: none;
+            border-radius: 999px;
+            padding: 8px 12px;
+            font-weight: bold;
+            cursor: pointer;
+            box-shadow: 0 10px 24px rgba(0, 0, 0, 0.35);
+        }
+
+        .modal-asset {
+            width: auto;
+            max-width: none;
+            display: block;
+            border-radius: 8px;
+            background: #0a0a0a;
+        }
+
+        .is-hidden {
+            display: none;
+        }
+
+        .modal.is-hidden {
+            display: none;
+        }
+
+        @media (max-width: 768px) {
+            .home-link {
+                top: 14px;
+                left: 14px;
+                padding: 9px 14px;
+                font-size: 0.95em;
+            }
+
+            .container {
+                margin-top: 72px;
+                padding: 20px;
+            }
+
+            h1 {
+                font-size: 1.8em;
+            }
+
+            h2 {
+                font-size: 1.4em;
+            }
+
+            .question {
+                padding: 15px;
+            }
+
+            .training-loop-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .flatland-prelude-assets {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <a class="home-link" href="https://griffinrutherford.com/">← Back to Homepage</a>
+    <div class="container">
+        <div class="header">
+            <h1>Stochastic Gradient Descent Made Fun</h1>
+            <h2>The Math Behind ChatGPT and AI</h2>
+            <h3>Guest Speaker - Griffin Rutherford - MS Computer Science - Mountain Runner</h3>
+            <p style="margin-top: 15px; font-style: italic; color: #cfcfcf;">
+                This topic is normally only taught at the master's degree level. But I'm sure you can learn it!
+            </p>
+            <div class="mode-toggle" aria-label="Answer mode toggle">
+                <input type="radio" id="mode-algebra" name="answer-mode" value="algebra" checked>
+                <label for="mode-algebra">Algebra II</label>
+                <input type="radio" id="mode-calculus" name="answer-mode" value="calculus">
+                <label for="mode-calculus">Calculus</label>
+            </div>
+        </div>
+
+        <!-- Question 1 -->
+        <div class="question">
+            <div class="question-number">1.</div>
+            <div class="question-text">
+                The expression for the slope of a function is:
+            </div>
+            <input type="text" placeholder="Your answer...">
+            <button class="submit-answer" data-question="1">Submit</button>
+            <div class="answer" id="answer-1"></div>
+            <div class="canvas-container">
+                <canvas id="slopeCanvas" width="800" height="360"></canvas>
+            </div>
+        </div>
+
+        <!-- Question 2 -->
+        <div class="question">
+            <div class="question-number">2.</div>
+            <div class="question-text">
+                What does it mean when the slope is zero?
+            </div>
+            <input type="text" placeholder="Your answer...">
+            <button class="submit-answer" data-question="2">Submit</button>
+            <div class="answer" id="answer-2"></div>
+        </div>
+
+        <!-- Question 3 -->
+        <div class="question">
+            <div class="question-number">3.</div>
+            <div class="question-text">
+                What is the expression for the x-coordinate of the vertex of a parabola?
+            </div>
+            <input type="text" placeholder="Your answer...">
+            <button class="submit-answer" data-question="3">Submit</button>
+            <div class="answer" id="answer-3"></div>
+        </div>
+
+        <!-- Question 4 -->
+        <div class="question">
+            <div class="question-number">4.</div>
+            <div class="question-text" id="q4-question-text">
+                If you connect two dots that are equidistant from the vertex with a line, what is the slope of that line?
+            </div>
+            <input type="text" placeholder="Your answer...">
+            <button class="submit-answer" data-question="4">Submit</button>
+            <div class="answer" id="answer-4"></div>
+
+            <div class="canvas-container">
+                <canvas id="parabolaCanvas" width="800" height="400"></canvas>
+            </div>
+            <div class="controls">
+                <button id="show-q4-line" onclick="showVertexLine()">Show Vertex Line</button>
+                <button class="reset" onclick="clearParabola()">Clear</button>
+            </div>
+        </div>
+
+        <!-- Question 5 -->
+        <div class="question">
+            <div class="question-number">5.</div>
+            <div class="question-text">
+                For the upward-opening parabola <span class="math-inline">y = x²</span>, how does the slope change from the left to right side of the vertex?
+            </div>
+            <div class="canvas-container">
+                <canvas id="slopeChangeCanvas" width="800" height="360"></canvas>
+            </div>
+            <textarea placeholder="Your answer..."></textarea>
+            <button class="submit-answer" data-question="5">Submit</button>
+            <div class="answer" id="answer-5"></div>
+        </div>
+
+        <!-- Question 6 -->
+        <div class="question">
+            <div class="question-number">6.</div>
+            <div class="question-text">
+                Using this quartic equation as an example: <span class="formula">y = x⁴ + 2x³ − 3x² + x + 1</span>
+                We have something that looks like a vertex, but since it's a higher order polynomial, it's a local minimum: there's no formula for this! It's at (-2.22, -13.60).
+                <div class="wordvec-note is-hidden" id="quartic-calculus-note" style="margin-top: 15px;">
+                    In Calculus mode, we can find the x-values of extrema (local mins/maxes) by taking the derivative and solving where that derivative equals zero.
+                </div>
+            </div>
+
+            <div class="canvas-container">
+                <canvas id="quarticCanvas" width="800" height="400"></canvas>
+            </div>
+
+            <div class="question-text" style="margin-top: 20px;">
+                In real life problem solving, why might finding a vertex or local min/max be useful?
+            </div>
+            <textarea placeholder="Your answer..."></textarea>
+            <button class="submit-answer" data-question="6">Submit</button>
+            <div class="answer" id="answer-6"></div>
+        </div>
+
+        <!-- Question 7 -->
+        <div class="question">
+            <div class="question-number">7.</div>
+            <div class="question-text">
+                If f(x) represents the amount of water pollution, and x is the amount of a resource used in an engineering project, would it be better to find the local minimum or local maximum of this function? Explain your reasoning.
+            </div>
+            <textarea placeholder="Your answer..."></textarea>
+            <button class="submit-answer" data-question="7">Submit</button>
+            <div class="answer" id="answer-7"></div>
+        </div>
+
+        <!-- Question 8 -->
+        <div class="question">
+            <div class="question-number">8.</div>
+            <div class="question-text">
+                But the world is a lot more complicated than one number in and one number out! We can actually extend this concept to 3D! Don't worry about all the underlying math, I want to focus on intuition. 3D functions are cool; they are normally not taught until Calculus III. Below is the 3D equivalent of a parabola called a paraboloid:
+            </div>
+
+            <div class="canvas-container">
+                <canvas id="paraboloidCanvas" width="800" height="500"></canvas>
+            </div>
+            <div class="controls">
+                <button id="toggle-secant-plane" type="button">Show Secant Plane</button>
+                <button id="toggle-tangent-plane" type="button" class="is-hidden">Show Tangent Plane</button>
+            </div>
+            <p class="wordvec-note is-hidden" id="plane-explanation"></p>
+            <p style="text-align: center; margin-top: 10px; font-style: italic; color: #cfcfcf;">
+                Click and drag to rotate the paraboloid!
+            </p>
+
+            <div class="question-text" style="margin-top: 20px;">
+                Why do you think the real world doesn't normally use 2D functions for science and engineering?
+            </div>
+            <textarea placeholder="Your answer..."></textarea>
+            <button class="submit-answer" data-question="8">Submit</button>
+            <div class="answer" id="answer-8"></div>
+        </div>
+
+        <!-- Question 9 -->
+        <div class="question">
+            <div class="question-number">9.</div>
+            <div class="question-text">
+                Let's say you could walk inside that paraboloid above, but you must be blindfolded. If you didn't exactly know where the bottom is, how would you figure out where the lowest point is? What concept from the start of the lesson helps us solve this question? Hint: There is no equation for this problem.
+            </div>
+
+            <!-- Valley Analogy Visualization -->
+            <div class="wordvec-visualizer" style="border-color: #64f4ac; background: #080808; margin-bottom: 25px;">
+                <div class="wordvec-title" style="color: #64f4ac;">The "Blindfolded in a Valley" Analogy</div>
+                <div class="wordvec-stage" style="border-color: rgba(100, 244, 172, 0.5);">
+                    <canvas id="valleyCanvas" width="800" height="500"></canvas>
+                </div>
+                <p style="text-align: center; margin-top: 10px; font-style: italic; color: #cfcfcf; font-size: 1em;">
+                    Drag to orbit the valley. The person stays visible as you compare the terrain from different angles.
+                </p>
+            </div>
+
+            <textarea placeholder="Your answer..."></textarea>
+            <button class="submit-answer" data-question="9">Submit</button>
+            <div class="answer" id="answer-9"></div>
+        </div>
+
+        <!-- Question 10 -->
+        <div class="question">
+            <div class="question-number">10.</div>
+            <div class="info-box">
+                <p style="margin-bottom: 15px;">
+                    Yes! The world is messy and we can't just plug stuff into equations. As we have a bunch of data, we can't rely on the quadratic formula, completing the square, etc. I mean it would be insane to solve quartic equations by hand with this nightmare formula:
+                </p>
+                <button class="reveal-asset" id="show-quartic-formula" type="button">Reveal the craziness</button>
+                <p style="margin-top: 15px;">
+                    So what in the world do we do? We use computers!
+                </p>
+            </div>
+
+            <div class="modal is-hidden" id="quartic-modal" role="dialog" aria-modal="true" aria-label="Quartic formula">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button class="modal-close" id="quartic-close" type="button">Close</button>
+                    </div>
+                    <img class="modal-asset" src="assets/q10-quartic-formula.svg" alt="Quartic formula">
+                </div>
+            </div>
+
+            <div class="question-text">
+                Computers can crunch a bunch of math insanely fast. We can also use context clues to help computers make a lot of rapid guesses back-to-back, so they get closer to the output we want.
+                <br><br>
+                Remember the concept of local minima/maxima and how we talked about slope? Those concepts all exist in 3D too.
+                <br><br>
+                So how do you think a computer can find the local minimum of a function if all we know is the input, output, and slope of where we are "standing"? Hint: Imagine you are walking in the paraboloid from the last page trying to find the very bottom.
+            </div>
+            <img class="question-asset" src="assets/q10-paraboloid.png" alt="Paraboloid surface">
+            <textarea placeholder="Your answer..."></textarea>
+            <button class="submit-answer" data-question="10">Submit</button>
+            <div class="answer" id="answer-10"></div>
+
+            <div class="canvas-container">
+                <canvas id="gradientDescentCanvas" width="800" height="400"></canvas>
+            </div>
+            <div class="controls">
+                <button onclick="startGradientDescent()">Start Gradient Descent</button>
+                <button class="reset" onclick="resetGradientDescent()">Reset</button>
+            </div>
+            <p class="wordvec-note" id="gradient-descent-slope-note">
+                At each point, we can calculate the slope at that point and use it to decide which downhill step to take.
+            </p>
+        </div>
+
+        <!-- Question 11 -->
+        <div class="question">
+            <div class="question-number">11.</div>
+            <div class="info-box">
+                <p style="margin-bottom: 15px;">
+                    <strong>Spoiler for Q10:</strong> Computers can think like someone standing at the edge of a paraboloid, and make small steps downward until it knows the slope is flat. Remember that line we drew through the vertex of the parabola from Q4? Computers can figure that out, but in 3D too.
+                </p>
+                <p id="flat-slope-plane-note" style="margin-bottom: 15px;">
+                    In Algebra II mode, we can say the slope is flat when the secant plane has no incline, like a perfectly level sheet across the bowl.
+                </p>
+                <p>
+                    Computers really just make a bunch of educated guesses until it gets close enough to the result we want: the lowest point of the paraboloid.
+                </p>
+                <p style="margin-top: 15px; font-weight: bold; color: #e10600;">
+                    This is the concept of Gradient Descent, a foundational reason why ChatGPT works!!
+                </p>
+            </div>
+
+            <div class="question-text" style="margin-top: 30px;">
+                So instead of walking inside the paraboloid, let's imagine we have a super weird bowl with marbles inside. We drop marbles somewhere randomly in this bowl, and wherever the marbles end up landing decides how much money is saved. The deeper inside the bowl they end up, the better.
+                <br><br>
+                We have two holes. Think of the deepest hole as the global minimum and the other hole is a local minimum.
+                <br><br>
+                Let's say you could control the bowl with your hands and you want as many marbles as possible to end up in the deeper hole. You are blindfolded once again, so you can't tilt the bowl in the direction you know has the deeper hole.
+                <br><br>
+                What could you do to try to get the most marbles in the deepest hole after the marbles are dropped? Could anything be done?
+            </div>
+
+            <div class="sgd-simulator">
+                <h3 style="color: #49a7ff; margin-bottom: 10px;">The Training Simulator: "The 3D Marble Bowl"</h3>
+                <p style="color: #cfcfcf; font-size: 1.08em; max-width: 840px; margin: 0 auto 15px;">
+                    Below is a 3D version of our weird bowl. The "best" result is the deepest part of the bowl (the <strong>Global Minimum</strong>). But sometimes, a marble gets stuck in a shallow dent on the side (a <strong>Local Minimum</strong>). The slider controls <strong>Stochastic Noise</strong>: the middle gives a useful shake that fades over time, while the far right can shake marbles right out of the bowl.
+                </p>
+                <p style="color: #cfcfcf; font-size: 1.08em; max-width: 840px; margin: 0 auto 15px;">
+                    A little shaking helps the marbles escape shallow dents, but the shaking has to calm down. If the bowl keeps shaking forever, the marbles never settle into the best spot.
+                </p>
+                
+                <div class="sgd-canvas-container" style="height: 450px;">
+                    <canvas id="sgdCanvas" width="800" height="450"></canvas>
+                </div>
+
+                <div class="sgd-controls">
+                    <div class="sgd-loop-track" aria-label="Animation loop progress">
+                        <span id="sgdLoopMeter"></span>
+                    </div>
+                    <div>
+                        <label for="sgdNoise" style="color: #fff; font-weight: bold;">Noise / Shakiness</label>
+                        <input type="range" id="sgdNoise" min="0" max="100" value="28" style="width: 100%;">
+                        <div class="value-display" id="sgdNoiseValue">Noise: 28%</div>
+                        <div style="text-align: center; margin-top: 10px;">
+                            <button type="button" id="toggle-sgd-autorotate" class="reset auto-rotate-button" aria-pressed="false" style="padding: 7px 18px; font-size: 1em; border-radius: 4px; cursor: pointer;">Auto Rotate</button>
+                            <button type="button" onclick="restartSgdSimulator()" style="padding: 7px 18px; font-size: 1em; background: #333; color: #fff; border: 1px solid #64f4ac; border-radius: 4px; cursor: pointer;">Restart Cycle</button>
+                        </div>
+                    </div>
+                    <div id="sgdCounter" style="color: #64f4ac; font-weight: bold; font-size: 1.22em; margin-top: 5px;">Marbles in Global Minimum: 0</div>
+                    <p id="sgdStatus" style="color: #64f4ac; font-weight: bold; min-height: 1.2em;">Loop running: marbles reset automatically.</p>
+                </div>
+            </div>
+
+            <textarea placeholder="Your answer..."></textarea>
+            <button class="submit-answer" data-question="11">Submit</button>
+            <div class="answer" id="answer-11"></div>
+        </div>
+
+        <!-- Question 12 -->
+        <div class="question">
+            <div class="question-number">12.</div>
+            <div class="info-box">
+                <p style="font-weight: bold; color: #e10600; margin-bottom: 15px;">
+                    You just learned the concept of Stochastic Gradient Descent! This concept is not normally taught until 500-level graduate math classes 😱!
+                </p>
+                <p style="margin-bottom: 15px;">
+                    <strong>Stochastic</strong> is a fancy word for random.
+                </p>
+                <p style="margin-bottom: 15px;">
+                    To summarize, adding a bit of random "shakiness" helps computers better approximate to the best "local minimum" compared to going straight down.
+                </p>
+
+                <p style="margin-bottom: 15px;">
+                    Some shakiness is good, but too much causes the marbles to fall out, so we need just the right amount.
+                </p>
+                <p>
+                    In AI training, this "shakiness" is usually called <strong>noise</strong> or <strong>stochasticity</strong>. Shaping the bowl is one analogy for training AI. <strong>Temperature</strong> is different: it matters later, when ChatGPT is actually writing its response.
+                </p>
+                <p style="margin-top: 15px;">
+                    Instead of marbles in weird bowl holes, instead picture the depth of the hole as reducing pollution, saving resources, etc.
+                </p>
+                <div class="question-text" style="margin-top: 20px;">
+                    In your own words, why does “shakiness” increase accuracy?
+                </div>
+                <textarea placeholder="Your answer..."></textarea>
+                <p style="margin-top: 15px; font-weight: bold;">
+                    You think that’s crazy? It’s about to get nuts.
+                </p>
+            </div>
+            <button class="submit-answer" data-question="12">Submit</button>
+            <div class="answer" id="answer-12"></div>
+        </div>
+
+        <!-- Question 13 -->
+        <div class="question">
+            <div class="question-number">13.</div>
+            <div class="question-text" style="font-size: 1.3em; text-align: center; color: #e10600;">
+                What in the world does this have to do with ChatGPT?
+            </div>
+            <div class="question-text" style="margin-top: 20px;">
+                AI like ChatGPT stores how words relate to each other as a whole bunch of numbers organized in a specific way. Check this out:
+                <br><br>
+                In this first example, ChatGPT stores the concept of “Royalty” on the x-axis and “Gender Identity” on the y-axis.
+                <img class="question-asset" src="assets/q13-word2vec-1.png" alt="Word vector example with royalty and gender axes">
+                <br><br>
+                In this second example, ChatGPT stores the concept of “Activity Intensity” on the x-axis and “Temperature” on the y-axis.
+                <img class="question-asset" src="assets/q13-word2vec-2.png" alt="Word vector example with activity intensity and temperature axes">
+                <img class="question-asset" src="assets/q13-word2vec-3.png" alt="Word vector example with concept arithmetic">
+                <br><br>
+                Here, we can see how we can perform math operations between word concepts in the way ChatGPT thinks. If we go by the coordinate pairs, we can calculate: Monarch = Queen - Woman.
+                <br><br>
+                Before we jump into four dimensions, it helps to think about <em>Flatland</em>, written by Edwin Abbott Abbott: a world where the inhabitants can only see two dimensions. Its class depictions are also a satire of the rigidity of Victorian-era social hierarchy. A 3D object passing through their world would look like a changing 2D slice or shadow, because they can only observe its projection into their space.
+                <div class="flatland-prelude-assets">
+                    <img class="question-asset" src="assets/rob-hocking-math-flatland-projection-thumbnail.jpg" alt="Flatland projection illustration showing a higher-dimensional object as a lower-dimensional view">
+                    <img class="question-asset" src="assets/inhabitants-flatland-class-critique.jpg" alt="Flatland inhabitants discussing how a higher-dimensional object appears in their two-dimensional world">
+                </div>
+                Vector projection is the same core idea in math: we take something with more information and ask, "How much of it points in this direction?" A word vector can be projected onto axes like royalty, temperature, or activity intensity, and each projection gives us one meaningful part of the full concept.
+                <br><br>
+                Now let’s add one more dimension. Below, the words sit in 3D concept space, but they only "exist" when the slider matches their hidden 4th dimension. You can choose different "lenses" to see how AI organizes concepts like <strong>Flavor</strong>, <strong>Vibe</strong>, or <strong>Arcane Power</strong>.
+                <div class="wordvec-visualizer" aria-label="4D word vector visualization">
+                    <div class="wordvec-title" id="wordvec-display-title">4D Word Vector Visualization: The Flavor-Scanner</div>
+                    
+                    <div style="text-align: center; margin-bottom: 15px;">
+                        <label for="wordvec-theme-select" style="color: #fff; font-weight: bold; margin-right: 10px;">Choose a 4D Lens:</label>
+                        <select id="wordvec-theme-select" style="background: #151515; color: #fff; border: 1px solid #e10600; padding: 5px 10px; border-radius: 5px;">
+                            <option value="flavor">The Flavor-Scanner (Edibility)</option>
+                            <option value="vibe">The Vibe-Radiator (Social Energy)</option>
+                            <option value="arcane">The Arcane-Chronometer (Magical Power)</option>
+                        </select>
+                    </div>
+
+                    <p class="wordvec-note" id="wordvec-display-note">
+                        Drag to rotate. Move the slider to scan the 4th dimension (Edibility). Watch as words morph into view and grow in size when the "Flavor-Scanner" hits their specific coordinate.
+                    </p>
+                    <div class="wordvec-stage">
+                        <canvas id="wordVectorCanvas" width="800" height="520"></canvas>
+                    </div>
+                    <div class="wordvec-controls">
+                        <label for="wordVectorTime" id="wordvec-slider-label">4th Dimension: Edibility Scanner</label>
+                        <input type="range" id="wordVectorTime" min="0" max="100" value="72">
+                        <div class="wordvec-time-label" id="wordVectorTimeLabel">Scanning Edibility: 72%</div>
+                        <div class="wordvec-control-row">
+                            <button type="button" onclick="rotateWordVectors()">Auto Rotate</button>
+                            <button type="button" class="reset" onclick="stopWordVectorRotation()">Stop</button>
+                            <button type="button" class="reset" onclick="resetWordVectorView()">Reset View</button>
+                        </div>
+                    </div>
+                    <div class="wordvec-legend" id="wordvec-legend">
+                        <span class="legend-item"><span class="legend-dot" style="background: #ff4b3e;"></span>Cosmic / Massive</span>
+                        <span class="legend-item"><span class="legend-dot" style="background: #49a7ff;"></span>Microscopic / Life</span>
+                        <span class="legend-item"><span class="legend-dot" style="background: #ffd166;"></span>Synthetic / Artifacts</span>
+                        <span class="legend-item"><span class="legend-dot" style="background: #64f4ac;"></span>Culinary Concepts</span>
+                    </div>
+                </div>
+                <br>
+                So ChatGPT does all of this, but instead of pairs of numbers, it is able to perform these operations on lists of thousands of numbers at a time. This is because there are so many more relationships between words outside of “Royalty” and “Gender Identity” or “Activity Intensity” and “Temperature”.
+                <br><br>
+                So instead of 2D space (with parabolas) or even 3D space (with paraboloids)...
+                <br><br>
+                We are working with functions in THOUSAND-PLUS DIMENSIONAL SPACE!!!!
+                <img class="question-asset" src="assets/q13-million-dimension-space.png" alt="Illustration of high-dimensional space">
+                <br><br>
+                What does it mean to "train AI"? We are using two analogies. One analogy is words coming into place. Another analogy is a bowl being shaped.
+                <br><br>
+                Both visuals are simplified ways to imagine training: the model is gradually learning patterns from data.
+
+                <div class="wordvec-visualizer">
+                    <div class="wordvec-title">What Does it Mean to Train AI?</div>
+                    <p class="wordvec-note">
+                        This animation is a depiction of how ChatGPT is "trained" to know what to say. Words coming into place and a bowl being shaped are both analogies for what it means to train AI.
+                    </p>
+                    <div class="training-loop-grid">
+                        <div class="training-loop-panel">
+                            <div class="training-loop-panel-title">Words Falling Into Place</div>
+                            <div class="wordvec-stage">
+                                <canvas id="wordConvergenceCanvas" width="400" height="360"></canvas>
+                            </div>
+                        </div>
+                        <div class="training-loop-panel">
+                            <div class="training-loop-panel-title">The Bowl Being Shaped</div>
+                            <div class="wordvec-stage">
+                                <canvas id="bowlMorphCanvas" width="400" height="360"></canvas>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="question-text" style="margin-top: 20px;">
+                What do you think happens when we raise or lower the temperature of the output of ChatGPT? Yes, this is shaking a bowl in a thousand-plus dimensional space. (Hint: "Shaping" the bowl is different from "shaking" it.)
+            </div>
+            <textarea placeholder="Your answer..."></textarea>
+            <button class="submit-answer" data-question="13">Submit</button>
+            <div class="answer" id="answer-13"></div>
+        </div>
+
+        <!-- Question 14 -->
+        <div class="question">
+            <div class="question-number">14.</div>
+            <div class="wordvec-visualizer" aria-label="ChatGPT output generation visualization">
+                <div class="wordvec-title">How ChatGPT Generates an Output</div>
+                <p class="wordvec-note">
+                    After training, the model uses the patterns it learned to choose one word after another. The word space helps represent possible next words, and the shaped bowl is an analogy for the trained model already being ready to guide the output.
+                </p>
+                <div class="wordvec-controls">
+                    <label for="outputTemperature">Temperature</label>
+                    <input type="range" id="outputTemperature" min="0" max="100" value="38">
+                    <div class="wordvec-time-label" id="outputTemperatureLabel">Temperature: 38% - coherent with some variety</div>
+                    <div class="wordvec-control-row">
+                        <button type="button" id="toggle-output-bowl-autorotate" class="reset auto-rotate-button" aria-pressed="false">Auto Rotate</button>
+                        <button type="button" id="toggle-output-animation" class="reset pause-animation-button" aria-pressed="false">Pause Animation</button>
+                        <button type="button" class="reset" id="restart-output-loop">Restart Loop</button>
+                    </div>
+                </div>
+                <div class="training-loop-grid">
+                    <div class="training-loop-panel">
+                        <div class="training-loop-panel-title">Words Selected in Order</div>
+                        <div class="wordvec-stage">
+                            <canvas id="outputWordCanvas" width="400" height="360"></canvas>
+                        </div>
+                    </div>
+                    <div class="training-loop-panel">
+                        <div class="training-loop-panel-title">Trained Bowl Guiding Choices</div>
+                        <div class="wordvec-stage">
+                            <canvas id="outputBowlCanvas" width="400" height="360"></canvas>
+                        </div>
+                    </div>
+                </div>
+                <div class="training-loop-panel output-probability-panel">
+                    <div class="training-loop-panel-title">Next Word Probability</div>
+                    <div class="wordvec-stage">
+                        <canvas id="outputDistributionCanvas" width="400" height="360"></canvas>
+                    </div>
+                </div>
+            </div>
+            <div class="question-text">
+                To conclude, we started by talking about how to calculate the slope of a function, and we ended with the insanity of dropping marbles in strange, thousand-plus-dimensional bowls to explain how ChatGPT works. What you are learning in class now aligns with the foundation of not only AI, but how the world works in SO many ways. Below, please connect ONE topic you learned in class to ONE new idea you learned today.
+            </div>
+            <textarea placeholder="Your answer..."></textarea>
+            <button class="submit-answer" data-question="14">Submit</button>
+            <div class="answer" id="answer-14"></div>
+            <p style="margin-top: 20px;">
+                P.S.: What we talked about today is exactly why TikTok and Instagram Reels are so addicting and the Oxford Word of the Year is “Rage Bait”. The “marbles at the bottom of the bowl” for social media have to do with watch time, comments, and shares. Outrage and dishonesty is more effective at this than positivity and the full truth.
+            </p>
+            <p style="margin-top: 20px;">
+                One last note: examples like walking down a hill blindfolded, shaping a bowl, and dropping marbles into a bowl are analogies. They are not a perfect representation of how AI works, but they help get the general ideas across.
+            </p>
+            <p style="margin-top: 20px; font-weight: bold; text-align: center;">
+                Thank you so much for listening and participating!!
+            </p>
+        </div>
+
+        <!-- Speaker Bio -->
+        <div class="speaker-bio">
+            <h2 style="margin-bottom: 20px; text-align: center;">About the Speaker (Griffin Rutherford)</h2>
+            <p>
+                I am a graduate of Santa Fe Prep and a Bachelor and Master of Science in Computer Science Graduate from Colorado School of Mines. People say I have "golden retriever energy", and I love being physically active. I am an avid weightlifter, trail cyclist, snowboarder, runner, and more. I moved back to Santa Fe to work a remote position as an AI Research Engineer. I was a member of the Alpha Tau Omega fraternity as Philanthropy Chair, and I lived in the frat house basement for two years (at the expense of my GPA). I also love to sing, write, and enjoy long conversations with friends and family.
+            </p>
+            <div class="ig-post">
+                <a href="https://www.instagram.com/p/Cvgq7rvOr7U/?img_index=1" target="_blank" rel="noopener noreferrer">
+                    <img src="assets/alpine-lake-selfie.png" alt="Alpine Lake trail selfie">
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const mi = (value) => `<span class="math-inline">${value}</span>`;
+
+        const answerMap = {
+            algebra: {
+                1: `Slope between two points: ${mi('(y₂ - y₁) / (x₂ - x₁)')}.`,
+                2: "A zero slope means the line is flat (horizontal).",
+                3: `For ${mi('ax² + bx + c')}, the vertex x-coordinate is ${mi('x = -b / (2a)')}.`,
+                4: `The line is horizontal, so the slope is ${mi('0')}.`,
+                5: `Left of the vertex the slope is negative, at the vertex it is ${mi('0')}, and to the right it is positive.`,
+                6: "Min/max points help you optimize real problems like cost, pollution, or profit.",
+                7: "Local minimum — less pollution is better.",
+                8: "Most real problems depend on several variables, so 2D graphs are too simple.",
+                9: "Follow the downhill direction step by step; use slope to guide you.",
+                10: "Use the slope to move downhill a little at a time until it flattens out.",
+                11: "Add randomness (shake) so marbles can escape the shallow hole and reach the deeper one.",
+                12: "A little randomness helps the guesses explore more, so they don't get stuck too early and can find a better answer.",
+                13: "ChatGPT represents word meanings as numbers and learns by reducing error over and over, like sliding downhill to the lowest point.",
+                14: "Example: We learned slope/derivatives, and today we used them to find minima, which is how AI optimizes its predictions."
+            },
+            calculus: {
+                1: `Slope at a point is the derivative: ${mi("f'(x)")} or ${mi('dy/dx')}.`,
+                2: `A zero slope means a horizontal tangent, often a local max or min (${mi("f'(x) = 0")}).`,
+                3: `For ${mi('ax² + bx + c')}, the vertex x-coordinate is ${mi('x = -b / (2a)')}. In Calculus, we find this by taking the derivative, ${mi("f'(x) = 2ax + b")}, setting it equal to ${mi('0')}, and rearranging to solve for ${mi('x')}.`,
+                4: `The tangent line at the vertex is horizontal, so the slope is ${mi('0')}. The vertex is a local minimum where ${mi("f'(x) = 0")}.`,
+                5: `For an upward-opening parabola, ${mi("f'(x) < 0")} on the left, ${mi("f'(x) = 0")} at the vertex, and ${mi("f'(x) > 0")} on the right.`,
+                6: `Local minima/maxima are critical points used for optimization in real systems. For this quartic, we could find the local minimum by taking the derivative and finding the roots of that derivative, then checking which critical point gives the lowest nearby value.`,
+                7: "Local minimum — you want to minimize pollution.",
+                8: `Most systems are multivariable, so you need functions of several variables (surfaces) and partial derivatives.`,
+                9: `Use the gradient to step in the direction of steepest descent (${mi('gradient descent')}).`,
+                10: `Iteratively move opposite the gradient until the gradient is near zero.`,
+                11: "Add stochasticity to escape local minima and improve chances of reaching the global minimum.",
+                12: "Small random steps help the optimizer explore the loss surface and avoid getting stuck in a shallow local minimum.",
+                13: `ChatGPT embeds words into high-dimensional vectors and is trained by minimizing loss with ${mi('gradient descent / SGD')}.`,
+                14: "Example: Derivatives/critical points lead to optimization, which is the core math behind training AI models."
+            }
+        };
+
+        let currentMode = "algebra";
+
+        function updateFlatSlopePlaneNote() {
+            const note = document.getElementById('flat-slope-plane-note');
+            if (!note) return;
+
+            if (currentMode === 'calculus') {
+                note.innerHTML = 'In Calculus mode, we can say the slope is flat when the tangent plane has no incline, like a perfectly level sheet just touching the bowl.';
+            } else {
+                note.innerHTML = 'In Algebra II mode, we can say the slope is flat when the secant plane has no incline, like a perfectly level sheet across the bowl.';
+            }
+        }
+
+        function updateGradientDescentSlopeNote() {
+            const note = document.getElementById('gradient-descent-slope-note');
+            if (!note) return;
+
+            if (currentMode === 'calculus') {
+                note.innerHTML = 'At each point, we calculate the <strong>slope</strong> using the derivative at that point, then use it to move downhill a little at a time.<br><br><strong>Calculus III fun fact:</strong> this is called gradient descent because a <strong>gradient</strong> is like the 3D version of a derivative. Instead of one slope, it gives a list of slopes in different directions, like x, y, z, and more. Gradient descent uses that list to decide which way is downhill.';
+            } else {
+                note.innerHTML = 'At each point, we can calculate the <strong>slope</strong> at that point and use it to move downhill a little at a time.';
+            }
+        }
+
+        function updateQuestion4Prompt() {
+            const prompt = document.getElementById('q4-question-text');
+            const button = document.getElementById('show-q4-line');
+            if (!prompt) return;
+
+            if (currentMode === 'calculus') {
+                prompt.innerHTML = 'What is the slope of the tangent line at the vertex of this parabola?';
+                if (button) button.textContent = 'Show Tangent Line';
+            } else {
+                prompt.innerHTML = 'If you connect two dots that are equidistant from the vertex with a line, what is the slope of that line?';
+                if (button) button.textContent = 'Show Vertex Line';
+            }
+        }
+
+        function updateQuarticCalculusNote() {
+            const note = document.getElementById('quartic-calculus-note');
+            if (!note) return;
+            note.classList.toggle('is-hidden', currentMode !== 'calculus');
+        }
+
+        document.querySelectorAll('input[name=\"answer-mode\"]').forEach((input) => {
+            input.addEventListener('change', (e) => {
+                currentMode = e.target.value;
+                updateFlatSlopePlaneNote();
+                updateGradientDescentSlopeNote();
+                updateQuestion4Prompt();
+                updateQuarticCalculusNote();
+                drawSlopeVisual();
+                drawSlopeChangeVisual();
+                drawParabola();
+                updateParaboloidPlaneControls();
+                drawParaboloid();
+            });
+        });
+
+        document.querySelectorAll('.submit-answer').forEach((button) => {
+            button.addEventListener('click', () => {
+                const questionNumber = button.getAttribute('data-question');
+                const answerEl = document.getElementById(`answer-${questionNumber}`);
+                const modeAnswers = answerMap[currentMode] || {};
+                answerEl.innerHTML = modeAnswers[questionNumber] || "Answer coming soon.";
+                answerEl.classList.add('visible');
+            });
+        });
+
+        const quarticModal = document.getElementById('quartic-modal');
+        const quarticOpen = document.getElementById('show-quartic-formula');
+        const quarticClose = document.getElementById('quartic-close');
+
+        function openQuarticModal() {
+            if (quarticModal) {
+                quarticModal.classList.remove('is-hidden');
+            }
+        }
+
+        function closeQuarticModal() {
+            if (quarticModal) {
+                quarticModal.classList.add('is-hidden');
+            }
+        }
+
+        if (quarticOpen) {
+            quarticOpen.addEventListener('click', openQuarticModal);
+        }
+
+        if (quarticClose) {
+            quarticClose.addEventListener('click', closeQuarticModal);
+        }
+
+        if (quarticModal) {
+            quarticModal.addEventListener('click', (e) => {
+                if (e.target === quarticModal) {
+                    closeQuarticModal();
+                }
+            });
+        }
+
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape') {
+                closeQuarticModal();
+            }
+        });
+
+        // Slope Visual Canvas (Question 1)
+        const slopeCanvas = document.getElementById('slopeCanvas');
+        const slopeCtx = slopeCanvas.getContext('2d');
+
+        function drawArrow(ctx, fromX, fromY, toX, toY, color) {
+            const angle = Math.atan2(toY - fromY, toX - fromX);
+            const arrowSize = 12;
+            ctx.strokeStyle = color;
+            ctx.fillStyle = color;
+            ctx.lineWidth = 4;
+            ctx.beginPath();
+            ctx.moveTo(fromX, fromY);
+            ctx.lineTo(toX, toY);
+            ctx.stroke();
+            ctx.beginPath();
+            ctx.moveTo(toX, toY);
+            ctx.lineTo(toX - arrowSize * Math.cos(angle - Math.PI / 6), toY - arrowSize * Math.sin(angle - Math.PI / 6));
+            ctx.lineTo(toX - arrowSize * Math.cos(angle + Math.PI / 6), toY - arrowSize * Math.sin(angle + Math.PI / 6));
+            ctx.closePath();
+            ctx.fill();
+        }
+
+        function drawDoubleArrow(ctx, fromX, fromY, toX, toY, color, width = 3) {
+            const angle = Math.atan2(toY - fromY, toX - fromX);
+            const arrowSize = 12;
+            ctx.strokeStyle = color;
+            ctx.fillStyle = color;
+            ctx.lineWidth = width;
+            ctx.beginPath();
+            ctx.moveTo(fromX, fromY);
+            ctx.lineTo(toX, toY);
+            ctx.stroke();
+
+            [[toX, toY, angle], [fromX, fromY, angle + Math.PI]].forEach(([x, y, headAngle]) => {
+                ctx.beginPath();
+                ctx.moveTo(x, y);
+                ctx.lineTo(x - arrowSize * Math.cos(headAngle - Math.PI / 6), y - arrowSize * Math.sin(headAngle - Math.PI / 6));
+                ctx.lineTo(x - arrowSize * Math.cos(headAngle + Math.PI / 6), y - arrowSize * Math.sin(headAngle + Math.PI / 6));
+                ctx.closePath();
+                ctx.fill();
+            });
+        }
+
+        function drawSlopeAxes(ctx, canvas) {
+            ctx.strokeStyle = 'rgba(255, 255, 255, 0.42)';
+            ctx.lineWidth = 3;
+            ctx.beginPath();
+            ctx.moveTo(70, canvas.height - 56);
+            ctx.lineTo(canvas.width - 42, canvas.height - 56);
+            ctx.moveTo(70, canvas.height - 56);
+            ctx.lineTo(70, 34);
+            ctx.stroke();
+        }
+
+        function drawSlopeVisual() {
+            slopeCtx.clearRect(0, 0, slopeCanvas.width, slopeCanvas.height);
+            slopeCtx.fillStyle = '#050505';
+            slopeCtx.fillRect(0, 0, slopeCanvas.width, slopeCanvas.height);
+            drawSlopeAxes(slopeCtx, slopeCanvas);
+
+            if (currentMode === 'calculus') {
+                const centerX = slopeCanvas.width / 2;
+                const centerY = slopeCanvas.height / 2 + 34;
+                const scale = 68;
+                const pointX = 1.1;
+                const pointY = 0.12 * pointX * pointX;
+                const slope = 0.24 * pointX;
+
+                slopeCtx.strokeStyle = '#e10600';
+                slopeCtx.lineWidth = 4;
+                slopeCtx.beginPath();
+                for (let x = -4; x <= 4; x += 0.04) {
+                    const y = 0.12 * x * x;
+                    const canvasX = centerX + x * scale;
+                    const canvasY = centerY - y * scale;
+                    if (x === -4) slopeCtx.moveTo(canvasX, canvasY); else slopeCtx.lineTo(canvasX, canvasY);
+                }
+                slopeCtx.stroke();
+
+                const tangentX1 = -4.35;
+                const tangentX2 = 4.35;
+                const tangentY1 = pointY + slope * (tangentX1 - pointX);
+                const tangentY2 = pointY + slope * (tangentX2 - pointX);
+                drawDoubleArrow(
+                    slopeCtx,
+                    centerX + tangentX1 * scale,
+                    centerY - tangentY1 * scale,
+                    centerX + tangentX2 * scale,
+                    centerY - tangentY2 * scale,
+                    '#64f4ac',
+                    4
+                );
+
+                const px = centerX + pointX * scale;
+                const py = centerY - pointY * scale;
+                slopeCtx.fillStyle = '#ffffff';
+                slopeCtx.beginPath();
+                slopeCtx.arc(px, py, 7, 0, Math.PI * 2);
+                slopeCtx.fill();
+
+                slopeCtx.fillStyle = '#ffffff';
+                slopeCtx.font = '700 24px STIX Two Text, Times New Roman, serif';
+                slopeCtx.fillText('Tangent line', px + 22, py - 24);
+                slopeCtx.font = '600 20px STIX Two Text, Times New Roman, serif';
+                slopeCtx.fillStyle = '#cfcfcf';
+                slopeCtx.fillText('slope at one point', px + 22, py);
+            } else {
+                const x1 = 330;
+                const y1 = 230;
+                const x2 = 455;
+                const y2 = 166;
+                const slope = (y2 - y1) / (x2 - x1);
+                const lineStartX = 104;
+                const lineEndX = 698;
+                const lineStartY = y1 + slope * (lineStartX - x1);
+                const lineEndY = y1 + slope * (lineEndX - x1);
+
+                drawDoubleArrow(slopeCtx, lineStartX, lineStartY, lineEndX, lineEndY, '#e10600', 5);
+
+                drawDoubleArrow(slopeCtx, x1, y1 + 24, x2, y1 + 24, '#64f4ac', 4);
+                drawDoubleArrow(slopeCtx, x2 + 24, y1, x2 + 24, y2, '#49a7ff', 4);
+
+                slopeCtx.strokeStyle = 'rgba(255, 255, 255, 0.52)';
+                slopeCtx.lineWidth = 3;
+                slopeCtx.beginPath();
+                slopeCtx.moveTo(x1, y1);
+                slopeCtx.lineTo(x2, y1);
+                slopeCtx.lineTo(x2, y2);
+                slopeCtx.stroke();
+
+                slopeCtx.fillStyle = '#ffffff';
+                slopeCtx.beginPath();
+                slopeCtx.arc(x1, y1, 7, 0, Math.PI * 2);
+                slopeCtx.arc(x2, y2, 7, 0, Math.PI * 2);
+                slopeCtx.fill();
+
+                slopeCtx.fillStyle = '#64f4ac';
+                slopeCtx.font = '700 26px STIX Two Text, Times New Roman, serif';
+                slopeCtx.fillText('△x', (x1 + x2) / 2 - 14, y1 + 62);
+                slopeCtx.fillStyle = '#49a7ff';
+                slopeCtx.fillText('△y', x2 + 54, (y1 + y2) / 2 + 8);
+                slopeCtx.fillStyle = '#ffffff';
+                slopeCtx.font = '700 25px STIX Two Text, Times New Roman, serif';
+                slopeCtx.fillText('Find the relationship between the rise and run.', 190, 52);
+            }
+        }
+
+        // Slope Change Canvas (Question 5)
+        const slopeChangeCanvas = document.getElementById('slopeChangeCanvas');
+        const slopeChangeCtx = slopeChangeCanvas.getContext('2d');
+
+        function drawSlopeChangeVisual() {
+            slopeChangeCtx.clearRect(0, 0, slopeChangeCanvas.width, slopeChangeCanvas.height);
+            slopeChangeCtx.fillStyle = '#050505';
+            slopeChangeCtx.fillRect(0, 0, slopeChangeCanvas.width, slopeChangeCanvas.height);
+
+            const centerX = slopeChangeCanvas.width / 2;
+            const centerY = slopeChangeCanvas.height - 72;
+            const scale = 58;
+            const f = (x) => 0.18 * x * x;
+            const toCanvas = (x, y) => ({ x: centerX + x * scale, y: centerY - y * scale });
+
+            slopeChangeCtx.strokeStyle = 'rgba(255, 255, 255, 0.42)';
+            slopeChangeCtx.lineWidth = 3;
+            slopeChangeCtx.beginPath();
+            slopeChangeCtx.moveTo(52, centerY);
+            slopeChangeCtx.lineTo(slopeChangeCanvas.width - 44, centerY);
+            slopeChangeCtx.moveTo(centerX, 34);
+            slopeChangeCtx.lineTo(centerX, slopeChangeCanvas.height - 34);
+            slopeChangeCtx.stroke();
+
+            slopeChangeCtx.strokeStyle = '#e10600';
+            slopeChangeCtx.lineWidth = 4;
+            slopeChangeCtx.beginPath();
+            for (let x = -4.8; x <= 4.8; x += 0.04) {
+                const point = toCanvas(x, f(x));
+                if (x === -4.8) slopeChangeCtx.moveTo(point.x, point.y); else slopeChangeCtx.lineTo(point.x, point.y);
+            }
+            slopeChangeCtx.stroke();
+
+            const drawLineForSlope = (pointX, pointY, slope, color) => {
+                const x1 = -4.95;
+                const x2 = 4.95;
+                const y1 = pointY + slope * (x1 - pointX);
+                const y2 = pointY + slope * (x2 - pointX);
+                const p1 = toCanvas(x1, y1);
+                const p2 = toCanvas(x2, y2);
+                drawDoubleArrow(slopeChangeCtx, p1.x, p1.y, p2.x, p2.y, color, 4);
+            };
+
+            if (currentMode === 'calculus') {
+                const points = [
+                    { x: -2.2, color: '#49a7ff', label: 'Left slope' },
+                    { x: 2.2, color: '#64f4ac', label: 'Right slope' }
+                ];
+
+                points.forEach(({ x, color, label }) => {
+                    const y = f(x);
+                    const slope = 0.36 * x;
+                    drawLineForSlope(x, y, slope, color);
+                    const point = toCanvas(x, y);
+                    slopeChangeCtx.fillStyle = '#ffffff';
+                    slopeChangeCtx.beginPath();
+                    slopeChangeCtx.arc(point.x, point.y, 6, 0, Math.PI * 2);
+                    slopeChangeCtx.fill();
+                    slopeChangeCtx.fillStyle = color;
+                    slopeChangeCtx.font = '700 20px STIX Two Text, Times New Roman, serif';
+                    slopeChangeCtx.fillText(label, point.x + (x < 0 ? -118 : 18), point.y - 18);
+                });
+            } else {
+                const secants = [
+                    { a: -3.1, b: -1.8, color: '#49a7ff', label: 'Left slope' },
+                    { a: 1.8, b: 3.1, color: '#64f4ac', label: 'Right slope' }
+                ];
+
+                secants.forEach(({ a, b, color, label }) => {
+                    const yA = f(a);
+                    const yB = f(b);
+                    const slope = (yB - yA) / (b - a);
+                    drawLineForSlope(a, yA, slope, color);
+                    [a, b].forEach((x) => {
+                        const point = toCanvas(x, f(x));
+                        slopeChangeCtx.fillStyle = '#ffffff';
+                        slopeChangeCtx.beginPath();
+                        slopeChangeCtx.arc(point.x, point.y, 5, 0, Math.PI * 2);
+                        slopeChangeCtx.fill();
+                    });
+                    const mid = toCanvas((a + b) / 2, (yA + yB) / 2);
+                    slopeChangeCtx.fillStyle = color;
+                    slopeChangeCtx.font = '700 20px STIX Two Text, Times New Roman, serif';
+                    slopeChangeCtx.fillText(label, mid.x + (a < 0 ? -116 : 18), mid.y - 14);
+                });
+            }
+
+            const vertex = toCanvas(0, 0);
+            slopeChangeCtx.fillStyle = '#ffffff';
+            slopeChangeCtx.beginPath();
+            slopeChangeCtx.arc(vertex.x, vertex.y, 6, 0, Math.PI * 2);
+            slopeChangeCtx.fill();
+
+            slopeChangeCtx.fillStyle = '#ffffff';
+            slopeChangeCtx.font = '700 24px STIX Two Text, Times New Roman, serif';
+            slopeChangeCtx.fillText('y = x² opens upward', 24, 34);
+        }
+
+        // Parabola Canvas
+        const parabolaCanvas = document.getElementById('parabolaCanvas');
+        const parabolaCtx = parabolaCanvas.getContext('2d');
+        let showLine = false;
+
+        function drawParabola() {
+            parabolaCtx.clearRect(0, 0, parabolaCanvas.width, parabolaCanvas.height);
+
+            // Draw axes
+            parabolaCtx.strokeStyle = '#ffffff';
+            parabolaCtx.lineWidth = 3;
+            parabolaCtx.beginPath();
+            parabolaCtx.moveTo(0, parabolaCanvas.height / 2);
+            parabolaCtx.lineTo(parabolaCanvas.width, parabolaCanvas.height / 2);
+            parabolaCtx.moveTo(parabolaCanvas.width / 2, 0);
+            parabolaCtx.lineTo(parabolaCanvas.width / 2, parabolaCanvas.height);
+            parabolaCtx.stroke();
+
+            // Draw parabola y = x^2
+            parabolaCtx.strokeStyle = '#e10600';
+            parabolaCtx.lineWidth = 4;
+            parabolaCtx.beginPath();
+
+            const scale = 50;
+            const centerX = parabolaCanvas.width / 2;
+            const centerY = parabolaCanvas.height / 2;
+
+            for (let x = -8; x <= 8; x += 0.1) {
+                const y = x * x / 4;
+                const canvasX = centerX + x * scale;
+                const canvasY = centerY - y * scale;
+
+                if (x === -8) {
+                    parabolaCtx.moveTo(canvasX, canvasY);
+                } else {
+                    parabolaCtx.lineTo(canvasX, canvasY);
+                }
+            }
+            parabolaCtx.stroke();
+
+            // Draw vertex
+            parabolaCtx.fillStyle = '#ffffff';
+            parabolaCtx.beginPath();
+            parabolaCtx.arc(centerX, centerY, 6, 0, Math.PI * 2);
+            parabolaCtx.fill();
+
+            if (showLine) {
+                let x1;
+                let x2;
+                let y1;
+                let y2;
+                let pointX1;
+                let pointX2;
+                let showReferencePoints = false;
+
+                if (currentMode === 'calculus') {
+                    // Tangent line at the vertex (slope = 0)
+                    x1 = 28;
+                    x2 = parabolaCanvas.width - 28;
+                    y1 = centerY;
+                    y2 = centerY;
+                } else {
+                    // Secant line through two symmetric points
+                    const dist = 2;
+                    pointX1 = centerX - dist * scale;
+                    pointX2 = centerX + dist * scale;
+                    x1 = 28;
+                    x2 = parabolaCanvas.width - 28;
+                    y1 = centerY - (dist * dist / 4) * scale;
+                    y2 = centerY - (dist * dist / 4) * scale;
+                    showReferencePoints = true;
+                }
+
+                parabolaCtx.strokeStyle = '#e10600';
+                parabolaCtx.lineWidth = 3;
+                parabolaCtx.setLineDash([5, 5]);
+                parabolaCtx.beginPath();
+                parabolaCtx.moveTo(x1, y1);
+                parabolaCtx.lineTo(x2, y2);
+                parabolaCtx.stroke();
+                parabolaCtx.setLineDash([]);
+
+                // Arrowheads indicate the line continues beyond the visible canvas.
+                const arrowSize = 10;
+                parabolaCtx.fillStyle = '#e10600';
+
+                parabolaCtx.beginPath();
+                parabolaCtx.moveTo(x1, y1);
+                parabolaCtx.lineTo(x1 + arrowSize, y1 - arrowSize / 2);
+                parabolaCtx.lineTo(x1 + arrowSize, y1 + arrowSize / 2);
+                parabolaCtx.closePath();
+                parabolaCtx.fill();
+
+                parabolaCtx.beginPath();
+                parabolaCtx.moveTo(x2, y2);
+                parabolaCtx.lineTo(x2 - arrowSize, y2 - arrowSize / 2);
+                parabolaCtx.lineTo(x2 - arrowSize, y2 + arrowSize / 2);
+                parabolaCtx.closePath();
+                parabolaCtx.fill();
+
+                if (showReferencePoints) {
+                    // Draw the two symmetric points that define the Algebra II secant line.
+                    parabolaCtx.beginPath();
+                    parabolaCtx.arc(pointX1, y1, 5, 0, Math.PI * 2);
+                    parabolaCtx.arc(pointX2, y2, 5, 0, Math.PI * 2);
+                    parabolaCtx.fill();
+                }
+            }
+        }
+
+        function showVertexLine() {
+            showLine = true;
+            drawParabola();
+        }
+
+        function clearParabola() {
+            showLine = false;
+            drawParabola();
+        }
+
+        // Quartic Canvas
+        const quarticCanvas = document.getElementById('quarticCanvas');
+        const quarticCtx = quarticCanvas.getContext('2d');
+
+        function drawQuartic() {
+            quarticCtx.clearRect(0, 0, quarticCanvas.width, quarticCanvas.height);
+
+            // Draw axes
+            quarticCtx.strokeStyle = '#ffffff';
+            quarticCtx.lineWidth = 3;
+            quarticCtx.beginPath();
+            quarticCtx.moveTo(0, quarticCanvas.height / 2);
+            quarticCtx.lineTo(quarticCanvas.width, quarticCanvas.height / 2);
+            quarticCtx.moveTo(quarticCanvas.width / 2, 0);
+            quarticCtx.lineTo(quarticCanvas.width / 2, quarticCanvas.height);
+            quarticCtx.stroke();
+
+            // Draw quartic y = x^4 + 2x^3 - 3x^2 + x + 1
+            quarticCtx.strokeStyle = '#e10600';
+            quarticCtx.lineWidth = 4;
+            quarticCtx.beginPath();
+
+            const scale = 30;
+            const centerX = quarticCanvas.width / 2;
+            const centerY = quarticCanvas.height / 2;
+
+            for (let x = -4; x <= 2; x += 0.05) {
+                const y = Math.pow(x, 4) + 2 * Math.pow(x, 3) - 3 * Math.pow(x, 2) + x + 1;
+                const canvasX = centerX + x * scale;
+                const canvasY = centerY - y * scale * 0.5;
+
+                if (x === -4) {
+                    quarticCtx.moveTo(canvasX, canvasY);
+                } else {
+                    quarticCtx.lineTo(canvasX, canvasY);
+                }
+            }
+            quarticCtx.stroke();
+
+            // Mark local minimum at (-2.22, -13.60)
+            const minX = centerX + (-2.22) * scale;
+            const minY = centerY - (-13.60) * scale * 0.5;
+
+            quarticCtx.fillStyle = '#ffffff';
+            quarticCtx.beginPath();
+            quarticCtx.arc(minX, minY, 6, 0, Math.PI * 2);
+            quarticCtx.fill();
+
+            quarticCtx.fillStyle = '#ffffff';
+            quarticCtx.font = 'bold 22px STIX Two Text, Times New Roman, serif';
+            // Keep label inside canvas bounds
+            const label = 'Local Min (-2.22, -13.60)';
+            const labelWidth = quarticCtx.measureText(label).width;
+            const labelX = Math.min(minX + 10, quarticCanvas.width - labelWidth - 10);
+            const labelY = Math.max(minY - 10, 20);
+            quarticCtx.fillText(label, labelX, labelY);
+        }
+
+        // Paraboloid Canvas (3D)
+        const paraboloidCanvas = document.getElementById('paraboloidCanvas');
+        const paraboloidCtx = paraboloidCanvas.getContext('2d');
+        let angleX = -0.95;
+        let angleY = 0.45;
+        let isDragging = false;
+        let lastMouseX = 0;
+        let lastMouseY = 0;
+        let isValleyMode = false;
+        let showSecantPlane = false;
+        let showTangentPlane = false;
+        const secantPlaneToggle = document.getElementById('toggle-secant-plane');
+        const tangentPlaneToggle = document.getElementById('toggle-tangent-plane');
+        const planeExplanation = document.getElementById('plane-explanation');
+
+        paraboloidCanvas.addEventListener('mousedown', (e) => {
+            isDragging = true;
+            lastMouseX = e.offsetX;
+            lastMouseY = e.offsetY;
+        });
+
+        paraboloidCanvas.addEventListener('mousemove', (e) => {
+            if (isDragging) {
+                const deltaX = e.offsetX - lastMouseX;
+                const deltaY = e.offsetY - lastMouseY;
+
+                angleY += deltaX * 0.01;
+                // Limit pitch to [-1.57, 0.1] to keep the camera ABOVE the paraboloid/valley
+                angleX = Math.max(-1.57, Math.min(0.1, angleX + deltaY * 0.01));
+
+                lastMouseX = e.offsetX;
+                lastMouseY = e.offsetY;
+
+                drawParaboloid();
+            }
+        });
+
+        paraboloidCanvas.addEventListener('mouseup', () => {
+            isDragging = false;
+        });
+
+        paraboloidCanvas.addEventListener('mouseleave', () => {
+            isDragging = false;
+        });
+
+        function drawSurfacePlane(ctx, centerX, centerY, scale, zValue, fillColor, strokeColor) {
+            const planeSize = 5.6;
+            const corners = [
+                project3D(-planeSize, -planeSize, zValue, centerX, centerY, scale, angleX, angleY),
+                project3D(planeSize, -planeSize, zValue, centerX, centerY, scale, angleX, angleY),
+                project3D(planeSize, planeSize, zValue, centerX, centerY, scale, angleX, angleY),
+                project3D(-planeSize, planeSize, zValue, centerX, centerY, scale, angleX, angleY)
+            ];
+
+            ctx.fillStyle = fillColor;
+            ctx.beginPath();
+            corners.forEach((point, index) => index === 0 ? ctx.moveTo(point.x, point.y) : ctx.lineTo(point.x, point.y));
+            ctx.closePath();
+            ctx.fill();
+
+            ctx.strokeStyle = strokeColor;
+            ctx.lineWidth = 3;
+            ctx.setLineDash([8, 6]);
+            ctx.beginPath();
+            corners.forEach((point, index) => index === 0 ? ctx.moveTo(point.x, point.y) : ctx.lineTo(point.x, point.y));
+            ctx.closePath();
+            ctx.stroke();
+            ctx.setLineDash([]);
+        }
+
+        function updateParaboloidPlaneControls() {
+            if (!secantPlaneToggle || !tangentPlaneToggle) return;
+
+            secantPlaneToggle.classList.toggle('is-hidden', currentMode !== 'algebra');
+            tangentPlaneToggle.classList.toggle('is-hidden', currentMode !== 'calculus');
+            secantPlaneToggle.textContent = showSecantPlane ? 'Hide Secant Plane' : 'Show Secant Plane';
+            tangentPlaneToggle.textContent = showTangentPlane ? 'Hide Tangent Plane' : 'Show Tangent Plane';
+
+            if (!planeExplanation) return;
+
+            if (currentMode === 'algebra' && showSecantPlane) {
+                planeExplanation.innerHTML = '<strong>Secant plane:</strong> a flat sheet that cuts across the 3D surface at matching-height points. It is the 3D version of the vertex line from Question 4: instead of drawing a line across a parabola, we draw a flat plane across the bowl.';
+                planeExplanation.classList.remove('is-hidden');
+            } else if (currentMode === 'calculus' && showTangentPlane) {
+                planeExplanation.innerHTML = '<strong>Tangent plane:</strong> a flat sheet that just touches the surface at the vertex and shows what "flat slope" looks like in 3D. It is the 3D version of the vertex line from Question 4.';
+                planeExplanation.classList.remove('is-hidden');
+            } else {
+                planeExplanation.innerHTML = '';
+                planeExplanation.classList.add('is-hidden');
+            }
+        }
+
+        if (secantPlaneToggle) {
+            secantPlaneToggle.addEventListener('click', () => {
+                showSecantPlane = !showSecantPlane;
+                updateParaboloidPlaneControls();
+                drawParaboloid();
+            });
+        }
+
+        if (tangentPlaneToggle) {
+            tangentPlaneToggle.addEventListener('click', () => {
+                showTangentPlane = !showTangentPlane;
+                updateParaboloidPlaneControls();
+                drawParaboloid();
+            });
+        }
+
+        function drawParaboloid() {
+            paraboloidCtx.clearRect(0, 0, paraboloidCanvas.width, paraboloidCanvas.height);
+            const centerX = paraboloidCanvas.width / 2, centerY = paraboloidCanvas.height / 2;
+            const scale = 32, gridSize = 8, gridStep = 0.8;
+
+            if (currentMode === 'algebra' && showSecantPlane) {
+                drawSurfacePlane(paraboloidCtx, centerX, centerY, scale, getZ(3, 0), 'rgba(100, 244, 172, 0.22)', 'rgba(100, 244, 172, 0.9)');
+            }
+
+            if (currentMode === 'calculus' && showTangentPlane) {
+                drawSurfacePlane(paraboloidCtx, centerX, centerY, scale, 0, 'rgba(73, 167, 255, 0.22)', 'rgba(73, 167, 255, 0.95)');
+            }
+
+            for (let x = -gridSize; x <= gridSize; x += gridStep) {
+                paraboloidCtx.strokeStyle = 'rgba(255, 255, 255, 0.58)'; paraboloidCtx.lineWidth = 3; paraboloidCtx.beginPath();
+                for (let y = -gridSize; y <= gridSize; y += gridStep) {
+                    const p = project3D(x, y, getZ(x, y), centerX, centerY, scale, angleX, angleY);
+                    if (y === -gridSize) paraboloidCtx.moveTo(p.x, p.y); else paraboloidCtx.lineTo(p.x, p.y);
+                }
+                paraboloidCtx.stroke();
+            }
+            for (let y = -gridSize; y <= gridSize; y += gridStep) {
+                paraboloidCtx.strokeStyle = 'rgba(255, 255, 255, 0.58)'; paraboloidCtx.lineWidth = 3; paraboloidCtx.beginPath();
+                for (let x = -gridSize; x <= gridSize; x += gridStep) {
+                    const p = project3D(x, y, getZ(x, y), centerX, centerY, scale, angleX, angleY);
+                    if (x === -gridSize) paraboloidCtx.moveTo(p.x, p.y); else paraboloidCtx.lineTo(p.x, p.y);
+                }
+                paraboloidCtx.stroke();
+            }
+            const b = project3D(0, 0, 0, centerX, centerY, scale, angleX, angleY);
+            paraboloidCtx.fillStyle = '#e10600'; paraboloidCtx.beginPath(); paraboloidCtx.arc(b.x, b.y, 10, 0, Math.PI * 2); paraboloidCtx.fill();
+        }
+
+        // Shared 3D Projection Logic
+        const getZ = (x, y) => 0.15 * (x * x + y * y);
+        function project3D(x, y, z, centerX, centerY, scale, pitch, yaw) {
+            let x1 = x * Math.cos(yaw) - y * Math.sin(yaw);
+            let y1 = x * Math.sin(yaw) + y * Math.cos(yaw);
+            let y2 = y1 * Math.cos(pitch) - z * Math.sin(pitch);
+            let z2 = y1 * Math.sin(pitch) + z * Math.cos(pitch);
+            const perspective = 200 / (200 + z2);
+            return { x: centerX + x1 * scale * perspective, y: centerY - y2 * scale * perspective, depth: z2, perspective };
+        }
+
+        // Valley Mode Canvas (Question 9)
+        const valleyCanvas = document.getElementById('valleyCanvas');
+        const valleyCtx = valleyCanvas ? valleyCanvas.getContext('2d') : null;
+        let vAngleX = -0.95, vAngleY = 0.45, vDragging = false, vLastX = 0, vLastY = 0;
+
+        if (valleyCanvas) {
+            valleyCanvas.addEventListener('mousedown', (e) => { vDragging = true; vLastX = e.offsetX; vLastY = e.offsetY; });
+            valleyCanvas.addEventListener('mousemove', (e) => {
+                if (vDragging) {
+                    if (e.cancelable) e.preventDefault();
+                    vAngleY += (e.offsetX - vLastX) * 0.01;
+                    vAngleX = Math.max(-1.57, Math.min(0.1, vAngleX + (e.offsetY - vLastY) * 0.01));
+                    vLastX = e.offsetX; vLastY = e.offsetY;
+                    drawValleyScene();
+                }
+            });
+            window.addEventListener('mouseup', () => vDragging = false);
+        }
+
+        function drawValleyScene() {
+            if (!valleyCtx) return;
+            valleyCtx.clearRect(0, 0, valleyCanvas.width, valleyCanvas.height);
+            const centerX = valleyCanvas.width / 2, centerY = valleyCanvas.height / 2;
+            const scale = 32, gridSize = 8, gridStep = 0.8;
+            const queue = [];
+            for (let x = -gridSize; x < gridSize; x += gridStep) {
+                for (let y = -gridSize; y < gridSize; y += gridStep) {
+                    const p1 = project3D(x, y, getZ(x, y), centerX, centerY, scale, vAngleX, vAngleY);
+                    const p2 = project3D(x + gridStep, y, getZ(x + gridStep, y), centerX, centerY, scale, vAngleX, vAngleY);
+                    const p3 = project3D(x + gridStep, y + gridStep, getZ(x + gridStep, y + gridStep), centerX, centerY, scale, vAngleX, vAngleY);
+                    const p4 = project3D(x, y + gridStep, getZ(x, y + gridStep), centerX, centerY, scale, vAngleX, vAngleY);
+                    queue.push({ type: 'quad', points: [p1, p2, p3, p4], depth: (p1.depth + p2.depth + p3.depth + p4.depth) / 4, height: getZ(x+gridStep/2, y+gridStep/2) });
+                }
+            }
+            const px = 3.0, py = 3.0, pz = getZ(px, py);
+            const projBase = project3D(px, py, pz, centerX, centerY, scale, vAngleX, vAngleY);
+
+            queue.sort((a, b) => b.depth - a.depth).forEach(item => {
+                const f = Math.min(1, item.height / 10);
+                valleyCtx.fillStyle = `rgb(${Math.floor(100*(1-f)+60*f)}, ${Math.floor(60*(1-f)+160*f)}, ${Math.floor(40*(1-f)+60*f)})`;
+                valleyCtx.beginPath(); item.points.forEach((p, i) => i === 0 ? valleyCtx.moveTo(p.x, p.y) : valleyCtx.lineTo(p.x, p.y)); valleyCtx.closePath(); valleyCtx.fill();
+                valleyCtx.strokeStyle = 'rgba(0,0,0,0.28)'; valleyCtx.lineWidth = 1.1; valleyCtx.stroke();
+            });
+            drawDetailedPerson(projBase, valleyCtx);
+        }
+
+        function drawDetailedPerson(p, ctx) {
+            const scale = p.perspective;
+            const x = p.x;
+            const y = p.y;
+            
+            // Shadow (drawn on floor)
+            ctx.fillStyle = 'rgba(0,0,0,0.3)'; 
+            ctx.beginPath(); 
+            ctx.ellipse(x, y, 14 * scale, 8 * scale, 0, 0, Math.PI * 2); 
+            ctx.fill();
+
+            // 2D line helper (relative to base)
+            const line = (x1, y1, x2, y2, c, w) => {
+                ctx.strokeStyle = c; ctx.lineWidth = w * scale; ctx.lineCap = 'round';
+                ctx.beginPath(); ctx.moveTo(x + x1 * scale, y - y1 * scale); ctx.lineTo(x + x2 * scale, y - y2 * scale); ctx.stroke();
+            };
+
+            // Figure - drawn as a 2D vertical plane
+            // Legs
+            line(-4, 0, -2, 20, '#f5f5f5', 4);
+            line(4, 0, 2, 20, '#f5f5f5', 4);
+
+            // Shirt (Trapezoid)
+            ctx.fillStyle = '#e10600';
+            ctx.beginPath();
+            ctx.moveTo(x - 8 * scale, y - 20 * scale);
+            ctx.lineTo(x + 8 * scale, y - 20 * scale);
+            ctx.lineTo(x + 10 * scale, y - 45 * scale);
+            ctx.lineTo(x - 10 * scale, y - 45 * scale);
+            ctx.closePath();
+            ctx.fill();
+
+            // Arms
+            line(-8, 40, -14, 30, '#f5f5f5', 3);
+            line(8, 40, 14, 30, '#f5f5f5', 3);
+
+            // Head and Neck
+            line(0, 45, 0, 50, '#ffdbac', 4);
+            ctx.fillStyle = '#ffdbac';
+            ctx.beginPath();
+            ctx.arc(x, y - 58 * scale, 9 * scale, 0, Math.PI * 2);
+            ctx.fill();
+
+            // Blindfold
+            ctx.strokeStyle = '#222';
+            ctx.lineWidth = 5 * scale;
+            ctx.beginPath();
+            ctx.moveTo(x - 10 * scale, y - 59 * scale);
+            ctx.lineTo(x + 10 * scale, y - 59 * scale);
+            ctx.stroke();
+        }
+
+        // Gradient Descent Canvas (Question 10)
+        const gdCanvas = document.getElementById('gradientDescentCanvas');
+        const gdCtx = gdCanvas.getContext('2d');
+        let gdAnimating = false;
+        let gdPosition = 6;
+        let gdSteps = [];
+
+        function drawGradientDescentSlopeGuide(centerX, centerY, scale) {
+            if (gdPosition === null) return;
+
+            const pointX = gdPosition;
+            const pointY = Math.pow(pointX, 2) / 8;
+            const direction = pointX > 0.08 ? -1 : pointX < -0.08 ? 1 : 1;
+            let slope;
+            let label;
+            let color;
+
+            if (currentMode === 'calculus') {
+                slope = pointX / 4;
+                label = 'Tangent line';
+                color = '#64f4ac';
+            } else {
+                const secantX = pointX + direction * 1.1;
+                const secantY = Math.pow(secantX, 2) / 8;
+                slope = (secantY - pointY) / (secantX - pointX);
+                label = 'Secant line';
+                color = '#49a7ff';
+
+                const secantCanvasX = centerX + secantX * scale;
+                const secantCanvasY = centerY - secantY * scale;
+                gdCtx.fillStyle = '#ffffff';
+                gdCtx.beginPath();
+                gdCtx.arc(secantCanvasX, secantCanvasY, 5, 0, Math.PI * 2);
+                gdCtx.fill();
+            }
+
+            const xStart = pointX - direction * 0.85;
+            const xEnd = pointX + direction * 1.65;
+            const yStart = pointY + slope * (xStart - pointX);
+            const yEnd = pointY + slope * (xEnd - pointX);
+            const startCanvasX = centerX + xStart * scale;
+            const startCanvasY = centerY - yStart * scale;
+            const endCanvasX = centerX + xEnd * scale;
+            const endCanvasY = centerY - yEnd * scale;
+
+            drawArrow(gdCtx, startCanvasX, startCanvasY, endCanvasX, endCanvasY, color);
+            gdCtx.fillStyle = color;
+            gdCtx.font = '700 22px STIX Two Text, Times New Roman, serif';
+            const labelX = Math.max(18, Math.min(endCanvasX + 12, gdCanvas.width - 170));
+            const labelY = Math.max(32, Math.min(endCanvasY - 14, gdCanvas.height - 26));
+            gdCtx.fillText(label, labelX, labelY);
+        }
+
+        function drawGradientDescentSetup() {
+            gdCtx.clearRect(0, 0, gdCanvas.width, gdCanvas.height);
+
+            // Draw axes
+            gdCtx.strokeStyle = '#ffffff';
+            gdCtx.lineWidth = 3;
+            gdCtx.beginPath();
+            gdCtx.moveTo(0, gdCanvas.height / 2);
+            gdCtx.lineTo(gdCanvas.width, gdCanvas.height / 2);
+            gdCtx.moveTo(gdCanvas.width / 2, 0);
+            gdCtx.lineTo(gdCanvas.width / 2, gdCanvas.height);
+            gdCtx.stroke();
+
+            // Draw function
+            gdCtx.strokeStyle = '#e10600';
+            gdCtx.lineWidth = 4;
+            gdCtx.beginPath();
+
+            const scale = 40;
+            const centerX = gdCanvas.width / 2;
+            const centerY = gdCanvas.height / 2;
+
+            for (let x = -10; x <= 10; x += 0.1) {
+                const y = Math.pow(x, 2) / 8;
+                const canvasX = centerX + x * scale;
+                const canvasY = centerY - y * scale;
+
+                if (x === -10) {
+                    gdCtx.moveTo(canvasX, canvasY);
+                } else {
+                    gdCtx.lineTo(canvasX, canvasY);
+                }
+            }
+            gdCtx.stroke();
+
+            drawGradientDescentSlopeGuide(centerX, centerY, scale);
+
+            // Draw current position
+            if (gdPosition !== null) {
+                const y = Math.pow(gdPosition, 2) / 8;
+                const canvasX = centerX + gdPosition * scale;
+                const canvasY = centerY - y * scale;
+
+                gdCtx.fillStyle = '#ffffff';
+                gdCtx.beginPath();
+                gdCtx.arc(canvasX, canvasY, 8, 0, Math.PI * 2);
+                gdCtx.fill();
+            }
+
+            // Draw steps
+            gdSteps.forEach((step, i) => {
+                const y = Math.pow(step, 2) / 8;
+                const canvasX = centerX + step * scale;
+                const canvasY = centerY - y * scale;
+
+                gdCtx.fillStyle = `rgba(225, 6, 0, ${1 - i * 0.1})`;
+                gdCtx.beginPath();
+                gdCtx.arc(canvasX, canvasY, 5, 0, Math.PI * 2);
+                gdCtx.fill();
+            });
+        }
+
+        function startGradientDescent() {
+            if (gdAnimating) return;
+
+            gdAnimating = true;
+            gdPosition = 6;
+            gdSteps = [];
+
+            const interval = setInterval(() => {
+                // Calculate gradient (slope)
+                const gradient = gdPosition / 4;
+
+                // Move in opposite direction of gradient
+                const learningRate = 0.3;
+                gdPosition = gdPosition - learningRate * gradient;
+
+                gdSteps.push(gdPosition);
+                if (gdSteps.length > 10) gdSteps.shift();
+
+                drawGradientDescentSetup();
+
+                // Stop when close to minimum
+                if (Math.abs(gdPosition) < 0.1) {
+                    clearInterval(interval);
+                    gdAnimating = false;
+                }
+            }, 200);
+        }
+
+        function resetGradientDescent() {
+            gdAnimating = false;
+            gdPosition = 6;
+            gdSteps = [];
+            drawGradientDescentSetup();
+        }
+
+        // 3D SGD Training Simulator JS (The Bowl for Q11)
+        const sgdCanvas = document.getElementById('sgdCanvas');
+        const sgdCtx = sgdCanvas.getContext('2d');
+        const sgdNoise = document.getElementById('sgdNoise');
+        const sgdNoiseValue = document.getElementById('sgdNoiseValue');
+        const sgdLoopMeter = document.getElementById('sgdLoopMeter');
+        const sgdStatus = document.getElementById('sgdStatus');
+        const sgdCounter = document.getElementById('sgdCounter');
+        const toggleSgdAutoRotate = document.getElementById('toggle-sgd-autorotate');
+
+        const SGD_INITIAL_ANGLE_X = -0.82;
+        const SGD_INITIAL_ANGLE_Y = 0.72;
+        const SGD_MIN_ANGLE_X = -1.35;
+        const SGD_MAX_ANGLE_X = -0.35;
+        let sgdAngleX = SGD_INITIAL_ANGLE_X;
+        let sgdAngleY = SGD_INITIAL_ANGLE_Y;
+        let sgdDragging = false;
+        let sgdLastX = 0;
+        let sgdLastY = 0;
+        let sgdAutoRotate = false;
+
+        let sgdMarbles = [];
+        let sgdLoopStart = 0;
+        let sgdLastFrame = 0;
+        const sgdLoopDuration = 10000; // 10 seconds
+        const sgdFallDuration = 9200; // Almost the whole loop
+        
+        // Shallow local minima and deep global minima
+        const sgdWells = [
+            { label: 'Global Min', x: 1.2, y: 1.2, depth: 2.8, spread: 1.4, radius: 0.45, color: '#64f4ac', global: true },
+            { label: 'Local Trap', x: -1.5, y: -1.5, depth: 1.25, spread: 2.8, radius: 0.35, color: '#ffd166' },
+            { label: 'Local Trap', x: 1.2, y: -1.2, depth: 0.95, spread: 3.8, radius: 0.3, color: '#ffd166' },
+            { label: 'Local Trap', x: -1.2, y: 1.2, depth: 0.95, spread: 3.8, radius: 0.3, color: '#ffd166' },
+            { label: 'Local Trap', x: 0, y: 1.5, depth: 0.85, spread: 4.2, radius: 0.25, color: '#ffd166' }
+        ];
+
+        function getSgdHeight(x, y) {
+            const bowl = 0.1 * (x * x + y * y);
+            const wells = sgdWells.reduce((total, well) => {
+                const distanceSquared = Math.pow(x - well.x, 2) + Math.pow(y - well.y, 2);
+                return total + well.depth * Math.exp(-distanceSquared * well.spread);
+            }, 0);
+            return bowl - wells;
+        }
+
+        function projectSgd(x, y, z) {
+            const centerX = sgdCanvas.width / 2;
+            const centerY = sgdCanvas.height / 2 + 40;
+            const scale = 55; // Zoomed out from 75
+
+            // Rotate around Y axis (yaw) FIRST to preserve world-vertical orientation
+            let x1 = x * Math.cos(sgdAngleY) - y * Math.sin(sgdAngleY);
+            let y1 = x * Math.sin(sgdAngleY) + y * Math.cos(sgdAngleY);
+
+            // Rotate around X axis (pitch) SECOND
+            let y2 = y1 * Math.cos(sgdAngleX) - z * Math.sin(sgdAngleX);
+            let z2 = y1 * Math.sin(sgdAngleX) + z * Math.cos(sgdAngleX);
+
+            const perspective = 350 / (350 + z2 * 40);
+            return { x: centerX + x1 * scale * perspective, y: centerY - y2 * scale * perspective, depth: z2, perspective };
+        }
+
+        function resetSgdCamera() {
+            sgdAngleX = SGD_INITIAL_ANGLE_X;
+            sgdAngleY = SGD_INITIAL_ANGLE_Y;
+        }
+
+        function initSgdSimulator(now = performance.now(), resetView = false) {
+            if (resetView) resetSgdCamera();
+            sgdMarbles = [];
+            const traps = sgdWells.filter(w => !w.global);
+            
+            for (let i = 0; i < 20; i++) {
+                // Bias: 75% start near local traps, 25% near global or random
+                const useTrap = Math.random() < 0.75 && traps.length > 0;
+                const well = useTrap 
+                    ? traps[Math.floor(Math.random() * traps.length)] 
+                    : sgdWells[Math.floor(Math.random() * sgdWells.length)];
+
+                // Offset scatter
+                const scatter = 0.8;
+                sgdMarbles.push({
+                    x: well.x + (Math.random() - 0.5) * scatter,
+                    y: well.y + (Math.random() - 0.5) * scatter,
+                    vx: 0, vy: 0,
+                    noiseAngle: Math.random() * Math.PI * 2,
+                    noisePhase: Math.random() * Math.PI * 2,
+                    noiseSpin: 0.0015 + Math.random() * 0.0025,
+                    color: i % 3 === 0 ? '#ff4b3e' : i % 3 === 1 ? '#49a7ff' : '#ffd166',
+                    settled: false,
+                    fallenOut: false,
+                    fallAge: 0
+                });
+            }
+            sgdLoopStart = now;
+            sgdLastFrame = now;
+        }
+
+        function restartSgdSimulator() {
+            initSgdSimulator(performance.now(), true);
+        }
+
+        function drawSgdTarget(x, y, label, color) {
+            const p = projectSgd(x, y, getSgdHeight(x, y));
+            sgdCtx.save();
+            sgdCtx.strokeStyle = color;
+            sgdCtx.lineWidth = 2.5;
+            sgdCtx.beginPath();
+            sgdCtx.arc(p.x, p.y, 12 * p.perspective, 0, Math.PI * 2);
+            sgdCtx.stroke();
+            sgdCtx.restore();
+        }
+
+        function updateSgdMarbles(dt, elapsed) {
+            const noisePercent = Number(sgdNoise.value);
+            const decayingNoiseLevel = Math.min(noisePercent, 50) / 50;
+            const sustainedNoiseLevel = Math.max(0, noisePercent - 50) / 50;
+            const isFalling = elapsed < sgdFallDuration;
+            const gravityStrength = 0.003; // Reduced intensity
+            const damping = 0.98;
+            const canFallOut = noisePercent >= 75;
+
+            sgdMarbles.forEach((marble) => {
+                if (marble.fallenOut) {
+                    marble.fallAge += dt;
+                    marble.x += marble.vx * dt * 0.18;
+                    marble.y += marble.vy * dt * 0.18;
+                    return;
+                }
+
+                const eps = 0.025;
+                const gradX = (getSgdHeight(marble.x + eps, marble.y) - getSgdHeight(marble.x - eps, marble.y)) / (2 * eps);
+                const gradY = (getSgdHeight(marble.x, marble.y + eps) - getSgdHeight(marble.x, marble.y - eps)) / (2 * eps);
+                
+                // The left half of the slider decays away; the right half adds persistent shake.
+                const decay = Math.max(0, 1 - elapsed / sgdFallDuration);
+                const decayingKick = decayingNoiseLevel * 0.1 * Math.pow(decay, 3);
+                const sustainedKick = sustainedNoiseLevel * 0.045 * (isFalling ? 1 : 0.25);
+                const randomKick = decayingKick + sustainedKick;
+                const shakeX = (Math.random() - 0.5) * randomKick;
+                const shakeY = (Math.random() - 0.5) * randomKick;
+                const highNoisePower = sustainedNoiseLevel * sustainedNoiseLevel;
+                const gustAngle = marble.noiseAngle + Math.sin(elapsed * marble.noiseSpin + marble.noisePhase) * 0.9;
+                const directionalKick = highNoisePower * 0.04 * (isFalling ? 1 : 0.45);
+                const gustX = Math.cos(gustAngle) * directionalKick;
+                const gustY = Math.sin(gustAngle) * directionalKick;
+
+                marble.vx = marble.vx * damping - gradX * gravityStrength * dt + (shakeX + gustX) * dt;
+                marble.vy = marble.vy * damping - gradY * gravityStrength * dt + (shakeY + gustY) * dt;
+                
+                marble.x += marble.vx * dt;
+                marble.y += marble.vy * dt;
+
+                if (canFallOut && Math.hypot(marble.x, marble.y) > 2.78) {
+                    marble.fallenOut = true;
+                    marble.settled = false;
+                    marble.vx *= 1.35;
+                    marble.vy *= 1.35;
+                    return;
+                }
+
+                if (Math.abs(marble.x) > 2.6) { marble.x = Math.sign(marble.x) * 2.6; marble.vx *= canFallOut ? 0.9 : -0.4; }
+                if (Math.abs(marble.y) > 2.6) { marble.y = Math.sign(marble.y) * 2.6; marble.vy *= canFallOut ? 0.9 : -0.4; }
+
+                const settledDistToGlobal = Math.hypot(marble.x - 1.2, marble.y - 1.2);
+                marble.settled = settledDistToGlobal < 0.6 || sgdWells.some(w => !w.global && Math.hypot(marble.x - w.x, marble.y - w.y) < w.radius);
+            });
+        }
+
+        function drawSgdScene(now = performance.now()) {
+            if (!sgdLoopStart) initSgdSimulator(now);
+            let elapsed = now - sgdLoopStart;
+            if (elapsed >= sgdLoopDuration) { initSgdSimulator(now); elapsed = 0; }
+
+            const dt = Math.min(0.6, (now - sgdLastFrame) / 16.67);
+            sgdLastFrame = now;
+            if (sgdAutoRotate && !sgdDragging) sgdAngleY += 0.006 * dt;
+            updateSgdMarbles(dt, elapsed);
+
+            sgdCtx.clearRect(0, 0, sgdCanvas.width, sgdCanvas.height);
+            const bg = sgdCtx.createRadialGradient(sgdCanvas.width / 2, sgdCanvas.height / 2, 40, sgdCanvas.width / 2, sgdCanvas.height / 2, 430);
+            bg.addColorStop(0, '#111'); bg.addColorStop(1, '#000');
+            sgdCtx.fillStyle = bg; sgdCtx.fillRect(0, 0, sgdCanvas.width, sgdCanvas.height);
+
+            // Draw bowl grid
+            const gridSize = 2.5;
+            const step = 0.25;
+            for (let x = -gridSize; x <= gridSize; x += step) {
+                sgdCtx.beginPath(); sgdCtx.strokeStyle = 'rgba(73, 167, 255, 0.34)'; sgdCtx.lineWidth = 1.8;
+                for (let y = -gridSize; y <= gridSize; y += step) {
+                    const p = projectSgd(x, y, getSgdHeight(x, y));
+                    if (y === -gridSize) sgdCtx.moveTo(p.x, p.y); else sgdCtx.lineTo(p.x, p.y);
+                }
+                sgdCtx.stroke();
+            }
+            for (let y = -gridSize; y <= gridSize; y += step) {
+                sgdCtx.beginPath(); sgdCtx.strokeStyle = 'rgba(73, 167, 255, 0.34)'; sgdCtx.lineWidth = 1.8;
+                for (let x = -gridSize; x <= gridSize; x += step) {
+                    const p = projectSgd(x, y, getSgdHeight(x, y));
+                    if (x === -gridSize) sgdCtx.moveTo(p.x, p.y); else sgdCtx.lineTo(p.x, p.y);
+                }
+                sgdCtx.stroke();
+            }
+
+            sgdWells.forEach(well => drawSgdTarget(well.x, well.y, well.label, well.color));
+
+            let globalCount = 0;
+            let localCount = 0;
+            let fallenOutCount = 0;
+            const projectedMarbles = sgdMarbles.map(marble => {
+                if (marble.fallenOut) {
+                    fallenOutCount++;
+                    const edgeX = Math.max(-2.8, Math.min(2.8, marble.x));
+                    const edgeY = Math.max(-2.8, Math.min(2.8, marble.y));
+                    return { ...marble, projected: projectSgd(edgeX, edgeY, getSgdHeight(edgeX, edgeY) + 0.4 + marble.fallAge * 0.05) };
+                }
+
+                const well = sgdWells.find(w => Math.hypot(marble.x - w.x, marble.y - w.y) < w.radius);
+                
+                // Use a relatively lax threshold (0.6) for the global minimum counter
+                const distToGlobal = Math.hypot(marble.x - 1.2, marble.y - 1.2);
+                if (distToGlobal < 0.6) {
+                    globalCount++;
+                } else if (well && !well.global) {
+                    localCount++;
+                }
+                
+                return { ...marble, projected: projectSgd(marble.x, marble.y, getSgdHeight(marble.x, marble.y)) };
+            });
+
+            projectedMarbles.sort((a, b) => b.projected.depth - a.projected.depth).forEach(marble => {
+                const p = marble.projected;
+                const radius = 6 * p.perspective;
+                sgdCtx.save();
+                sgdCtx.globalAlpha = marble.fallenOut ? Math.max(0.16, 0.72 - marble.fallAge * 0.035) : 0.88;
+                sgdCtx.fillStyle = marble.color;
+                sgdCtx.shadowColor = marble.color;
+                sgdCtx.shadowBlur = marble.settled ? 10 : 4;
+                sgdCtx.beginPath(); sgdCtx.arc(p.x, p.y, radius, 0, Math.PI * 2); sgdCtx.fill();
+                sgdCtx.restore();
+            });
+
+            const noisePercent = Number(sgdNoise.value);
+            sgdLoopMeter.style.width = `${(elapsed / sgdLoopDuration) * 100}%`;
+            sgdNoiseValue.textContent = `Noise Level: ${noisePercent}%`;
+            sgdCounter.textContent = `Marbles in Global Minimum: ${globalCount}`;
+
+            if (elapsed > sgdFallDuration) {
+                sgdStatus.textContent = `Cycle complete: ${globalCount} Global, ${localCount} Local, ${fallenOutCount} Fell Out. Resetting...`;
+                sgdStatus.style.color = '#64f4ac';
+            } else if (noisePercent < 20) {
+                sgdStatus.textContent = 'Low Noise: Marbles might get stuck in Local Trap dents.';
+                sgdStatus.style.color = '#ffd166';
+            } else if (noisePercent > 55) {
+                sgdStatus.textContent = noisePercent >= 75 ? 'Too Much Noise: Marbles can shake right out of the bowl.' : 'Sustained Noise: The bowl keeps shaking, so marbles may not settle cleanly.';
+                sgdStatus.style.color = '#ff4b3e';
+            } else {
+                sgdStatus.textContent = 'Optimal Noise: The shake helps early, then fades so marbles can settle.';
+                sgdStatus.style.color = '#64f4ac';
+            }
+
+            requestAnimationFrame(drawSgdScene);
+        }
+
+        function getSgdPointerPosition(e) {
+            const rect = sgdCanvas.getBoundingClientRect();
+            const source = e.touches ? e.touches[0] : e;
+            return { x: (source.clientX - rect.left) * (sgdCanvas.width / rect.width), y: (source.clientY - rect.top) * (sgdCanvas.height / rect.height) };
+        }
+
+        function startSgdDrag(e) { if (e.cancelable) e.preventDefault(); const p = getSgdPointerPosition(e); sgdDragging = true; sgdLastX = p.x; sgdLastY = p.y; }
+        function moveSgdDrag(e) { 
+            if (!sgdDragging) return; 
+            if (e.cancelable) e.preventDefault(); 
+            const p = getSgdPointerPosition(e); 
+            sgdAngleY += (p.x - sgdLastX) * 0.01; 
+            sgdAngleX = Math.max(SGD_MIN_ANGLE_X, Math.min(SGD_MAX_ANGLE_X, sgdAngleX + (p.y - sgdLastY) * 0.01));
+            sgdLastX = p.x; 
+            sgdLastY = p.y; 
+        }
+        function endSgdDrag() { sgdDragging = false; }
+
+        function setSgdAutoRotate(enabled) {
+            sgdAutoRotate = enabled;
+            if (!toggleSgdAutoRotate) return;
+            toggleSgdAutoRotate.classList.toggle('is-active', enabled);
+            toggleSgdAutoRotate.setAttribute('aria-pressed', enabled ? 'true' : 'false');
+            toggleSgdAutoRotate.textContent = enabled ? 'Stop Rotation' : 'Auto Rotate';
+        }
+
+        sgdCanvas.addEventListener('mousedown', startSgdDrag);
+        sgdCanvas.addEventListener('mousemove', moveSgdDrag);
+        window.addEventListener('mouseup', endSgdDrag);
+        sgdCanvas.addEventListener('touchstart', startSgdDrag, { passive: false });
+        sgdCanvas.addEventListener('touchmove', moveSgdDrag, { passive: false });
+        sgdCanvas.addEventListener('touchend', endSgdDrag);
+        sgdCanvas.addEventListener('touchcancel', endSgdDrag);
+        if (toggleSgdAutoRotate) {
+            toggleSgdAutoRotate.addEventListener('click', () => setSgdAutoRotate(!sgdAutoRotate));
+        }
+
+        // 4D Word Vector Canvas (3D space + time slider)
+        const wordVectorCanvas = document.getElementById('wordVectorCanvas');
+        const wordVectorCtx = wordVectorCanvas.getContext('2d');
+        const wordVectorTime = document.getElementById('wordVectorTime');
+        const wordVectorTimeLabel = document.getElementById('wordVectorTimeLabel');
+        let wordAngleX = -0.45;
+        let wordAngleY = 0.62;
+        let wordDragging = false;
+        let wordLastX = 0;
+        let wordLastY = 0;
+        let wordRotationInterval = null;
+
+        const wordVectorThemes = {
+            flavor: {
+                title: '4D Word Vector Visualization: The Flavor-Scanner',
+                note: 'Drag to rotate. Move the slider to scan the 4th dimension (Edibility). Watch as words morph into view and grow in size when the "Flavor-Scanner" hits their specific coordinate.',
+                sliderLabel: '4th Dimension: Edibility Scanner',
+                scanLabel: 'Scanning Edibility',
+                axes: [
+                    { label: 'Synthetic vs. Bio', color: '#ffd166', end: [-2.5, 0, 0] },
+                    { label: 'Quantum vs. Galactic', color: '#ff4b3e', end: [0, 2.3, 0] },
+                    { label: 'Ancient vs. Cyber', color: '#49a7ff', end: [0, 0, 2.4] }
+                ],
+                legend: [
+                    { label: 'Cosmic / Massive', color: '#ff4b3e' },
+                    { label: 'Microscopic / Life', color: '#49a7ff' },
+                    { label: 'Synthetic / Artifacts', color: '#ffd166' },
+                    { label: 'Culinary Concepts', color: '#64f4ac' }
+                ],
+                points: [
+                    { label: 'Black Hole', color: '#ff4b3e', base: [2.2, -1.8, -1.5], dim4: 0 },
+                    { label: 'Supernova', color: '#ff4b3e', base: [2.4, 1.2, 1.3], dim4: 5 },
+                    { label: 'Nebula', color: '#ff4b3e', base: [1.8, 0.4, -0.8], dim4: 15 },
+                    { label: 'Obsidian Dagger', color: '#ffd166', base: [0.3, -1.9, 1.1], dim4: 22 },
+                    { label: 'Microchip', color: '#ffd166', base: [-1.4, -1.5, -0.4], dim4: 30 },
+                    { label: 'Nanobot', color: '#ffd166', base: [-1.9, -0.1, -1.2], dim4: 35 },
+                    { label: 'Mitochondria', color: '#49a7ff', base: [-1.5, 0.8, -1.4], dim4: 45 },
+                    { label: 'Tardigrade', color: '#49a7ff', base: [-1.2, 1.8, 0.2], dim4: 55 },
+                    { label: 'Axolotl', color: '#49a7ff', base: [-0.9, -0.5, 0.6], dim4: 65 },
+                    { label: 'Cyber-Sushi', color: '#64f4ac', base: [-0.6, -0.7, 1.5], dim4: 82 },
+                    { label: 'Honeycomb', color: '#64f4ac', base: [0.2, 0.9, 1.4], dim4: 90 },
+                    { label: 'Mochi', color: '#64f4ac', base: [-0.4, 0.2, 1.8], dim4: 100 }
+                ]
+            },
+            vibe: {
+                title: '4D Word Vector Visualization: The Vibe-Radiator',
+                note: 'Drag to rotate. Move the slider to scan the 4th dimension (Social Vibe). Watch as concepts radiate energy when you find their "Vibe-frequency".',
+                sliderLabel: '4th Dimension: Vibe-Frequency',
+                scanLabel: 'Social Vibe Energy',
+                axes: [
+                    { label: 'Introvert vs. Extrovert', color: '#ffd166', end: [-2.5, 0, 0] },
+                    { label: 'Chaos vs. Order', color: '#ff4b3e', end: [0, 2.3, 0] },
+                    { label: 'Digital vs. Physical', color: '#49a7ff', end: [0, 0, 2.4] }
+                ],
+                legend: [
+                    { label: 'Party / High Energy', color: '#ff4b3e' },
+                    { label: 'Zen / Quiet', color: '#49a7ff' },
+                    { label: 'Awkward / Nervous', color: '#ffd166' },
+                    { label: 'Wholesome / Warm', color: '#64f4ac' }
+                ],
+                points: [
+                    { label: 'Library', color: '#49a7ff', base: [-1.8, 1.5, -0.5], dim4: 10 },
+                    { label: 'Silent Disco', color: '#ffd166', base: [0.2, 1.2, 2.2], dim4: 35 },
+                    { label: 'Cozy Fireplace', color: '#64f4ac', base: [-0.5, 0.8, -1.2], dim4: 85 },
+                    { label: 'Nightclub', color: '#ff4b3e', base: [2.2, 1.9, 1.5], dim4: 95 },
+                    { label: 'Mosh Pit', color: '#ff4b3e', base: [2.5, -1.5, 0.8], dim4: 100 },
+                    { label: 'Zoom Call', color: '#ffd166', base: [-1.2, -1.8, 2.1], dim4: 25 },
+                    { label: 'Meditation', color: '#49a7ff', base: [-2.2, 1.8, -1.8], dim4: 5 },
+                    { label: 'First Date', color: '#ffd166', base: [0.8, -0.5, 0.2], dim4: 60 },
+                    { label: 'Golden Retriever', color: '#64f4ac', base: [1.8, 0.2, -0.5], dim4: 90 },
+                    { label: 'Broken Link', color: '#ffd166', base: [-1.5, -2.2, 2.5], dim4: 0 },
+                    { label: 'Nap', color: '#49a7ff', base: [-2.5, 0.1, -1.2], dim4: 15 }
+                ]
+            },
+            arcane: {
+                title: '4D Word Vector Visualization: The Arcane-Chronometer',
+                note: 'Drag to rotate. Move the slider to scan the 4th dimension (Magical Potency). Watch as items sparkle and manifest when their "True Name" is reached.',
+                sliderLabel: '4th Dimension: Arcane Potency',
+                scanLabel: 'Mana Concentration',
+                axes: [
+                    { label: 'Dark vs. Light', color: '#ffd166', end: [-2.5, 0, 0] },
+                    { label: 'Ancient vs. Modern', color: '#ff4b3e', end: [0, 2.3, 0] },
+                    { label: 'Ethereal vs. Material', color: '#49a7ff', end: [0, 0, 2.4] }
+                ],
+                legend: [
+                    { label: 'Artifacts / Items', color: '#ff4b3e' },
+                    { label: 'Spells / Energy', color: '#49a7ff' },
+                    { label: 'Entities / Beings', color: '#ffd166' },
+                    { label: 'Sacred Sites', color: '#64f4ac' }
+                ],
+                points: [
+                    { label: 'Rusting Spoon', color: '#ff4b3e', base: [0.5, -1.8, 1.2], dim4: 2 },
+                    { label: 'Dragon Scale', color: '#ff4b3e', base: [1.8, 0.5, -0.5], dim4: 65 },
+                    { label: 'Fireball', color: '#49a7ff', base: [1.2, 1.8, 0.2], dim4: 80 },
+                    { label: 'Necronomicon', color: '#ffd166', base: [-2.2, -1.2, -1.8], dim4: 95 },
+                    { label: 'Phoenix Feather', color: '#ff4b3e', base: [2.5, 1.5, -0.8], dim4: 85 },
+                    { label: 'Stonehenge', color: '#64f4ac', base: [0.2, 0.1, -2.5], dim4: 75 },
+                    { label: 'Mana Potion', color: '#49a7ff', base: [0.8, -0.2, 1.5], dim4: 45 },
+                    { label: 'Lich King', color: '#ffd166', base: [-2.5, -1.8, 0.5], dim4: 100 },
+                    { label: 'Blink Spell', color: '#49a7ff', base: [-0.5, 2.2, 1.8], dim4: 55 },
+                    { label: 'Cathedral', color: '#64f4ac', base: [1.2, 0.8, -2.1], dim4: 50 },
+                    { label: 'Wifi Router', color: '#ff4b3e', base: [-1.5, -2.5, 2.4], dim4: 0 }
+                ]
+            }
+        };
+
+        let currentWordTheme = 'flavor';
+
+        function updateWordTheme() {
+            const theme = wordVectorThemes[currentWordTheme];
+            document.getElementById('wordvec-display-title').textContent = theme.title;
+            document.getElementById('wordvec-display-note').textContent = theme.note;
+            document.getElementById('wordvec-slider-label').textContent = theme.sliderLabel;
+            
+            const legendContainer = document.getElementById('wordvec-legend');
+            legendContainer.innerHTML = '';
+            theme.legend.forEach(item => {
+                const span = document.createElement('span');
+                span.className = 'legend-item';
+                span.innerHTML = `<span class="legend-dot" style="background: ${item.color};"></span>${item.label}`;
+                legendContainer.appendChild(span);
+            });
+
+            drawWordVectorScene();
+        }
+
+        document.getElementById('wordvec-theme-select').addEventListener('change', (e) => {
+            currentWordTheme = e.target.value;
+            updateWordTheme();
+        });
+
+        function getWordProgress() {
+            return Number(wordVectorTime.value);
+        }
+
+        function projectWordVector(point) {
+            const [x, y, z] = point;
+            const centerX = wordVectorCanvas.width / 2;
+            const centerY = wordVectorCanvas.height / 2 + 12;
+            const scale = 88;
+
+            const y1 = y * Math.cos(wordAngleX) - z * Math.sin(wordAngleX);
+            const z1 = y * Math.sin(wordAngleX) + z * Math.cos(wordAngleX);
+            const x2 = x * Math.cos(wordAngleY) - z1 * Math.sin(wordAngleY);
+            const z2 = x * Math.sin(wordAngleY) + z1 * Math.cos(wordAngleY);
+            const perspective = 420 / (420 + z2 * 48);
+
+            return {
+                x: centerX + x2 * scale * perspective,
+                y: centerY - y1 * scale * perspective,
+                depth: z2,
+                perspective
+            };
+        }
+
+        function drawWordLine(from, to, color, width = 2, alpha = 0.9) {
+            const a = projectWordVector(from);
+            const b = projectWordVector(to);
+            wordVectorCtx.save();
+            wordVectorCtx.globalAlpha = alpha;
+            wordVectorCtx.strokeStyle = color;
+            wordVectorCtx.lineWidth = width;
+            wordVectorCtx.beginPath();
+            wordVectorCtx.moveTo(a.x, a.y);
+            wordVectorCtx.lineTo(b.x, b.y);
+            wordVectorCtx.stroke();
+            wordVectorCtx.restore();
+        }
+
+        function drawWordAxes() {
+            const theme = wordVectorThemes[currentWordTheme];
+            
+            theme.axes.forEach((axis, i) => {
+                const start = axis.end.map(c => -c);
+                drawWordLine(start, axis.end, axis.color, 2, 0.4);
+
+                const projected = projectWordVector(axis.end);
+                wordVectorCtx.fillStyle = axis.color;
+                wordVectorCtx.globalAlpha = 0.6;
+                wordVectorCtx.font = '700 18px STIX Two Text, Times New Roman, serif';
+                wordVectorCtx.fillText(axis.label, projected.x + 8, projected.y - 8);
+            });
+            wordVectorCtx.globalAlpha = 1;
+
+            const origin = projectWordVector([0, 0, 0]);
+            wordVectorCtx.fillStyle = '#fff';
+            wordVectorCtx.beginPath();
+            wordVectorCtx.arc(origin.x, origin.y, 3, 0, Math.PI * 2);
+            wordVectorCtx.fill();
+        }
+
+        function drawWordVectorScene() {
+            wordVectorCtx.clearRect(0, 0, wordVectorCanvas.width, wordVectorCanvas.height);
+            const gradient = wordVectorCtx.createRadialGradient(
+                wordVectorCanvas.width / 2,
+                wordVectorCanvas.height / 2,
+                40,
+                wordVectorCanvas.width / 2,
+                wordVectorCanvas.height / 2,
+                430
+            );
+            gradient.addColorStop(0, '#151515');
+            gradient.addColorStop(1, '#000');
+            wordVectorCtx.fillStyle = gradient;
+            wordVectorCtx.fillRect(0, 0, wordVectorCanvas.width, wordVectorCanvas.height);
+
+            const theme = wordVectorThemes[currentWordTheme];
+            const scannerValue = getWordProgress();
+            wordVectorTimeLabel.textContent = `${theme.scanLabel}: ${scannerValue}%`;
+
+            drawWordAxes();
+
+            const positions = theme.points.map((point) => {
+                const distance = Math.abs(point.dim4 - scannerValue);
+                const intensity = Math.max(0, 1 - distance / 25);
+                const morphFactor = Math.pow(intensity, 2);
+                
+                return {
+                    ...point,
+                    morphFactor,
+                    projected: projectWordVector(point.base)
+                };
+            });
+
+            positions
+                .sort((a, b) => b.projected.depth - a.projected.depth)
+                .forEach((point) => {
+                    if (point.morphFactor <= 0.01) return;
+
+                    const sizeScale = 1 + (point.dim4 / 100) * 1.5; 
+                    const radius = (6 + point.projected.perspective * 4) * sizeScale * (0.5 + point.morphFactor * 0.5);
+                    
+                    wordVectorCtx.save();
+                    wordVectorCtx.globalAlpha = point.morphFactor;
+                    
+                    wordVectorCtx.fillStyle = point.color;
+                    wordVectorCtx.shadowColor = point.color;
+                    wordVectorCtx.shadowBlur = (currentWordTheme === 'arcane' ? 25 : 15) * point.morphFactor;
+                    
+                    wordVectorCtx.beginPath();
+                    wordVectorCtx.arc(point.projected.x, point.projected.y, radius, 0, Math.PI * 2);
+                    wordVectorCtx.fill();
+                    
+                    if (point.dim4 > 70) {
+                        wordVectorCtx.fillStyle = '#fff';
+                        wordVectorCtx.beginPath();
+                        wordVectorCtx.arc(point.projected.x, point.projected.y, radius * (currentWordTheme === 'vibe' ? 0.4 : 0.3), 0, Math.PI * 2);
+                        wordVectorCtx.fill();
+                    }
+
+                    wordVectorCtx.fillStyle = '#fff';
+                    wordVectorCtx.font = `${700} ${16 + point.morphFactor * 5}px STIX Two Text, Times New Roman, serif`;
+                    wordVectorCtx.fillText(point.label, point.projected.x + radius + 5, point.projected.y + 5);
+                    
+                    wordVectorCtx.restore();
+                });
+
+            wordVectorCtx.fillStyle = 'rgba(255, 255, 255, 0.82)';
+            wordVectorCtx.font = '600 18px STIX Two Text, Times New Roman, serif';
+            wordVectorCtx.fillText(`Scanning the 4th dimension: ${theme.sliderLabel}`, 18, 30);
+        }
+
+        function getWordPointerPosition(e) {
+            const rect = wordVectorCanvas.getBoundingClientRect();
+            const source = e.touches ? e.touches[0] : e;
+            return {
+                x: (source.clientX - rect.left) * (wordVectorCanvas.width / rect.width),
+                y: (source.clientY - rect.top) * (wordVectorCanvas.height / rect.height)
+            };
+        }
+
+        function startWordDrag(e) {
+            if (e.cancelable) {
+                e.preventDefault();
+            }
+            const position = getWordPointerPosition(e);
+            wordDragging = true;
+            wordLastX = position.x;
+            wordLastY = position.y;
+        }
+
+        function moveWordDrag(e) {
+            if (!wordDragging) return;
+            if (e.cancelable) {
+                e.preventDefault();
+            }
+            const position = getWordPointerPosition(e);
+            wordAngleY += (position.x - wordLastX) * 0.01;
+            wordAngleX += (position.y - wordLastY) * 0.01;
+            wordLastX = position.x;
+            wordLastY = position.y;
+            drawWordVectorScene();
+        }
+
+        function endWordDrag() {
+            wordDragging = false;
+        }
+
+        wordVectorCanvas.addEventListener('mousedown', startWordDrag);
+        wordVectorCanvas.addEventListener('mousemove', moveWordDrag);
+        wordVectorCanvas.addEventListener('mouseup', endWordDrag);
+        wordVectorCanvas.addEventListener('mouseleave', endWordDrag);
+        wordVectorCanvas.addEventListener('touchstart', startWordDrag, { passive: false });
+        wordVectorCanvas.addEventListener('touchmove', moveWordDrag, { passive: false });
+        wordVectorCanvas.addEventListener('touchend', endWordDrag);
+        wordVectorCanvas.addEventListener('touchcancel', endWordDrag);
+
+        wordVectorTime.addEventListener('input', drawWordVectorScene);
+
+        function rotateWordVectors() {
+            if (wordRotationInterval) return;
+            wordRotationInterval = setInterval(() => {
+                wordAngleY += 0.018;
+                drawWordVectorScene();
+            }, 30);
+        }
+
+        function stopWordVectorRotation() {
+            if (wordRotationInterval) {
+                clearInterval(wordRotationInterval);
+                wordRotationInterval = null;
+            }
+        }
+
+        function resetWordVectorView() {
+            stopWordVectorRotation();
+            wordAngleX = -0.45;
+            wordAngleY = 0.62;
+            wordVectorTime.value = 72;
+            drawWordVectorScene();
+        }
+
+        // 3D Word Convergence Animation (Question 13)
+        const convCanvas = document.getElementById('wordConvergenceCanvas');
+        const convCtx = convCanvas.getContext('2d');
+        let convAngleX = -0.45;
+        let convAngleY = 0.62;
+        let convDragging = false;
+        let convLastX = 0;
+        let convLastY = 0;
+
+        const convTargets = [
+            { label: 'Black Hole', color: '#ff4b3e', target: [2.2, -1.8, -1.5] },
+            { label: 'Supernova', color: '#ff4b3e', target: [2.4, 1.2, 1.3] },
+            { label: 'Axolotl', color: '#49a7ff', target: [-0.9, -0.5, 0.6] },
+            { label: 'Tardigrade', color: '#49a7ff', target: [-1.2, 1.8, 0.2] },
+            { label: 'Obsidian Dagger', color: '#ffd166', target: [0.3, -1.9, 1.1] },
+            { label: 'Nanobot', color: '#ffd166', target: [-1.9, -0.1, -1.2] },
+            { label: 'Mochi', color: '#64f4ac', target: [-0.4, 0.2, 1.8] },
+            { label: 'Cyber-Sushi', color: '#64f4ac', target: [-0.6, -0.7, 1.5] }
+        ];
+
+        let convWords = [];
+        let convLoopTimer = 0;
+        const CONV_LOOP_DURATION = 350; 
+
+        function initConvSimulator() {
+            convWords = convTargets.map(t => ({
+                ...t,
+                x: (Math.random() - 0.5) * 8,
+                y: (Math.random() - 0.5) * 8,
+                z: (Math.random() - 0.5) * 8
+            }));
+        }
+
+        function projectConv(x, y, z) {
+            const centerX = convCanvas.width / 2;
+            const centerY = convCanvas.height / 2;
+            const scale = 80;
+            let y1 = y * Math.cos(convAngleX) - z * Math.sin(convAngleX);
+            let z1 = y * Math.sin(convAngleX) + z * Math.cos(convAngleX);
+            let x2 = x * Math.cos(convAngleY) - z1 * Math.sin(convAngleY);
+            let z2 = x * Math.sin(convAngleY) + z1 * Math.cos(convAngleY);
+            const perspective = 400 / (400 + z2 * 45);
+            return { x: centerX + x2 * scale * perspective, y: centerY - y1 * scale * perspective, depth: z2, perspective };
+        }
+
+        function drawConvScene() {
+            convCtx.clearRect(0, 0, convCanvas.width, convCanvas.height);
+            const gradient = convCtx.createRadialGradient(convCanvas.width/2, convCanvas.height/2, 40, convCanvas.width/2, convCanvas.height/2, 430);
+            gradient.addColorStop(0, '#121212'); gradient.addColorStop(1, '#000');
+            convCtx.fillStyle = gradient; convCtx.fillRect(0, 0, convCanvas.width, convCanvas.height);
+
+            convLoopTimer++;
+            if (convLoopTimer > CONV_LOOP_DURATION) {
+                convLoopTimer = 0;
+                initConvSimulator();
+            }
+
+            const t = convLoopTimer / (CONV_LOOP_DURATION * 0.7);
+            const smoothT = t > 1 ? 1 : t * t * (3 - 2 * t);
+            const isPaused = convLoopTimer > CONV_LOOP_DURATION * 0.7;
+
+            // Draw axes
+            const axisLen = 3;
+            const axes = [
+                { end: [axisLen, 0, 0], color: 'rgba(255, 209, 102, 0.2)' },
+                { end: [0, axisLen, 0], color: 'rgba(255, 75, 62, 0.2)' },
+                { end: [0, 0, axisLen], color: 'rgba(73, 167, 255, 0.2)' }
+            ];
+            axes.forEach(a => {
+                const p1 = projectConv(-a.end[0], -a.end[1], -a.end[2]);
+                const p2 = projectConv(a.end[0], a.end[1], a.end[2]);
+                convCtx.strokeStyle = a.color; convCtx.lineWidth = 2; convCtx.beginPath();
+                convCtx.moveTo(p1.x, p1.y); convCtx.lineTo(p2.x, p2.y); convCtx.stroke();
+            });
+
+            const currentPositions = convWords.map(w => {
+                const targetX = w.target[0]; const targetY = w.target[1]; const targetZ = w.target[2];
+                const jitter = isPaused ? 0.01 : (1 - smoothT) * 0.15;
+                const nx = (Math.random() - 0.5) * jitter;
+                const ny = (Math.random() - 0.5) * jitter;
+                const nz = (Math.random() - 0.5) * jitter;
+                const curX = w.x + (targetX - w.x) * smoothT + nx;
+                const curY = w.y + (targetY - w.y) * smoothT + ny;
+                const curZ = w.z + (targetZ - w.z) * smoothT + nz;
+                return { ...w, curX, curY, curZ, projected: projectConv(curX, curY, curZ) };
+            });
+
+            currentPositions.sort((a, b) => b.projected.depth - a.projected.depth).forEach(w => {
+                const p = w.projected;
+                const alpha = isPaused ? 1 : 0.4 + smoothT * 0.6;
+                convCtx.save();
+                convCtx.globalAlpha = alpha;
+                convCtx.fillStyle = w.color;
+                convCtx.shadowColor = w.color;
+                convCtx.shadowBlur = 10 * alpha;
+                const radius = (6 + p.perspective * 4) * (0.8 + smoothT * 0.4);
+                convCtx.beginPath(); convCtx.arc(p.x, p.y, radius, 0, Math.PI * 2); convCtx.fill();
+                convCtx.fillStyle = '#fff';
+                convCtx.font = `700 ${16 + smoothT * 4}px STIX Two Text, serif`;
+                convCtx.fillText(w.label, p.x + radius + 5, p.y + 5);
+                convCtx.restore();
+            });
+            requestAnimationFrame(drawConvScene);
+        }
+
+        function getConvPointerPosition(e) {
+            const rect = convCanvas.getBoundingClientRect();
+            const source = e.touches ? e.touches[0] : e;
+            return { x: (source.clientX - rect.left) * (convCanvas.width / rect.width), y: (source.clientY - rect.top) * (convCanvas.height / rect.height) };
+        }
+        function startConvDrag(e) { if (e.cancelable) e.preventDefault(); const p = getConvPointerPosition(e); convDragging = true; convLastX = p.x; convLastY = p.y; }
+        function moveConvDrag(e) { if (!convDragging) return; if (e.cancelable) e.preventDefault(); const p = getConvPointerPosition(e); convAngleY += (p.x - convLastX) * 0.01; convAngleX += (p.y - convLastY) * 0.01; convLastX = p.x; convLastY = p.y; }
+        function endConvDrag() { convDragging = false; }
+
+        convCanvas.addEventListener('mousedown', startConvDrag);
+        convCanvas.addEventListener('mousemove', moveConvDrag);
+        window.addEventListener('mouseup', endConvDrag);
+        convCanvas.addEventListener('touchstart', startConvDrag, { passive: false });
+        convCanvas.addEventListener('touchmove', moveConvDrag, { passive: false });
+        convCanvas.addEventListener('touchend', endConvDrag);
+        convCanvas.addEventListener('touchcancel', endConvDrag);
+
+        // Bowl-Shaping Animation beside the word convergence visual
+        const bowlMorphCanvas = document.getElementById('bowlMorphCanvas');
+        const bowlMorphCtx = bowlMorphCanvas ? bowlMorphCanvas.getContext('2d') : null;
+        let bowlMorphFrame = 0;
+        const BOWL_MORPH_DURATION = 420;
+        const bowlBasins = [
+            { x: -1.7, y: -1.1, depth: 0.9, spreadX: 1.5, spreadY: 1.0, color: '#49a7ff' },
+            { x: -0.6, y: 1.4, depth: 0.7, spreadX: 1.0, spreadY: 1.6, color: '#ffd166' },
+            { x: 0.8, y: -1.5, depth: 0.75, spreadX: 1.2, spreadY: 1.2, color: '#ff4b3e' },
+            { x: 1.45, y: 0.75, depth: 1.25, spreadX: 1.6, spreadY: 1.1, color: '#64f4ac' },
+            { x: 0.05, y: 0.05, depth: 0.45, spreadX: 2.2, spreadY: 2.2, color: '#cfcfcf' }
+        ];
+        const bowlRidges = [
+            { x: -0.25, y: -0.25, height: 0.42, spreadX: 0.28, spreadY: 2.0, angle: -0.72 },
+            { x: 0.9, y: 0.0, height: 0.32, spreadX: 0.36, spreadY: 1.35, angle: 0.9 }
+        ];
+
+        function getBowlMorphProgress() {
+            const cycle = (bowlMorphFrame % BOWL_MORPH_DURATION) / BOWL_MORPH_DURATION;
+            if (cycle < 0.08) return 0;
+            if (cycle > 0.76) return 1;
+
+            const t = (cycle - 0.08) / 0.68;
+            return t * t * (3 - 2 * t);
+        }
+
+        function ellipticalFalloff(x, y, feature) {
+            const dx = x - feature.x;
+            const dy = y - feature.y;
+            const angle = feature.angle || 0;
+            const rx = dx * Math.cos(angle) - dy * Math.sin(angle);
+            const ry = dx * Math.sin(angle) + dy * Math.cos(angle);
+            return Math.exp(-(rx * rx * feature.spreadX + ry * ry * feature.spreadY));
+        }
+
+        function getBowlMorphHeight(x, y, progress) {
+            const broadBowl = 0.045 * (x * x + y * y);
+            const basins = bowlBasins.reduce((total, basin) => {
+                return total - basin.depth * ellipticalFalloff(x, y, basin);
+            }, 0);
+            const ridges = bowlRidges.reduce((total, ridge) => {
+                return total + ridge.height * ellipticalFalloff(x, y, ridge);
+            }, 0);
+            const ripples = 0.08 * Math.sin(2.4 * x + 0.8 * y) + 0.06 * Math.cos(1.4 * x - 2.1 * y);
+            return progress * (broadBowl + basins + ridges + ripples);
+        }
+
+        function projectBowlMorph(x, y, z) {
+            const centerX = bowlMorphCanvas.width / 2;
+            const centerY = bowlMorphCanvas.height / 2 + 4;
+            const scale = 66;
+            const pitch = -1.43;
+            const yaw = 0.48 + Math.sin(bowlMorphFrame * 0.01) * 0.08;
+
+            let x1 = x * Math.cos(yaw) - y * Math.sin(yaw);
+            let y1 = x * Math.sin(yaw) + y * Math.cos(yaw);
+            let y2 = y1 * Math.cos(pitch) - z * Math.sin(pitch);
+            let z2 = y1 * Math.sin(pitch) + z * Math.cos(pitch);
+            const perspective = 300 / (300 + z2 * 34);
+
+            return { x: centerX + x1 * scale * perspective, y: centerY - y2 * scale * perspective, depth: z2, perspective };
+        }
+
+        function drawBowlMorphScene() {
+            if (!bowlMorphCtx) return;
+            bowlMorphFrame++;
+            const progress = getBowlMorphProgress();
+            bowlMorphCtx.clearRect(0, 0, bowlMorphCanvas.width, bowlMorphCanvas.height);
+
+            const bg = bowlMorphCtx.createRadialGradient(
+                bowlMorphCanvas.width / 2,
+                bowlMorphCanvas.height / 2,
+                35,
+                bowlMorphCanvas.width / 2,
+                bowlMorphCanvas.height / 2,
+                300
+            );
+            bg.addColorStop(0, '#131313');
+            bg.addColorStop(1, '#000');
+            bowlMorphCtx.fillStyle = bg;
+            bowlMorphCtx.fillRect(0, 0, bowlMorphCanvas.width, bowlMorphCanvas.height);
+
+            const gridSize = 2.8;
+            const step = 0.24;
+            for (let x = -gridSize; x <= gridSize; x += step) {
+                bowlMorphCtx.beginPath();
+                bowlMorphCtx.strokeStyle = `rgba(100, 244, 172, ${0.14 + progress * 0.22})`;
+                bowlMorphCtx.lineWidth = 1.8;
+                for (let y = -gridSize; y <= gridSize; y += step) {
+                    const p = projectBowlMorph(x, y, getBowlMorphHeight(x, y, progress));
+                    if (y === -gridSize) bowlMorphCtx.moveTo(p.x, p.y); else bowlMorphCtx.lineTo(p.x, p.y);
+                }
+                bowlMorphCtx.stroke();
+            }
+
+            for (let y = -gridSize; y <= gridSize; y += step) {
+                bowlMorphCtx.beginPath();
+                bowlMorphCtx.strokeStyle = `rgba(73, 167, 255, ${0.13 + progress * 0.2})`;
+                bowlMorphCtx.lineWidth = 1.8;
+                for (let x = -gridSize; x <= gridSize; x += step) {
+                    const p = projectBowlMorph(x, y, getBowlMorphHeight(x, y, progress));
+                    if (x === -gridSize) bowlMorphCtx.moveTo(p.x, p.y); else bowlMorphCtx.lineTo(p.x, p.y);
+                }
+                bowlMorphCtx.stroke();
+            }
+
+            bowlBasins.slice(0, 4).forEach((basin) => {
+                const p = projectBowlMorph(basin.x, basin.y, getBowlMorphHeight(basin.x, basin.y, progress));
+                bowlMorphCtx.save();
+                bowlMorphCtx.globalAlpha = 0.18 + progress * 0.7;
+                bowlMorphCtx.strokeStyle = basin.color;
+                bowlMorphCtx.lineWidth = 3;
+                bowlMorphCtx.shadowColor = basin.color;
+                bowlMorphCtx.shadowBlur = 12 * progress;
+                bowlMorphCtx.beginPath();
+                bowlMorphCtx.arc(p.x, p.y, (10 + progress * 8) * p.perspective, 0, Math.PI * 2);
+                bowlMorphCtx.stroke();
+                bowlMorphCtx.restore();
+            });
+
+            bowlMorphCtx.fillStyle = 'rgba(255, 255, 255, 0.84)';
+            bowlMorphCtx.font = '700 18px STIX Two Text, Times New Roman, serif';
+            const cycle = (bowlMorphFrame % BOWL_MORPH_DURATION) / BOWL_MORPH_DURATION;
+            const label = cycle < 0.08 ? 'New training run: flat surface' : progress < 1 ? 'Training shapes the bowl' : 'Trained bowl holds its shape';
+            bowlMorphCtx.fillText(label, 16, 28);
+            requestAnimationFrame(drawBowlMorphScene);
+        }
+
+        // Output Generation Animation (Question 14)
+        const outputWordCanvas = document.getElementById('outputWordCanvas');
+        const outputWordCtx = outputWordCanvas ? outputWordCanvas.getContext('2d') : null;
+        const outputDistributionCanvas = document.getElementById('outputDistributionCanvas');
+        const outputDistributionCtx = outputDistributionCanvas ? outputDistributionCanvas.getContext('2d') : null;
+        const outputBowlCanvas = document.getElementById('outputBowlCanvas');
+        const outputBowlCtx = outputBowlCanvas ? outputBowlCanvas.getContext('2d') : null;
+        const outputTemperature = document.getElementById('outputTemperature');
+        const outputTemperatureLabel = document.getElementById('outputTemperatureLabel');
+        const restartOutputLoop = document.getElementById('restart-output-loop');
+        const toggleOutputBowlAutoRotate = document.getElementById('toggle-output-bowl-autorotate');
+        const toggleOutputAnimation = document.getElementById('toggle-output-animation');
+        let outputFrame = 0;
+        let outputMarbles = [];
+        const OUTPUT_BOWL_INITIAL_ANGLE_X = -0.82;
+        const OUTPUT_BOWL_INITIAL_ANGLE_Y = 0.72;
+        const OUTPUT_BOWL_MIN_ANGLE_X = -1.35;
+        const OUTPUT_BOWL_MAX_ANGLE_X = -0.35;
+        let outputBowlAngleX = OUTPUT_BOWL_INITIAL_ANGLE_X;
+        let outputBowlAngleY = OUTPUT_BOWL_INITIAL_ANGLE_Y;
+        let outputBowlDragging = false;
+        let outputBowlLastX = 0;
+        let outputBowlLastY = 0;
+        let outputBowlAutoRotate = false;
+        let outputAnimationPaused = false;
+        const outputSequences = {
+            low: [
+                { label: 'ChatGPT', point: [-2.2, -1.0, -0.6], color: '#49a7ff' },
+                { label: 'says', point: [-1.35, 0.75, 0.15], color: '#ffd166' },
+                { label: 'the', point: [-0.55, -0.35, 1.0], color: '#64f4ac' },
+                { label: 'the', point: [0.25, 0.9, -0.2], color: '#64f4ac' },
+                { label: 'the', point: [0.95, -0.6, 0.7], color: '#64f4ac' },
+                { label: 'answer', point: [1.75, 0.5, -0.7], color: '#49a7ff' },
+                { label: 'the', point: [2.35, -0.3, 0.25], color: '#64f4ac' }
+            ],
+            balanced: [
+                { label: 'ChatGPT', point: [-2.2, -1.0, -0.6], color: '#49a7ff' },
+                { label: 'chooses', point: [-1.25, 0.9, 0.2], color: '#ffd166' },
+                { label: 'one', point: [-0.35, -0.3, 1.1], color: '#64f4ac' },
+                { label: 'word', point: [0.55, 1.0, -0.2], color: '#ff4b3e' },
+                { label: 'at', point: [1.35, -0.55, 0.7], color: '#ffd166' },
+                { label: 'a', point: [1.95, 0.55, -0.8], color: '#49a7ff' },
+                { label: 'time', point: [2.45, -0.25, 0.3], color: '#64f4ac' }
+            ],
+            creative: [
+                { label: 'ChatGPT', point: [-2.2, -1.0, -0.6], color: '#49a7ff' },
+                { label: 'builds', point: [-1.35, 1.05, 0.3], color: '#ffd166' },
+                { label: 'fresh', point: [-0.45, -0.4, 1.25], color: '#64f4ac' },
+                { label: 'ideas', point: [0.45, 1.25, -0.35], color: '#ff4b3e' },
+                { label: 'from', point: [1.25, -0.7, 0.85], color: '#ffd166' },
+                { label: 'learned', point: [1.9, 0.62, -0.9], color: '#49a7ff' },
+                { label: 'patterns', point: [2.48, -0.22, 0.35], color: '#64f4ac' }
+            ],
+            nonsense: [
+                { label: 'ChatGPT', point: [-2.2, -1.0, -0.6], color: '#49a7ff' },
+                { label: 'purple', point: [-1.45, 1.45, 1.2], color: '#cfcfcf' },
+                { label: 'algebra', point: [-0.15, -1.55, -1.1], color: '#ffd166' },
+                { label: 'banana', point: [1.35, 1.45, 1.35], color: '#64f4ac' },
+                { label: 'static', point: [-0.95, 0.15, -1.75], color: '#ff4b3e' },
+                { label: 'velvet', point: [1.9, -0.85, -0.8], color: '#49a7ff' },
+                { label: 'toaster', point: [2.55, 0.2, 0.5], color: '#cfcfcf' }
+            ]
+        };
+        const outputExtraWords = [
+            { label: 'maybe', point: [-1.8, 1.6, 1.2], color: '#cfcfcf' },
+            { label: 'next', point: [0.1, -1.65, -1.1], color: '#cfcfcf' },
+            { label: 'idea', point: [1.65, 1.55, 1.25], color: '#cfcfcf' },
+            { label: 'because', point: [-0.9, 0.1, -1.7], color: '#cfcfcf' }
+        ];
+
+        function getOutputTemperature() {
+            return outputTemperature ? Number(outputTemperature.value) : 38;
+        }
+
+        function getOutputMode() {
+            const temperature = getOutputTemperature();
+            if (temperature < 16) return 'low';
+            if (temperature < 52) return 'balanced';
+            if (temperature < 76) return 'creative';
+            return 'nonsense';
+        }
+
+        function getOutputModeText() {
+            const mode = getOutputMode();
+            if (mode === 'low') return 'Too low: the response gets stuck and repetitive';
+            if (mode === 'creative') return 'Higher: more creative, still mostly connected';
+            if (mode === 'nonsense') return 'Too high: randomness takes over';
+            return 'Balanced: coherent with some variety';
+        }
+
+        function getCurrentOutputSequence() {
+            return outputSequences[getOutputMode()] || outputSequences.balanced;
+        }
+
+        function getOutputCycleState() {
+            const currentSequence = getCurrentOutputSequence();
+            const cycle = outputFrame % 520;
+            const activeIndex = Math.min(currentSequence.length - 1, Math.floor(cycle / 62));
+            return { currentSequence, activeIndex };
+        }
+
+        function updateOutputTemperatureLabel() {
+            if (!outputTemperatureLabel) return;
+            outputTemperatureLabel.textContent = `Temperature: ${getOutputTemperature()}% - ${getOutputModeText()}`;
+        }
+
+        function projectOutputWord(point) {
+            const [x, y, z] = point;
+            const centerX = outputWordCanvas.width / 2;
+            const centerY = outputWordCanvas.height / 2 + 8;
+            const scale = 70;
+            const angleX = -0.5;
+            const angleY = 0.58 + Math.sin(outputFrame * 0.008) * 0.08;
+            const y1 = y * Math.cos(angleX) - z * Math.sin(angleX);
+            const z1 = y * Math.sin(angleX) + z * Math.cos(angleX);
+            const x2 = x * Math.cos(angleY) - z1 * Math.sin(angleY);
+            const z2 = x * Math.sin(angleY) + z1 * Math.cos(angleY);
+            const perspective = 390 / (390 + z2 * 42);
+            return { x: centerX + x2 * scale * perspective, y: centerY - y1 * scale * perspective, depth: z2, perspective };
+        }
+
+        function drawOutputWordScene() {
+            if (!outputWordCtx) return;
+            const { currentSequence, activeIndex } = getOutputCycleState();
+            outputWordCtx.clearRect(0, 0, outputWordCanvas.width, outputWordCanvas.height);
+            const bg = outputWordCtx.createRadialGradient(200, 160, 35, 200, 180, 300);
+            bg.addColorStop(0, '#141414');
+            bg.addColorStop(1, '#000');
+            outputWordCtx.fillStyle = bg;
+            outputWordCtx.fillRect(0, 0, outputWordCanvas.width, outputWordCanvas.height);
+
+            const axisLen = 2.8;
+            [
+                { end: [axisLen, 0, 0], color: 'rgba(255, 209, 102, 0.28)' },
+                { end: [0, axisLen, 0], color: 'rgba(255, 75, 62, 0.24)' },
+                { end: [0, 0, axisLen], color: 'rgba(73, 167, 255, 0.26)' }
+            ].forEach(axis => {
+                const a = projectOutputWord(axis.end.map(value => -value));
+                const b = projectOutputWord(axis.end);
+                outputWordCtx.strokeStyle = axis.color;
+                outputWordCtx.lineWidth = 2.5;
+                outputWordCtx.beginPath();
+                outputWordCtx.moveTo(a.x, a.y);
+                outputWordCtx.lineTo(b.x, b.y);
+                outputWordCtx.stroke();
+            });
+
+            const pulse = 0.5 + 0.5 * Math.sin(outputFrame * 0.16);
+            const allWords = currentSequence.concat(outputExtraWords).map((word, index) => ({
+                ...word,
+                sequenceIndex: index < currentSequence.length ? index : -1,
+                projected: projectOutputWord(word.point)
+            }));
+
+            for (let i = 1; i <= activeIndex; i++) {
+                const from = projectOutputWord(currentSequence[i - 1].point);
+                const to = projectOutputWord(currentSequence[i].point);
+                outputWordCtx.strokeStyle = 'rgba(100, 244, 172, 0.52)';
+                outputWordCtx.lineWidth = 3;
+                outputWordCtx.beginPath();
+                outputWordCtx.moveTo(from.x, from.y);
+                outputWordCtx.lineTo(to.x, to.y);
+                outputWordCtx.stroke();
+            }
+
+            allWords.sort((a, b) => b.projected.depth - a.projected.depth).forEach(word => {
+                const selected = word.sequenceIndex === activeIndex;
+                const alreadyChosen = word.sequenceIndex >= 0 && word.sequenceIndex < activeIndex;
+                const available = word.sequenceIndex === activeIndex + 1 || word.sequenceIndex === -1;
+                const alpha = selected ? 1 : alreadyChosen ? 0.78 : available ? 0.36 : 0.16;
+                const radius = selected ? 10 + pulse * 4 : alreadyChosen ? 7 : 5;
+                outputWordCtx.save();
+                outputWordCtx.globalAlpha = alpha;
+                outputWordCtx.fillStyle = word.color;
+                outputWordCtx.shadowColor = word.color;
+                outputWordCtx.shadowBlur = selected ? 18 : 6;
+                outputWordCtx.beginPath();
+                outputWordCtx.arc(word.projected.x, word.projected.y, radius * word.projected.perspective, 0, Math.PI * 2);
+                outputWordCtx.fill();
+                outputWordCtx.fillStyle = '#fff';
+                outputWordCtx.font = `700 ${selected ? 21 : 16}px STIX Two Text, Times New Roman, serif`;
+                outputWordCtx.fillText(word.label, word.projected.x + 10, word.projected.y + 4);
+                outputWordCtx.restore();
+            });
+
+            const drawFittedText = (text, x, y, maxWidth, size, weight, color) => {
+                let fontSize = size;
+                outputWordCtx.font = `${weight} ${fontSize}px STIX Two Text, Times New Roman, serif`;
+                while (fontSize > 11 && outputWordCtx.measureText(text).width > maxWidth) {
+                    fontSize -= 1;
+                    outputWordCtx.font = `${weight} ${fontSize}px STIX Two Text, Times New Roman, serif`;
+                }
+                outputWordCtx.fillStyle = color;
+                outputWordCtx.fillText(text, x, y);
+            };
+
+            drawFittedText(getOutputModeText(), 16, 30, outputWordCanvas.width - 32, 18, 700, 'rgba(255, 255, 255, 0.9)');
+            drawFittedText(
+                currentSequence.slice(0, activeIndex + 1).map(word => word.label).join(' '),
+                16,
+                outputWordCanvas.height - 24,
+                outputWordCanvas.width - 32,
+                20,
+                800,
+                '#64f4ac'
+            );
+        }
+
+        function getOutputDistributionData() {
+            const { currentSequence, activeIndex } = getOutputCycleState();
+            const selectedWord = currentSequence[activeIndex];
+            const previousWords = currentSequence.slice(0, activeIndex).map(word => word.label).join(' ') || 'Start';
+            const labels = new Set([selectedWord.label]);
+            const candidates = [{ label: selectedWord.label, color: selectedWord.color, selected: true, baseLogit: 3.4 }];
+
+            Object.values(outputSequences).forEach(sequence => {
+                const candidate = sequence[activeIndex];
+                if (candidate && !labels.has(candidate.label)) {
+                    labels.add(candidate.label);
+                    candidates.push({
+                        label: candidate.label,
+                        color: candidate.color,
+                        selected: false,
+                        baseLogit: 2.3 - Math.min(0.8, candidates.length * 0.12)
+                    });
+                }
+            });
+
+            outputExtraWords.forEach((word, index) => {
+                if (!labels.has(word.label) && candidates.length < 8) {
+                    labels.add(word.label);
+                    candidates.push({
+                        label: word.label,
+                        color: word.color,
+                        selected: false,
+                        baseLogit: 0.55 + index * 0.13
+                    });
+                }
+            });
+
+            const temperature = getOutputTemperature();
+            const softmaxTemperature = 0.28 + (temperature / 100) * 2.25;
+            const highTemperatureLift = Math.pow(temperature / 100, 1.7) * 0.95;
+            const logits = candidates.map((candidate, index) => {
+                const farOptionLift = candidate.selected ? 0 : highTemperatureLift * (0.45 + index * 0.09);
+                return candidate.baseLogit + farOptionLift;
+            });
+            const maxLogit = Math.max(...logits);
+            const weights = logits.map(logit => Math.exp((logit - maxLogit) / softmaxTemperature));
+            const totalWeight = weights.reduce((total, weight) => total + weight, 0);
+
+            return {
+                previousWords,
+                selectedWord,
+                candidates: candidates.map((candidate, index) => ({
+                    ...candidate,
+                    probability: weights[index] / totalWeight
+                })).sort((a, b) => b.probability - a.probability)
+            };
+        }
+
+        function drawOutputDistributionScene() {
+            if (!outputDistributionCtx) return;
+            const data = getOutputDistributionData();
+            const ctx = outputDistributionCtx;
+            const width = outputDistributionCanvas.width;
+            const height = outputDistributionCanvas.height;
+            const pulse = 0.5 + 0.5 * Math.sin(outputFrame * 0.16);
+
+            ctx.clearRect(0, 0, width, height);
+            const bg = ctx.createRadialGradient(width / 2, 130, 35, width / 2, 180, 310);
+            bg.addColorStop(0, '#161616');
+            bg.addColorStop(1, '#000');
+            ctx.fillStyle = bg;
+            ctx.fillRect(0, 0, width, height);
+
+            const drawFittedText = (text, x, y, maxWidth, size, weight, color, align = 'left') => {
+                let fontSize = size;
+                ctx.font = `${weight} ${fontSize}px STIX Two Text, Times New Roman, serif`;
+                while (fontSize > 10 && ctx.measureText(text).width > maxWidth) {
+                    fontSize -= 1;
+                    ctx.font = `${weight} ${fontSize}px STIX Two Text, Times New Roman, serif`;
+                }
+                ctx.fillStyle = color;
+                ctx.textAlign = align;
+                ctx.fillText(text, x, y);
+                ctx.textAlign = 'left';
+            };
+
+            drawFittedText('Softmax: possible next words', 16, 28, width - 32, 18, 800, 'rgba(255, 255, 255, 0.92)');
+            drawFittedText(`After: ${data.previousWords}`, 16, 52, width - 32, 15, 700, 'rgba(207, 207, 207, 0.9)');
+            drawFittedText(`Chosen: ${data.selectedWord.label}`, 16, 78, width - 32, 20, 800, '#64f4ac');
+
+            const barX = 112;
+            const barMaxWidth = width - barX - 64;
+            const startY = 108;
+            const rowHeight = 27;
+            data.candidates.forEach((candidate, index) => {
+                const y = startY + index * rowHeight;
+                const barWidth = Math.max(4, candidate.probability * barMaxWidth);
+                const selectedGlow = candidate.selected ? 0.18 + pulse * 0.22 : 0;
+
+                drawFittedText(candidate.label, 16, y + 15, 82, 15, candidate.selected ? 800 : 700, candidate.selected ? '#fff' : 'rgba(255, 255, 255, 0.78)');
+
+                ctx.fillStyle = 'rgba(255, 255, 255, 0.08)';
+                ctx.fillRect(barX, y, barMaxWidth, 17);
+                ctx.fillStyle = candidate.color;
+                ctx.globalAlpha = candidate.selected ? 0.9 : 0.48;
+                ctx.fillRect(barX, y, barWidth, 17);
+                ctx.globalAlpha = 1;
+
+                if (candidate.selected) {
+                    ctx.strokeStyle = `rgba(100, 244, 172, ${0.62 + selectedGlow})`;
+                    ctx.lineWidth = 2;
+                    ctx.strokeRect(barX - 2, y - 2, barWidth + 4, 21);
+                }
+
+                drawFittedText(`${Math.round(candidate.probability * 100)}%`, width - 48, y + 15, 38, 14, 800, candidate.selected ? '#64f4ac' : 'rgba(207, 207, 207, 0.86)', 'right');
+            });
+
+            const temperature = getOutputTemperature();
+            const tempText = temperature < 20
+                ? 'Low temp: one tall bar'
+                : temperature < 55
+                    ? 'Balanced temp: likely words compete'
+                    : temperature < 78
+                        ? 'Higher temp: distribution spreads out'
+                        : 'Very high temp: unlikely words get lifted';
+            drawFittedText(tempText, 16, height - 24, width - 32, 16, 800, '#ffd166');
+        }
+
+        const outputBowlWells = [
+            { label: 'Global Min', x: 1.2, y: 1.2, depth: 2.8, spread: 1.45, radius: 0.48, color: '#64f4ac', global: true },
+            { label: 'Local Trap', x: -1.5, y: -1.5, depth: 0.55, spread: 2.6, radius: 0.32, color: '#ffd166' },
+            { label: 'Local Trap', x: 1.2, y: -1.2, depth: 0.42, spread: 3.5, radius: 0.28, color: '#ffd166' },
+            { label: 'Local Trap', x: -1.2, y: 1.2, depth: 0.42, spread: 3.5, radius: 0.28, color: '#ffd166' },
+            { label: 'Local Trap', x: 0, y: 1.5, depth: 0.34, spread: 4.0, radius: 0.24, color: '#ffd166' }
+        ];
+
+        function getOutputBowlHeight(x, y) {
+            const bowl = 0.1 * (x * x + y * y);
+            const wells = outputBowlWells.reduce((total, well) => {
+                const distanceSquared = Math.pow(x - well.x, 2) + Math.pow(y - well.y, 2);
+                return total + well.depth * Math.exp(-distanceSquared * well.spread);
+            }, 0);
+            return bowl - wells;
+        }
+
+        function projectOutputBowl(x, y, z) {
+            const centerX = outputBowlCanvas.width / 2;
+            const centerY = outputBowlCanvas.height / 2 + 34;
+            const scale = 48;
+            const pitch = outputBowlAngleX;
+            const yaw = outputBowlAngleY;
+            let x1 = x * Math.cos(yaw) - y * Math.sin(yaw);
+            let y1 = x * Math.sin(yaw) + y * Math.cos(yaw);
+            let y2 = y1 * Math.cos(pitch) - z * Math.sin(pitch);
+            let z2 = y1 * Math.sin(pitch) + z * Math.cos(pitch);
+            const perspective = 350 / (350 + z2 * 40);
+            return { x: centerX + x1 * scale * perspective, y: centerY - y2 * scale * perspective, depth: z2, perspective };
+        }
+
+        function getOutputBowlPointerPosition(e) {
+            const rect = outputBowlCanvas.getBoundingClientRect();
+            const source = e.touches ? e.touches[0] : e;
+            return {
+                x: (source.clientX - rect.left) * (outputBowlCanvas.width / rect.width),
+                y: (source.clientY - rect.top) * (outputBowlCanvas.height / rect.height)
+            };
+        }
+
+        function startOutputBowlDrag(e) {
+            if (e.cancelable) e.preventDefault();
+            const position = getOutputBowlPointerPosition(e);
+            outputBowlDragging = true;
+            outputBowlLastX = position.x;
+            outputBowlLastY = position.y;
+        }
+
+        function moveOutputBowlDrag(e) {
+            if (!outputBowlDragging) return;
+            if (e.cancelable) e.preventDefault();
+            const position = getOutputBowlPointerPosition(e);
+            outputBowlAngleY += (position.x - outputBowlLastX) * 0.01;
+            outputBowlAngleX = Math.max(OUTPUT_BOWL_MIN_ANGLE_X, Math.min(OUTPUT_BOWL_MAX_ANGLE_X, outputBowlAngleX + (position.y - outputBowlLastY) * 0.01));
+            outputBowlLastX = position.x;
+            outputBowlLastY = position.y;
+        }
+
+        function endOutputBowlDrag() {
+            outputBowlDragging = false;
+        }
+
+        function setOutputBowlAutoRotate(enabled) {
+            outputBowlAutoRotate = enabled;
+            if (!toggleOutputBowlAutoRotate) return;
+            toggleOutputBowlAutoRotate.classList.toggle('is-active', enabled);
+            toggleOutputBowlAutoRotate.setAttribute('aria-pressed', enabled ? 'true' : 'false');
+            toggleOutputBowlAutoRotate.textContent = enabled ? 'Stop Rotation' : 'Auto Rotate';
+        }
+
+        function setOutputAnimationPaused(paused) {
+            outputAnimationPaused = paused;
+            if (!toggleOutputAnimation) return;
+            toggleOutputAnimation.classList.toggle('is-paused', paused);
+            toggleOutputAnimation.setAttribute('aria-pressed', paused ? 'true' : 'false');
+            toggleOutputAnimation.textContent = paused ? 'Resume Animation' : 'Pause Animation';
+        }
+
+        function resetOutputBowlCamera() {
+            outputBowlAngleX = OUTPUT_BOWL_INITIAL_ANGLE_X;
+            outputBowlAngleY = OUTPUT_BOWL_INITIAL_ANGLE_Y;
+        }
+
+        function initOutputMarbles() {
+            const traps = outputBowlWells.filter(well => !well.global);
+            outputMarbles = Array.from({ length: 18 }, (_, index) => {
+                const useTrap = Math.random() < 0.68 && traps.length > 0;
+                const well = useTrap
+                    ? traps[Math.floor(Math.random() * traps.length)]
+                    : outputBowlWells[Math.floor(Math.random() * outputBowlWells.length)];
+                const scatter = useTrap ? 0.52 : 0.78;
+
+                return {
+                    x: well.x + (Math.random() - 0.5) * scatter,
+                    y: well.y + (Math.random() - 0.5) * scatter,
+                    vx: 0,
+                    vy: 0,
+                    fallenOut: false,
+                    fallAge: 0,
+                    settled: false,
+                    noiseAngle: Math.random() * Math.PI * 2,
+                    noisePhase: Math.random() * Math.PI * 2,
+                    noiseSpin: 0.0015 + Math.random() * 0.0025,
+                    color: index % 3 === 0 ? '#ff4b3e' : index % 3 === 1 ? '#49a7ff' : '#ffd166'
+                };
+            });
+        }
+
+        function updateOutputMarbles() {
+            if (outputFrame % 360 === 0 || outputMarbles.length === 0) initOutputMarbles();
+            const cycleProgress = (outputFrame % 360) / 360;
+            const elapsed = cycleProgress * sgdFallDuration;
+            const dt = 0.62;
+            const temperature = getOutputTemperature();
+            const decayingNoise = Math.min(temperature, 50) / 50;
+            const sustainedNoise = Math.max(0, temperature - 50) / 50;
+            const isFalling = cycleProgress < 0.92;
+            const fade = Math.max(0, 1 - cycleProgress / 0.92);
+            const gravityStrength = 0.0042 * (0.22 + 0.78 * fade);
+            const damping = 0.98;
+            const canFallOut = temperature >= 75;
+
+            outputMarbles.forEach(marble => {
+                if (marble.fallenOut) {
+                    marble.fallAge += dt;
+                    marble.x += marble.vx * dt * 0.18;
+                    marble.y += marble.vy * dt * 0.18;
+                    return;
+                }
+
+                const eps = 0.025;
+                const gradX = (getOutputBowlHeight(marble.x + eps, marble.y) - getOutputBowlHeight(marble.x - eps, marble.y)) / (2 * eps);
+                const gradY = (getOutputBowlHeight(marble.x, marble.y + eps) - getOutputBowlHeight(marble.x, marble.y - eps)) / (2 * eps);
+                const decayingKick = decayingNoise * 0.12 * Math.pow(fade, 3);
+                const sustainedKick = sustainedNoise * 0.075 * Math.pow(fade, 1.25) * (isFalling ? 1 : 0.15);
+                const randomKick = decayingKick + sustainedKick;
+                const shakeX = (Math.random() - 0.5) * randomKick;
+                const shakeY = (Math.random() - 0.5) * randomKick;
+                const highNoisePower = sustainedNoise * sustainedNoise;
+                const gustAngle = marble.noiseAngle + Math.sin(elapsed * marble.noiseSpin + marble.noisePhase) * 0.9;
+                const directionalKick = highNoisePower * 0.08 * Math.pow(fade, 0.8) * (isFalling ? 1 : 0.2);
+                const gustX = Math.cos(gustAngle) * directionalKick;
+                const gustY = Math.sin(gustAngle) * directionalKick;
+
+                marble.vx = marble.vx * damping - gradX * gravityStrength * dt + (shakeX + gustX) * dt;
+                marble.vy = marble.vy * damping - gradY * gravityStrength * dt + (shakeY + gustY) * dt;
+                marble.x += marble.vx * dt;
+                marble.y += marble.vy * dt;
+
+                if (canFallOut && Math.hypot(marble.x, marble.y) > 2.78) {
+                    marble.fallenOut = true;
+                    marble.settled = false;
+                    marble.vx *= 1.45;
+                    marble.vy *= 1.45;
+                    return;
+                }
+
+                if (Math.abs(marble.x) > 2.6) { marble.x = Math.sign(marble.x) * 2.6; marble.vx *= canFallOut ? 0.9 : -0.4; }
+                if (Math.abs(marble.y) > 2.6) { marble.y = Math.sign(marble.y) * 2.6; marble.vy *= canFallOut ? 0.9 : -0.4; }
+
+                const distToGlobal = Math.hypot(marble.x - 1.2, marble.y - 1.2);
+                marble.settled = distToGlobal < 0.6 || outputBowlWells.some(well => !well.global && Math.hypot(marble.x - well.x, marble.y - well.y) < well.radius);
+            });
+        }
+
+        function drawOutputTarget(well) {
+            const p = projectOutputBowl(well.x, well.y, getOutputBowlHeight(well.x, well.y));
+            outputBowlCtx.save();
+            outputBowlCtx.strokeStyle = well.color;
+            outputBowlCtx.lineWidth = well.global ? 3 : 2;
+            outputBowlCtx.globalAlpha = well.global ? 1 : 0.82;
+            outputBowlCtx.beginPath();
+            outputBowlCtx.arc(p.x, p.y, (well.global ? 13 : 10) * p.perspective, 0, Math.PI * 2);
+            outputBowlCtx.stroke();
+            outputBowlCtx.fillStyle = well.color;
+            outputBowlCtx.font = '700 14px STIX Two Text, Times New Roman, serif';
+            outputBowlCtx.fillText(well.global ? 'Global' : 'Local', p.x + 8, p.y - 8);
+            outputBowlCtx.restore();
+        }
+
+        function drawOutputBowlScene(advance = true) {
+            if (!outputBowlCtx) return;
+            if (advance) updateOutputMarbles();
+            outputBowlCtx.clearRect(0, 0, outputBowlCanvas.width, outputBowlCanvas.height);
+            const bg = outputBowlCtx.createRadialGradient(200, 160, 35, 200, 180, 300);
+            bg.addColorStop(0, '#121212');
+            bg.addColorStop(1, '#000');
+            outputBowlCtx.fillStyle = bg;
+            outputBowlCtx.fillRect(0, 0, outputBowlCanvas.width, outputBowlCanvas.height);
+
+            const gridSize = 2.5;
+            const step = 0.25;
+            for (let x = -gridSize; x <= gridSize; x += step) {
+                outputBowlCtx.strokeStyle = 'rgba(73, 167, 255, 0.34)';
+                outputBowlCtx.lineWidth = 1.8;
+                outputBowlCtx.beginPath();
+                for (let y = -gridSize; y <= gridSize; y += step) {
+                    const p = projectOutputBowl(x, y, getOutputBowlHeight(x, y));
+                    if (y === -gridSize) outputBowlCtx.moveTo(p.x, p.y); else outputBowlCtx.lineTo(p.x, p.y);
+                }
+                outputBowlCtx.stroke();
+            }
+            for (let y = -gridSize; y <= gridSize; y += step) {
+                outputBowlCtx.strokeStyle = 'rgba(73, 167, 255, 0.38)';
+                outputBowlCtx.lineWidth = 1.8;
+                outputBowlCtx.beginPath();
+                for (let x = -gridSize; x <= gridSize; x += step) {
+                    const p = projectOutputBowl(x, y, getOutputBowlHeight(x, y));
+                    if (x === -gridSize) outputBowlCtx.moveTo(p.x, p.y); else outputBowlCtx.lineTo(p.x, p.y);
+                }
+                outputBowlCtx.stroke();
+            }
+
+            outputBowlWells.forEach(drawOutputTarget);
+
+            let globalCount = 0;
+            let localCount = 0;
+            let fallenCount = 0;
+            const projectedMarbles = outputMarbles.map(marble => ({
+                ...marble,
+                projected: marble.fallenOut
+                    ? projectOutputBowl(
+                        Math.max(-2.8, Math.min(2.8, marble.x)),
+                        Math.max(-2.8, Math.min(2.8, marble.y)),
+                        getOutputBowlHeight(Math.max(-2.8, Math.min(2.8, marble.x)), Math.max(-2.8, Math.min(2.8, marble.y))) + 0.4 + marble.fallAge * 0.05
+                    )
+                    : projectOutputBowl(marble.x, marble.y, getOutputBowlHeight(marble.x, marble.y))
+            })).map(marble => {
+                if (marble.fallenOut) {
+                    fallenCount++;
+                    return marble;
+                }
+
+                const distToGlobal = Math.hypot(marble.x - 1.2, marble.y - 1.2);
+                const inLocal = outputBowlWells.some(well => !well.global && Math.hypot(marble.x - well.x, marble.y - well.y) < well.radius);
+                if (distToGlobal < 0.6) {
+                    globalCount++;
+                } else if (inLocal) {
+                    localCount++;
+                }
+                return { ...marble, inLocal, inGlobal: distToGlobal < 0.6 };
+            });
+
+            projectedMarbles.sort((a, b) => b.projected.depth - a.projected.depth).forEach(marble => {
+                const fallOffset = marble.fallenOut ? marble.fallAge * 1.8 : 0;
+                outputBowlCtx.save();
+                outputBowlCtx.fillStyle = marble.color;
+                outputBowlCtx.shadowColor = marble.color;
+                outputBowlCtx.shadowBlur = marble.settled ? 12 : 5;
+                outputBowlCtx.globalAlpha = marble.fallenOut ? Math.max(0.12, 0.75 - marble.fallAge * 0.018) : 0.9;
+                outputBowlCtx.beginPath();
+                outputBowlCtx.arc(marble.projected.x, marble.projected.y + fallOffset, 6 * marble.projected.perspective, 0, Math.PI * 2);
+                outputBowlCtx.fill();
+                if (marble.inLocal) {
+                    outputBowlCtx.strokeStyle = '#ffd166';
+                    outputBowlCtx.lineWidth = 2.2;
+                    outputBowlCtx.stroke();
+                } else if (marble.inGlobal) {
+                    outputBowlCtx.strokeStyle = '#64f4ac';
+                    outputBowlCtx.lineWidth = 2.2;
+                    outputBowlCtx.stroke();
+                }
+                outputBowlCtx.restore();
+            });
+
+            outputBowlCtx.fillStyle = 'rgba(255, 255, 255, 0.86)';
+            outputBowlCtx.font = '700 18px STIX Two Text, Times New Roman, serif';
+            outputBowlCtx.fillText('Temperature shakes the trained bowl', 16, 28);
+            outputBowlCtx.fillStyle = fallenCount > 0 ? '#ff4b3e' : localCount > globalCount ? '#ffd166' : '#64f4ac';
+            outputBowlCtx.font = '700 16px STIX Two Text, Times New Roman, serif';
+            outputBowlCtx.fillText(`${globalCount} global  ${localCount} local  ${fallenCount} out`, 16, outputBowlCanvas.height - 22);
+        }
+
+        if (outputTemperature) {
+            outputTemperature.addEventListener('input', () => {
+                updateOutputTemperatureLabel();
+                initOutputMarbles();
+            });
+        }
+
+        function restartOutputGenerationLoop() {
+            resetOutputBowlCamera();
+            setOutputAnimationPaused(false);
+            outputFrame = 0;
+            initOutputMarbles();
+            updateOutputTemperatureLabel();
+            drawOutputWordScene();
+            drawOutputDistributionScene();
+            drawOutputBowlScene();
+        }
+
+        if (restartOutputLoop) {
+            restartOutputLoop.addEventListener('click', restartOutputGenerationLoop);
+        }
+
+        if (toggleOutputBowlAutoRotate) {
+            toggleOutputBowlAutoRotate.addEventListener('click', () => setOutputBowlAutoRotate(!outputBowlAutoRotate));
+        }
+
+        if (toggleOutputAnimation) {
+            toggleOutputAnimation.addEventListener('click', () => setOutputAnimationPaused(!outputAnimationPaused));
+        }
+
+        if (outputBowlCanvas) {
+            outputBowlCanvas.addEventListener('mousedown', startOutputBowlDrag);
+            outputBowlCanvas.addEventListener('mousemove', moveOutputBowlDrag);
+            outputBowlCanvas.addEventListener('mouseup', endOutputBowlDrag);
+            outputBowlCanvas.addEventListener('mouseleave', endOutputBowlDrag);
+            outputBowlCanvas.addEventListener('touchstart', startOutputBowlDrag, { passive: false });
+            outputBowlCanvas.addEventListener('touchmove', moveOutputBowlDrag, { passive: false });
+            outputBowlCanvas.addEventListener('touchend', endOutputBowlDrag);
+            outputBowlCanvas.addEventListener('touchcancel', endOutputBowlDrag);
+        }
+
+        function drawOutputGenerationScene() {
+            if (!outputAnimationPaused) outputFrame++;
+            if (!outputAnimationPaused && outputBowlAutoRotate && !outputBowlDragging) outputBowlAngleY += 0.0045;
+            updateOutputTemperatureLabel();
+            drawOutputWordScene();
+            drawOutputDistributionScene();
+            drawOutputBowlScene(!outputAnimationPaused);
+            requestAnimationFrame(drawOutputGenerationScene);
+        }
+
+        // Fast & Robust Initialization: Start all animations immediately
+        const startAllAnimations = () => {
+            console.log('Initializing all animations...');
+            const tryDraw = (fn, name) => {
+                try {
+                    fn();
+                    console.log(`Successfully initialized ${name}`);
+                } catch (e) {
+                    console.error(`Error in ${name}:`, e);
+                }
+            };
+
+            // 1. Static/Interactive charts (Initial draw)
+            tryDraw(updateGradientDescentSlopeNote, 'updateGradientDescentSlopeNote');
+            tryDraw(updateQuestion4Prompt, 'updateQuestion4Prompt');
+            tryDraw(updateQuarticCalculusNote, 'updateQuarticCalculusNote');
+            tryDraw(drawSlopeVisual, 'drawSlopeVisual');
+            tryDraw(drawSlopeChangeVisual, 'drawSlopeChangeVisual');
+            tryDraw(drawParabola, 'drawParabola');
+            tryDraw(drawQuartic, 'drawQuartic');
+            tryDraw(drawParaboloid, 'drawParaboloid');
+            tryDraw(drawValleyScene, 'drawValleyScene');
+            tryDraw(drawGradientDescentSetup, 'drawGradientDescentSetup');
+
+            // 2. Continuous 3D loops
+            try {
+                initSgdSimulator(performance.now(), true);
+                drawSgdScene(); 
+                console.log('Successfully started SGD loop');
+            } catch (e) { console.error('Error starting SGD loop:', e); }
+            
+            try {
+                initConvSimulator();
+                drawConvScene();
+                console.log('Successfully started Conv loop');
+            } catch (e) { console.error('Error starting Conv loop:', e); }
+
+            try {
+                drawBowlMorphScene();
+                console.log('Successfully started Bowl Morph loop');
+            } catch (e) { console.error('Error starting Bowl Morph loop:', e); }
+
+            try {
+                resetOutputBowlCamera();
+                initOutputMarbles();
+                drawOutputGenerationScene();
+                console.log('Successfully started Output Generation loop');
+            } catch (e) { console.error('Error starting Output Generation loop:', e); }
+
+            tryDraw(drawWordVectorScene, 'drawWordVectorScene');
+        };
+
+        // Run as soon as the DOM is ready
+        if (document.readyState === 'loading') {
+            document.addEventListener('DOMContentLoaded', startAllAnimations);
+        } else {
+            startAllAnimations();
+        }
+    </script>
+</body>
+</html>
