@@ -653,25 +653,29 @@
             }
         }
     </style>
+    <link rel="stylesheet" href="statistics.css">
 </head>
 <body>
     <a class="home-link" href="https://griffinrutherford.com/">← Back to Homepage</a>
     <div class="container">
         <div class="header">
             <h1>Stochastic Gradient Descent Made Fun</h1>
-            <h2>The Math Behind ChatGPT and AI</h2>
+            <h2 id="worksheet-subtitle">The Math Behind ChatGPT and AI</h2>
             <h3>Guest Speaker - Griffin Rutherford - MS Computer Science - Mountain Runner</h3>
-            <p style="margin-top: 15px; font-style: italic; color: #cfcfcf;">
+            <p id="worksheet-intro" style="margin-top: 15px; font-style: italic; color: #cfcfcf;">
                 This topic is normally only taught at the master's degree level. But I'm sure you can learn it!
             </p>
-            <div class="mode-toggle" aria-label="Answer mode toggle">
+            <div class="mode-toggle" role="radiogroup" aria-label="Worksheet version">
                 <input type="radio" id="mode-algebra" name="answer-mode" value="algebra" checked>
                 <label for="mode-algebra">Algebra II</label>
                 <input type="radio" id="mode-calculus" name="answer-mode" value="calculus">
                 <label for="mode-calculus">Calculus</label>
+                <input type="radio" id="mode-statistics" name="answer-mode" value="statistics">
+                <label for="mode-statistics">Statistics</label>
             </div>
         </div>
 
+        <section id="original-worksheet" class="worksheet-panel" aria-label="Algebra II and Calculus worksheet">
         <!-- Question 1 -->
         <div class="question">
             <div class="question-number">1.</div>
@@ -1128,6 +1132,150 @@
             </p>
         </div>
 
+        </section>
+
+        <section id="statistics-worksheet" class="worksheet-panel" aria-labelledby="statistics-title" hidden>
+            <div class="stats-intro">
+                <h2 id="statistics-title">Statistics: from sample means to SGD</h2>
+                <p>Imagine 12 students recorded their study hours and quiz scores. This fictional dataset is small enough to calculate with, but big enough to see why a computer might learn from one row at a time.</p>
+                <p>We will estimate an average, improve it in small steps, and then fit a line. You need averages, plots, and simple algebra—no calculus. A relationship between study time and scores does <strong>not</strong> prove that one caused the other.</p>
+            </div>
+
+            <div class="stats-data-panel">
+                <table id="stats-data-table">
+                    <caption>Our fictional sample of 12 students</caption>
+                    <thead><tr><th scope="col">Student</th><th scope="col">Study hours</th><th scope="col">Quiz score</th></tr></thead>
+                    <tbody>
+                        <tr data-stats-row="0"><th scope="row">A</th><td>0</td><td>62</td></tr>
+                        <tr data-stats-row="1"><th scope="row">B</th><td>1</td><td>68</td></tr>
+                        <tr data-stats-row="2"><th scope="row">C</th><td>2</td><td>60</td></tr>
+                        <tr data-stats-row="3"><th scope="row">D</th><td>3</td><td>72</td></tr>
+                        <tr data-stats-row="4"><th scope="row">E</th><td>4</td><td>70</td></tr>
+                        <tr data-stats-row="5"><th scope="row">F</th><td>5</td><td>78</td></tr>
+                        <tr data-stats-row="6"><th scope="row">G</th><td>6</td><td>74</td></tr>
+                        <tr data-stats-row="7"><th scope="row">H</th><td>7</td><td>84</td></tr>
+                        <tr data-stats-row="8"><th scope="row">I</th><td>8</td><td>82</td></tr>
+                        <tr data-stats-row="9"><th scope="row">J</th><td>9</td><td>80</td></tr>
+                        <tr data-stats-row="10"><th scope="row">K</th><td>10</td><td>90</td></tr>
+                        <tr data-stats-row="11"><th scope="row">L</th><td>11</td><td>92</td></tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="question stats-question">
+                <div class="question-number">1. Start with the average</div>
+                <p class="question-text">Ignore study hours for a moment. What is the <strong>sample mean</strong> of the 12 quiz scores?</p>
+                <canvas id="stats-dot-plot" width="760" height="200" role="img" aria-label="Dot plot of the twelve quiz scores, from 60 to 92 points"></canvas>
+                <label for="stats-answer-mean">Sample mean (quiz points)</label>
+                <div class="stats-answer-row"><input id="stats-answer-mean" type="number" inputmode="decimal" step="any"><button type="button" class="stats-check" data-stats-check="mean">Check</button></div>
+                <p id="stats-feedback-mean" class="stats-feedback" aria-live="polite"></p>
+                <details class="stats-explanation"><summary>Compare with an explanation</summary><p>The scores add to 912. Divide by 12 students to get a sample mean of <strong>76 points</strong>. A different group of students might have a different sample mean.</p></details>
+            </div>
+
+            <div class="question stats-question">
+                <div class="question-number">2. Measure a miss</div>
+                <p class="question-text">Suppose our current guess for every student's score is <strong>70</strong>. Student I scored <strong>82</strong>. What is that student's residual, observed score minus predicted score?</p>
+                <label for="stats-answer-residual">Residual (quiz points)</label>
+                <div class="stats-answer-row"><input id="stats-answer-residual" type="number" inputmode="decimal" step="any"><button type="button" class="stats-check" data-stats-check="residual">Check</button></div>
+                <p id="stats-feedback-residual" class="stats-feedback" aria-live="polite"></p>
+                <details class="stats-explanation"><summary>Compare with an explanation</summary><p>The residual is <strong>82 − 70 = 12 points</strong>. Squaring a residual makes misses on either side count as positive error. The computer will try to make the average squared residual smaller.</p></details>
+            </div>
+
+            <div class="question stats-question">
+                <div class="question-number">3. Take one small step</div>
+                <p class="question-text">Start with an estimate of <strong>60</strong>. The selected student's score is <strong>80</strong>. Move one quarter of the way from 60 toward 80. What is the new estimate?</p>
+                <p class="stats-formula">new estimate = old estimate + step fraction × (selected score − old estimate)</p>
+                <label for="stats-answer-step">New estimate (quiz points)</label>
+                <div class="stats-answer-row"><input id="stats-answer-step" type="number" inputmode="decimal" step="any"><button type="button" class="stats-check" data-stats-check="step">Check</button></div>
+                <p id="stats-feedback-step" class="stats-feedback" aria-live="polite"></p>
+                <details class="stats-explanation"><summary>Compare with an explanation</summary><p><strong>60 + 0.25 × (80 − 60) = 65.</strong> The 25% step fraction is called a <em>learning rate</em>. It controls how far the estimate moves on each update.</p></details>
+            </div>
+
+            <div class="question stats-question">
+                <div class="question-number">4. Make the step stochastic</div>
+                <p class="question-text">A step based on all 12 scores points toward their average of 76. A step based on one randomly selected score points toward that score instead. Why might two single-score steps point in different directions?</p>
+                <details class="stats-explanation"><summary>Compare with an explanation</summary><p>Different students have different scores. The data stay fixed, but the row chosen for an update can change. That random choice is the <em>stochastic</em> part of stochastic gradient descent (SGD). We are not adding arbitrary shaking to the graph.</p></details>
+            </div>
+
+            <div class="question stats-question">
+                <div class="question-number">5. Run the estimator</div>
+                <p class="question-text">Predict which will look smoother: using 1 score per step or all 12. Then try both. Each step selects real rows from the table above and updates the estimate toward their average.</p>
+                <div class="stats-control-grid">
+                    <label for="stats-batch-size">How many scores per step? <small>(batch size)</small>
+                        <select id="stats-batch-size"><option value="1">1 score</option><option value="4" selected>4 scores</option><option value="12">All 12 scores</option></select>
+                    </label>
+                    <label for="stats-step-size">How big is each step? <small>(learning rate)</small>
+                        <select id="stats-step-size"><option value="0.1">10%</option><option value="0.25" selected>25%</option><option value="0.5">50%</option><option value="1.25">125% (challenge)</option></select>
+                    </label>
+                </div>
+                <div class="stats-buttons">
+                    <button type="button" id="stats-step-once">Take one step</button>
+                    <button type="button" id="stats-auto-run">Run steps</button>
+                    <button type="button" id="stats-reset" class="reset">Reset</button>
+                    <button type="button" id="stats-new-sequence" class="reset">Try a new random sequence</button>
+                </div>
+                <p id="stats-selected" class="stats-state" aria-live="polite">Take a step to see which students were selected.</p>
+                <p id="stats-mean-summary" class="stats-state">Starting estimate: 60 points. The full-sample mean is 76.</p>
+                <canvas id="stats-loss-chart" width="760" height="330" role="img" aria-label="Average squared error by candidate estimate, showing the current estimate and the full-sample mean"></canvas>
+                <p class="stats-chart-note">The curve shows <strong>average squared error across all 12 scores</strong>. A random mini-batch step can sometimes make that full-data error rise before later steps bring it down.</p>
+                <details class="stats-explanation"><summary>Compare with an explanation</summary><p>All 12 scores produce the same direction every time, so their path is smoother. Smaller random groups are cheaper to inspect per step, but their estimates bounce around because the selected scores vary. More randomness does not guarantee a better answer.</p></details>
+            </div>
+
+            <div class="question stats-question">
+                <div class="question-number">6. Fit a line instead of one number</div>
+                <p class="question-text">Now bring study hours back. Move the line until its predictions seem close to the points. Each vertical segment is a <strong>residual</strong>: actual score minus predicted score. What do the line's starting height and slope tell you?</p>
+                <div class="stats-control-grid">
+                    <label for="stats-intercept">Line's starting height: <output id="stats-intercept-value">55</output> points
+                        <input id="stats-intercept" type="range" min="30" max="90" value="55" step="1">
+                    </label>
+                    <label for="stats-slope">Change per study hour: <output id="stats-slope-value">2.0</output> points
+                        <input id="stats-slope" type="range" min="-2" max="8" value="2" step="0.1">
+                    </label>
+                </div>
+                <div class="stats-control-grid"><label for="stats-line-batch">Rows used per fitting step
+                    <select id="stats-line-batch"><option value="1">1 student</option><option value="4" selected>4 students</option><option value="12">All 12 students</option></select>
+                </label></div>
+                <div class="stats-buttons">
+                    <button type="button" id="stats-line-step">Fit one step</button>
+                    <button type="button" id="stats-line-run">Fit 30 steps</button>
+                    <button type="button" id="stats-line-reset" class="reset">Reset line</button>
+                    <button type="button" id="stats-line-reference" class="reset" aria-pressed="false">Show best-fit reference</button>
+                </div>
+                <p id="stats-line-summary" class="stats-state" aria-live="polite"></p>
+                <canvas id="stats-regression-chart" width="760" height="370" role="img" aria-label="Scatterplot of study hours and quiz scores with a fitted line and residuals"></canvas>
+                <p class="stats-chart-note">The computer adjusts the line's height and tilt using the selected students' prediction errors. You do not need to calculate those two adjustments by hand. The dashed reference line, when shown, is the best-fitting line for these 12 students.</p>
+                <details class="stats-explanation"><summary>Compare with an explanation</summary><p>The starting height predicts the score at zero study hours. The slope says how many points the line predicts for one additional study hour. It describes an association in this sample, not proof that extra study hours caused the score difference.</p></details>
+            </div>
+
+            <div class="question stats-question">
+                <div class="question-number">7. Two different kinds of variation</div>
+                <p class="question-text">First, repeat a short run with the <strong>same 12 scores</strong> but different randomly chosen rows. Then draw new groups of 12 from a fictional larger class. Which result changes because the computer's steps changed, and which changes because the data changed?</p>
+                <div class="stats-buttons">
+                    <button type="button" id="stats-repeat-optimizer">Same data, new random steps</button>
+                    <button type="button" id="stats-new-sample">New sample of students</button>
+                </div>
+                <div class="stats-variation-grid">
+                    <div><h3>Same data (mean = 76)</h3><ol id="stats-optimizer-results" aria-live="polite"></ol></div>
+                    <div><h3>New group of 12</h3><ol id="stats-sample-results" aria-live="polite"></ol></div>
+                </div>
+                <details class="stats-explanation"><summary>Compare with an explanation</summary><p>With the same data, short runs can end at different estimates because the computer chooses different rows. With a new group of students, the sample mean itself may change. Optimizer variation is not a confidence interval or a measure of uncertainty about the whole population.</p></details>
+            </div>
+
+            <div class="question stats-question">
+                <div class="question-number">8. Explain the result</div>
+                <p class="question-text">In your own words: where did the randomness in SGD come from? If the computer reaches a stable line, what else should a statistician ask before trusting it?</p>
+                <label for="stats-final-response">Your explanation</label>
+                <textarea id="stats-final-response" placeholder="Think about which rows were chosen, the scatterplot, and the students we did not observe."></textarea>
+                <details class="stats-explanation"><summary>Compare with an explanation</summary><p>SGD chose different students' rows to estimate a direction for each step. A stable fit only tells us the calculation has settled for this data. We still need to ask whether a line fits the pattern, whether the sample represents the larger group, and whether another explanation could account for the association.</p></details>
+            </div>
+
+            <div class="question stats-question stats-challenge">
+                <div class="question-number">Optional challenge</div>
+                <p>Suppose a new student scored 100. Would the sample mean rise or fall? How might an unusually high score affect the fitted line? Then try a 125% step in Question 5. Does every step reduce the full-data error?</p>
+                <details class="stats-explanation"><summary>Compare with an explanation</summary><p>The mean rises from 76 to about 77.85 because 100 is above the current mean. A high score can pull a fitted line, especially if its study-hours value is far from the others. A 125% step can overshoot the selected-group average; it does not guarantee a smaller error across all 12 scores.</p></details>
+            </div>
+        </section>
+
         <!-- Speaker Bio -->
         <div class="speaker-bio">
             <h2 style="margin-bottom: 20px; text-align: center;">About the Speaker (Griffin Rutherford)</h2>
@@ -1180,7 +1328,38 @@
             }
         };
 
-        let currentMode = "algebra";
+        let currentMode = document.querySelector('input[name="answer-mode"]:checked')?.value || 'algebra';
+        const originalWorksheet = document.getElementById('original-worksheet');
+        const statisticsWorksheet = document.getElementById('statistics-worksheet');
+        const originalIntro = document.getElementById('worksheet-intro').textContent.trim();
+
+        function syncWorksheetMode() {
+            const isStatistics = currentMode === 'statistics';
+            document.body.classList.toggle('statistics-mode', isStatistics);
+            originalWorksheet.hidden = isStatistics;
+            statisticsWorksheet.hidden = !isStatistics;
+            document.getElementById('worksheet-subtitle').textContent = isStatistics
+                ? 'A High School Statistics Investigation'
+                : 'The Math Behind ChatGPT and AI';
+            document.getElementById('worksheet-intro').textContent = isStatistics
+                ? 'Use averages, residuals, and random samples to discover how a model learns from data. No calculus needed.'
+                : originalIntro;
+
+            if (isStatistics) {
+                window.renderStatisticsWorksheet?.();
+                return;
+            }
+            window.pauseStatisticsWorksheet?.();
+            updateFlatSlopePlaneNote();
+            updateGradientDescentSlopeNote();
+            updateQuestion4Prompt();
+            updateQuarticCalculusNote();
+            drawSlopeVisual();
+            drawSlopeChangeVisual();
+            drawParabola();
+            updateParaboloidPlaneControls();
+            drawParaboloid();
+        }
 
         function updateFlatSlopePlaneNote() {
             const note = document.getElementById('flat-slope-plane-note');
@@ -1227,15 +1406,7 @@
         document.querySelectorAll('input[name=\"answer-mode\"]').forEach((input) => {
             input.addEventListener('change', (e) => {
                 currentMode = e.target.value;
-                updateFlatSlopePlaneNote();
-                updateGradientDescentSlopeNote();
-                updateQuestion4Prompt();
-                updateQuarticCalculusNote();
-                drawSlopeVisual();
-                drawSlopeChangeVisual();
-                drawParabola();
-                updateParaboloidPlaneControls();
-                drawParaboloid();
+                syncWorksheetMode();
             });
         });
 
@@ -2280,6 +2451,10 @@
         }
 
         function drawSgdScene(now = performance.now()) {
+            if (currentMode === 'statistics') {
+                requestAnimationFrame(drawSgdScene);
+                return;
+            }
             if (!sgdLoopStart) initSgdSimulator(now);
             let elapsed = now - sgdLoopStart;
             if (elapsed >= sgdLoopDuration) { initSgdSimulator(now); elapsed = 0; }
@@ -2789,6 +2964,10 @@
         }
 
         function drawConvScene() {
+            if (currentMode === 'statistics') {
+                requestAnimationFrame(drawConvScene);
+                return;
+            }
             convCtx.clearRect(0, 0, convCanvas.width, convCanvas.height);
             const gradient = convCtx.createRadialGradient(convCanvas.width/2, convCanvas.height/2, 40, convCanvas.width/2, convCanvas.height/2, 430);
             gradient.addColorStop(0, '#121212'); gradient.addColorStop(1, '#000');
@@ -2930,6 +3109,10 @@
 
         function drawBowlMorphScene() {
             if (!bowlMorphCtx) return;
+            if (currentMode === 'statistics') {
+                requestAnimationFrame(drawBowlMorphScene);
+                return;
+            }
             bowlMorphFrame++;
             const progress = getBowlMorphProgress();
             bowlMorphCtx.clearRect(0, 0, bowlMorphCanvas.width, bowlMorphCanvas.height);
@@ -3639,6 +3822,10 @@
         }
 
         function drawOutputGenerationScene() {
+            if (currentMode === 'statistics') {
+                requestAnimationFrame(drawOutputGenerationScene);
+                return;
+            }
             if (!outputAnimationPaused) outputFrame++;
             if (!outputAnimationPaused && outputBowlAutoRotate && !outputBowlDragging) outputBowlAngleY += 0.0045;
             updateOutputTemperatureLabel();
@@ -3651,6 +3838,7 @@
         // Fast & Robust Initialization: Start all animations immediately
         const startAllAnimations = () => {
             console.log('Initializing all animations...');
+            syncWorksheetMode();
             const tryDraw = (fn, name) => {
                 try {
                     fn();
@@ -3707,5 +3895,7 @@
             startAllAnimations();
         }
     </script>
+    <script src="statistics-core.js"></script>
+    <script src="statistics.js"></script>
 </body>
 </html>
