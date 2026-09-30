@@ -9,6 +9,13 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=STIX+Two+Math&family=STIX+Two+Text:wght@400;500;600;700&display=swap" rel="stylesheet">
     <style>
+        :root {
+            --worksheet-accent: #e10600;
+            --worksheet-accent-rgb: 225, 6, 0;
+            --worksheet-button-ink: #fff;
+            --worksheet-panel: #0a0a0a;
+        }
+
         * {
             margin: 0;
             padding: 0;
@@ -34,7 +41,7 @@
             gap: 8px;
             padding: 10px 16px;
             border-radius: 999px;
-            border: 2px solid #e10600;
+            border: 2px solid var(--worksheet-accent);
             background: rgba(10, 10, 10, 0.92);
             color: #fff;
             text-decoration: none;
@@ -45,14 +52,14 @@
 
         .home-link:hover {
             transform: translateY(-1px);
-            background: rgba(225, 6, 0, 0.12);
-            box-shadow: 0 10px 22px rgba(225, 6, 0, 0.2);
+            background: rgba(var(--worksheet-accent-rgb), 0.12);
+            box-shadow: 0 10px 22px rgba(var(--worksheet-accent-rgb), 0.2);
         }
 
         .container {
             max-width: 1040px;
             margin: 60px auto 0;
-            background: #0a0a0a;
+            background: var(--worksheet-panel);
             padding: 44px;
             border-radius: 15px;
             box-shadow: 0 10px 30px rgba(0, 0, 0, 0.35);
@@ -62,11 +69,11 @@
             text-align: center;
             margin-bottom: 40px;
             padding-bottom: 20px;
-            border-bottom: 3px solid #e10600;
+            border-bottom: 3px solid var(--worksheet-accent);
         }
 
         h1 {
-            color: #e10600;
+            color: var(--worksheet-accent);
             font-size: 2.5em;
             margin-bottom: 10px;
             text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
@@ -86,11 +93,11 @@
         }
 
         .question {
-            background: rgba(225, 6, 0, 0.08);
+            background: rgba(var(--worksheet-accent-rgb), 0.08);
             padding: 30px;
             margin: 34px 0;
             border-radius: 10px;
-            border-left: 5px solid #e10600;
+            border-left: 5px solid var(--worksheet-accent);
         }
 
         .question .question-number,
@@ -101,13 +108,13 @@
         .question [style*="color: #e10600"] {
             color: #fff !important;
             text-decoration: underline;
-            text-decoration-color: #e10600;
+            text-decoration-color: var(--worksheet-accent);
             text-decoration-thickness: 3px;
             text-underline-offset: 5px;
         }
 
         .question-number {
-            color: #e10600;
+            color: var(--worksheet-accent);
             font-weight: bold;
             font-size: 1.42em;
             margin-bottom: 15px;
@@ -139,13 +146,13 @@
 
         input[type="text"]:focus, textarea:focus {
             outline: none;
-            border-color: #e10600;
-            box-shadow: 0 0 10px rgba(225, 6, 0, 0.3);
+            border-color: var(--worksheet-accent);
+            box-shadow: 0 0 10px rgba(var(--worksheet-accent-rgb), 0.3);
         }
 
         .canvas-container {
             background: #000;
-            border: 3px solid #e10600;
+            border: 3px solid var(--worksheet-accent);
             border-radius: 10px;
             margin: 20px 0;
             padding: 10px;
@@ -167,34 +174,34 @@
         }
 
         button {
-            background: #e10600;
-            color: #fff;
-            border: 2px solid #e10600;
+            background: var(--worksheet-accent);
+            color: var(--worksheet-button-ink);
+            border: 2px solid var(--worksheet-accent);
             padding: 13px 26px;
             border-radius: 25px;
             font-size: 1.08em;
             font-weight: bold;
             cursor: pointer;
             transition: all 0.3s ease;
-            box-shadow: 0 4px 10px rgba(225, 6, 0, 0.3);
+            box-shadow: 0 4px 10px rgba(var(--worksheet-accent-rgb), 0.3);
         }
 
         button:hover {
             transform: translateY(-2px);
-            box-shadow: 0 6px 15px rgba(225, 6, 0, 0.5);
+            box-shadow: 0 6px 15px rgba(var(--worksheet-accent-rgb), 0.5);
         }
 
         button.reset {
             background: transparent;
             color: #fff;
-            border: 2px solid #e10600;
+            border: 2px solid var(--worksheet-accent);
         }
 
         .info-box {
-            background: rgba(225, 6, 0, 0.08);
+            background: rgba(var(--worksheet-accent-rgb), 0.08);
             padding: 20px;
             border-radius: 10px;
-            border: 2px solid #e10600;
+            border: 2px solid var(--worksheet-accent);
             margin: 20px 0;
         }
 
@@ -209,7 +216,7 @@
             letter-spacing: 0.01em;
             font-weight: 700;
             margin: 15px 0;
-            color: #e10600;
+            color: var(--worksheet-accent);
         }
 
         .math-inline {
@@ -233,7 +240,7 @@
             padding: 30px;
             margin-top: 50px;
             border-radius: 10px;
-            border: 2px solid #e10600;
+            border: 2px solid var(--worksheet-accent);
         }
 
         .ig-post {
@@ -253,7 +260,7 @@
             aspect-ratio: 1 / 1;
             object-fit: cover;
             object-position: center center;
-            border: 2px solid #e10600;
+            border: 2px solid var(--worksheet-accent);
             border-radius: 12px;
             background: #0a0a0a;
         }
@@ -282,14 +289,14 @@
             width: 20px;
             height: 20px;
             border-radius: 50%;
-            background: #e10600;
+            background: var(--worksheet-accent);
             cursor: pointer;
         }
 
         .value-display {
             text-align: center;
             font-size: 1.2em;
-            color: #e10600;
+            color: var(--worksheet-accent);
             margin-top: 10px;
         }
 
@@ -302,7 +309,7 @@
             margin-top: 12px;
             padding: 12px;
             background: #0c0c0c;
-            border-left: 3px solid #e10600;
+            border-left: 3px solid var(--worksheet-accent);
             border-radius: 6px;
             color: #fff;
             font-size: 1.1em;
@@ -326,7 +333,7 @@
 
         .mode-toggle label {
             padding: 10px 20px;
-            border: 2px solid #e10600;
+            border: 2px solid var(--worksheet-accent);
             border-radius: 999px;
             cursor: pointer;
             background: transparent;
@@ -336,8 +343,8 @@
         }
 
         .mode-toggle input:checked + label {
-            background: #e10600;
-            color: #fff;
+            background: var(--worksheet-accent);
+            color: var(--worksheet-button-ink);
         }
 
         .question-asset {
@@ -345,7 +352,7 @@
             max-width: 760px;
             display: block;
             margin: 15px auto;
-            border: 2px solid #e10600;
+            border: 2px solid var(--worksheet-accent);
             border-radius: 10px;
             background: #0a0a0a;
         }
@@ -367,7 +374,7 @@
         .wordvec-visualizer {
             margin: 24px 0;
             padding: 22px;
-            border: 2px solid #e10600;
+            border: 2px solid var(--worksheet-accent);
             border-radius: 10px;
             background: #050505;
         }
@@ -378,7 +385,7 @@
         }
 
         .wordvec-title {
-            color: #e10600;
+            color: var(--worksheet-accent);
             font-weight: 700;
             font-size: 1.28em;
             line-height: 1.35;
@@ -398,7 +405,7 @@
         .wordvec-stage {
             position: relative;
             background: #000;
-            border: 1px solid rgba(225, 6, 0, 0.75);
+            border: 1px solid rgba(var(--worksheet-accent-rgb), 0.75);
             border-radius: 8px;
             overflow: hidden;
         }
@@ -474,7 +481,7 @@
         }
 
         .wordvec-time-label {
-            color: #e10600;
+            color: var(--worksheet-accent);
             font-weight: 700;
             text-align: center;
         }
@@ -565,9 +572,9 @@
             overflow-x: auto;
             overflow-y: hidden;
             scrollbar-width: auto;
-            scrollbar-color: #e10600 #111;
+            scrollbar-color: var(--worksheet-accent) #111;
             background: #0a0a0a;
-            border: 2px solid #e10600;
+            border: 2px solid var(--worksheet-accent);
             border-radius: 12px;
             padding: 72px 20px 20px;
             position: relative;
@@ -583,7 +590,7 @@
         }
 
         .modal-content::-webkit-scrollbar-thumb {
-            background: #e10600;
+            background: var(--worksheet-accent);
             border-radius: 999px;
             border: 2px solid #111;
         }
@@ -598,8 +605,8 @@
         }
 
         .modal-close {
-            background: #e10600;
-            color: #fff;
+            background: var(--worksheet-accent);
+            color: var(--worksheet-button-ink);
             border: none;
             border-radius: 999px;
             padding: 8px 12px;
@@ -659,6 +666,7 @@
         }
     </style>
     <link rel="stylesheet" href="statistics.css">
+    <link rel="stylesheet" href="worksheet-practice.css">
 </head>
 <body>
     <a class="home-link" href="https://griffinrutherford.com/">← Back to Homepage</a>
@@ -685,11 +693,15 @@
         </div>
 
         <section id="original-worksheet" class="worksheet-panel" aria-label="Algebra II and Calculus worksheet">
+        <div class="practice-intro">
+            <p>Write your answer, then choose <strong>Check answer</strong> for feedback. Short formulas are checked mathematically. Written feedback identifies key ideas and suggests what to add; open the example to compare your reasoning. Press Enter in a short-answer field, or Ctrl/⌘ + Enter in a written response.</p>
+            <p id="practice-progress" aria-live="polite"></p>
+        </div>
         <!-- Question 1 -->
         <div class="question">
             <div class="question-number">1.</div>
-            <div class="question-text">
-                The expression for the slope of a function is:
+            <div class="question-text" id="q1-question-text">
+                What expression gives the slope between two points?
             </div>
             <input type="text" placeholder="Your answer...">
             <button class="submit-answer" data-question="1">Submit</button>
@@ -714,7 +726,7 @@
         <div class="question">
             <div class="question-number">3.</div>
             <div class="question-text">
-                What is the expression for the x-coordinate of the vertex of a parabola?
+                For a parabola written as y = ax² + bx + c, what is the expression for the x-coordinate of its vertex?
             </div>
             <input type="text" placeholder="Your answer...">
             <button class="submit-answer" data-question="3">Submit</button>
@@ -972,7 +984,7 @@
                     Instead of marbles in weird bowl holes, instead picture the depth of the hole as reducing pollution, saving resources, etc.
                 </p>
                 <div class="question-text" style="margin-top: 20px;">
-                    In your own words, why does “shakiness” increase accuracy?
+                    In your own words, how can random movement help in this bowl illustration, and why might too much prevent the marbles from settling?
                 </div>
                 <textarea placeholder="Your answer..."></textarea>
                 <p style="margin-top: 15px; font-weight: bold;">
@@ -1078,7 +1090,7 @@
                 </div>
             </div>
             <div class="question-text" style="margin-top: 20px;">
-                What do you think happens when we raise or lower the temperature of the output of ChatGPT? Yes, this is shaking a bowl in a thousand-plus dimensional space. (Hint: "Shaping" the bowl is different from "shaking" it.)
+                What do you think happens to the variety of output choices when we raise or lower temperature? How is choosing an output different from training the model? Use the next animation to test your prediction.
             </div>
             <textarea placeholder="Your answer..."></textarea>
             <button class="submit-answer" data-question="13">Submit</button>
@@ -1354,6 +1366,8 @@
     </div>
 
     <script src="worksheet-animations.js"></script>
+    <script src="answer-feedback.js"></script>
+    <script src="worksheet-practice.js"></script>
     <script>
         const mi = (value) => `<span class="math-inline">${value}</span>`;
 
@@ -1369,9 +1383,9 @@
                 8: "Most real problems depend on several variables, so 2D graphs are too simple.",
                 9: "Follow the downhill direction step by step; use slope to guide you.",
                 10: "Use the slope to move downhill a little at a time until it flattens out.",
-                11: "Add randomness (shake) so marbles can escape the shallow hole and reach the deeper one.",
-                12: "A little randomness helps the guesses explore more, so they don't get stuck too early and can find a better answer.",
-                13: "ChatGPT represents word meanings as numbers and learns by reducing error over and over, like sliding downhill to the lowest point.",
+                11: "In this physical bowl illustration, shaking can help marbles leave a shallow dent. Actual SGD varies its updates by selecting random training examples; randomness does not guarantee a better fit.",
+                12: "Some early movement can help marbles leave a shallow dent, while too much sustained shaking can stop them settling. The shaking picture is an analogy; real SGD uses random groups of training data.",
+                13: "Higher temperature spreads out the output probabilities and usually gives more varied choices; lower temperature concentrates them. This affects output generation after training, rather than updating the learned model.",
                 14: "Example: We learned slope/derivatives, and today we used them to find minima, which is how AI optimizes its predictions."
             },
             calculus: {
@@ -1385,13 +1399,15 @@
                 8: `Most systems are multivariable, so you need functions of several variables (surfaces) and partial derivatives.`,
                 9: `Use the gradient to step in the direction of steepest descent (${mi('gradient descent')}).`,
                 10: `Iteratively move opposite the gradient until the gradient is near zero.`,
-                11: "Add stochasticity to escape local minima and improve chances of reaching the global minimum.",
-                12: "Small random steps help the optimizer explore the loss surface and avoid getting stuck in a shallow local minimum.",
-                13: `ChatGPT embeds words into high-dimensional vectors and is trained by minimizing loss with ${mi('gradient descent / SGD')}.`,
+                11: "In this bowl illustration, random movement can help leave a shallow local minimum. Actual SGD uses sampled training examples to estimate the gradient; it does not guarantee a global minimum.",
+                12: "Random movement can help exploration in the bowl, but persistent noise can prevent convergence. For actual SGD, batch size and learning rate affect the variation in updates, which come from sampled examples.",
+                13: "Higher temperature makes the output probability distribution less concentrated; lower temperature makes it more concentrated. Sampling an output from that distribution does not perform another gradient update or retrain the model.",
                 14: "Example: Derivatives/critical points lead to optimization, which is the core math behind training AI models."
             }
         };
 
+        let worksheetAccent = '#e10600';
+        let worksheetAccentRGB = '225, 6, 0';
         let currentMode = document.querySelector('input[name="answer-mode"]:checked')?.value || 'algebra';
         const originalWorksheet = document.getElementById('original-worksheet');
         const statisticsWorksheet = document.getElementById('statistics-worksheet');
@@ -1399,6 +1415,10 @@
 
         function syncWorksheetMode() {
             const isStatistics = currentMode === 'statistics';
+            document.body.dataset.worksheetMode = currentMode;
+            const theme = getComputedStyle(document.body);
+            worksheetAccent = theme.getPropertyValue('--worksheet-accent').trim();
+            worksheetAccentRGB = theme.getPropertyValue('--worksheet-accent-rgb').trim();
             document.body.classList.toggle('statistics-mode', isStatistics);
             originalWorksheet.hidden = isStatistics;
             statisticsWorksheet.hidden = !isStatistics;
@@ -1415,10 +1435,10 @@
                 return;
             }
             window.pauseStatisticsWorksheet?.();
-            originalWorksheet.querySelectorAll('.answer.visible').forEach(answer => {
-                const questionNumber = answer.id.replace('answer-', '');
-                answer.innerHTML = answerMap[currentMode][questionNumber];
-            });
+            window.restoreWorksheetPractice(currentMode, answerMap[currentMode]);
+            document.getElementById('q1-question-text').textContent = currentMode === 'calculus'
+                ? 'What expression gives the slope of a function at a point?'
+                : 'What expression gives the slope between two points?';
             updateFlatSlopePlaneNote();
             updateGradientDescentSlopeNote();
             updateQuestion4Prompt();
@@ -1426,6 +1446,9 @@
             drawSlopeVisual();
             drawSlopeChangeVisual();
             drawParabola();
+            drawQuartic();
+            drawValleyScene();
+            drawGradientDescentSetup();
             updateParaboloidPlaneControls();
             drawParaboloid();
         }
@@ -1476,16 +1499,6 @@
             input.addEventListener('change', (e) => {
                 currentMode = e.target.value;
                 syncWorksheetMode();
-            });
-        });
-
-        document.querySelectorAll('.submit-answer').forEach((button) => {
-            button.addEventListener('click', () => {
-                const questionNumber = button.getAttribute('data-question');
-                const answerEl = document.getElementById(`answer-${questionNumber}`);
-                const modeAnswers = answerMap[currentMode] || {};
-                answerEl.innerHTML = modeAnswers[questionNumber] || "Answer coming soon.";
-                answerEl.classList.add('visible');
             });
         });
 
@@ -1595,7 +1608,7 @@
                 const pointY = 0.12 * pointX * pointX;
                 const slope = 0.24 * pointX;
 
-                slopeCtx.strokeStyle = '#e10600';
+                slopeCtx.strokeStyle = worksheetAccent;
                 slopeCtx.lineWidth = 4;
                 slopeCtx.beginPath();
                 for (let x = -4; x <= 4; x += 0.04) {
@@ -1644,7 +1657,7 @@
                 const lineStartY = y1 + slope * (lineStartX - x1);
                 const lineEndY = y1 + slope * (lineEndX - x1);
 
-                drawDoubleArrow(slopeCtx, lineStartX, lineStartY, lineEndX, lineEndY, '#e10600', 5);
+                drawDoubleArrow(slopeCtx, lineStartX, lineStartY, lineEndX, lineEndY, worksheetAccent, 5);
 
                 drawDoubleArrow(slopeCtx, x1, y1 + 24, x2, y1 + 24, '#64f4ac', 4);
                 drawDoubleArrow(slopeCtx, x2 + 24, y1, x2 + 24, y2, '#49a7ff', 4);
@@ -1698,7 +1711,7 @@
             slopeChangeCtx.lineTo(centerX, slopeChangeCanvas.height - 34);
             slopeChangeCtx.stroke();
 
-            slopeChangeCtx.strokeStyle = '#e10600';
+            slopeChangeCtx.strokeStyle = worksheetAccent;
             slopeChangeCtx.lineWidth = 4;
             slopeChangeCtx.beginPath();
             for (let x = -4.8; x <= 4.8; x += 0.04) {
@@ -1791,7 +1804,7 @@
             parabolaCtx.stroke();
 
             // Draw parabola y = x^2
-            parabolaCtx.strokeStyle = '#e10600';
+            parabolaCtx.strokeStyle = worksheetAccent;
             parabolaCtx.lineWidth = 4;
             parabolaCtx.beginPath();
 
@@ -1845,7 +1858,7 @@
                     showReferencePoints = true;
                 }
 
-                parabolaCtx.strokeStyle = '#e10600';
+                parabolaCtx.strokeStyle = worksheetAccent;
                 parabolaCtx.lineWidth = 3;
                 parabolaCtx.setLineDash([5, 5]);
                 parabolaCtx.beginPath();
@@ -1856,7 +1869,7 @@
 
                 // Arrowheads indicate the line continues beyond the visible canvas.
                 const arrowSize = 10;
-                parabolaCtx.fillStyle = '#e10600';
+                parabolaCtx.fillStyle = worksheetAccent;
 
                 parabolaCtx.beginPath();
                 parabolaCtx.moveTo(x1, y1);
@@ -1910,7 +1923,7 @@
             quarticCtx.stroke();
 
             // Draw quartic y = x^4 + 2x^3 - 3x^2 + x + 1
-            quarticCtx.strokeStyle = '#e10600';
+            quarticCtx.strokeStyle = worksheetAccent;
             quarticCtx.lineWidth = 4;
             quarticCtx.beginPath();
 
@@ -2088,7 +2101,7 @@
                 paraboloidCtx.stroke();
             }
             const b = project3D(0, 0, 0, centerX, centerY, scale, angleX, angleY);
-            paraboloidCtx.fillStyle = '#e10600'; paraboloidCtx.beginPath(); paraboloidCtx.arc(b.x, b.y, 10, 0, Math.PI * 2); paraboloidCtx.fill();
+            paraboloidCtx.fillStyle = worksheetAccent; paraboloidCtx.beginPath(); paraboloidCtx.arc(b.x, b.y, 10, 0, Math.PI * 2); paraboloidCtx.fill();
         }
 
         // Shared 3D Projection Logic
@@ -2171,7 +2184,7 @@
             line(4, 0, 2, 20, '#f5f5f5', 4);
 
             // Shirt (Trapezoid)
-            ctx.fillStyle = '#e10600';
+            ctx.fillStyle = worksheetAccent;
             ctx.beginPath();
             ctx.moveTo(x - 8 * scale, y - 20 * scale);
             ctx.lineTo(x + 8 * scale, y - 20 * scale);
@@ -2267,7 +2280,7 @@
             gdCtx.stroke();
 
             // Draw function
-            gdCtx.strokeStyle = '#e10600';
+            gdCtx.strokeStyle = worksheetAccent;
             gdCtx.lineWidth = 4;
             gdCtx.beginPath();
 
@@ -2308,7 +2321,7 @@
                 const canvasX = centerX + step * scale;
                 const canvasY = centerY - y * scale;
 
-                gdCtx.fillStyle = `rgba(225, 6, 0, ${1 - i * 0.1})`;
+                gdCtx.fillStyle = `rgba(${worksheetAccentRGB}, ${1 - i * 0.1})`;
                 gdCtx.beginPath();
                 gdCtx.arc(canvasX, canvasY, 5, 0, Math.PI * 2);
                 gdCtx.fill();

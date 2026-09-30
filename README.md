@@ -10,8 +10,12 @@ All worksheet images and the favicon are in `assets/`. The page uses Google Font
 
 The site can be published directly from the repository root with GitHub Pages; no build step is needed.
 
-Run the numerical checks with `node --test tests/statistics-core.test.js`.
+Algebra II and Calculus now check submitted responses instead of revealing the answer automatically. Short formulas accept equivalent arithmetic notation; written feedback uses local concept rules to identify ideas and offer hints, without assigning a grade. Example explanations remain independently available. Answers and feedback are saved separately for each version in the current browser. Enter checks a short answer; Ctrl/⌘ + Enter checks a written answer. Calculus uses a purple theme, while Algebra II retains red and Statistics uses green.
+
+Run the numerical and feedback checks with `node --test tests/*.test.js`.
 
 With the site served locally and Playwright installed, run `node tests/worksheet-animations.browser.cjs` to check shared canvases, mode changes, pause, reduced motion, and screen widths. Set `WORKSHEET_URL` to check a different local or published route, and optionally `CHROME_PATH` to use an installed Chrome executable.
 
-The portfolio serves its own copy at `https://griffinrutherford.com/gradient-descent-worksheet/`. When publishing worksheet changes, also sync `index.html`, `statistics-core.js`, `statistics.js`, `statistics.css`, and `worksheet-animations.js` into that repository's `gradient-descent-worksheet/` directory, retaining its relative home and image paths.
+Run `node tests/worksheet-practice.browser.cjs` with the same environment to check submissions, keyboard shortcuts, separate saved drafts, themes, and blocked-storage behavior.
+
+The portfolio serves its own copy at `https://griffinrutherford.com/gradient-descent-worksheet/`. When publishing worksheet changes, also sync `index.html` and the root-level worksheet JavaScript/CSS files into that repository's `gradient-descent-worksheet/` directory, retaining its relative home and image paths.

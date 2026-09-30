@@ -1,0 +1,106 @@
+/* Purple Calculus and green Statistics accents; Algebra retains the original red. */
+body[data-worksheet-mode="calculus"] {
+    --worksheet-accent: #b6a1ff;
+    --worksheet-accent-rgb: 182, 161, 255;
+    --worksheet-button-ink: #170f2d;
+    --worksheet-panel: #100d1b;
+}
+
+body[data-worksheet-mode="statistics"] {
+    --worksheet-accent: #64f4ac;
+    --worksheet-accent-rgb: 100, 244, 172;
+    --worksheet-button-ink: #07170c;
+}
+
+.mode-toggle label[for="mode-algebra"] {
+    border-color: #e10600;
+}
+
+.mode-toggle label[for="mode-calculus"] {
+    border-color: #b6a1ff;
+}
+
+.mode-toggle label[for="mode-statistics"] {
+    border-color: #64f4ac;
+}
+
+.mode-toggle input:checked + label {
+    color: var(--worksheet-button-ink);
+}
+
+.practice-intro,
+.practice-explanation {
+    padding: 16px 20px;
+    margin: 18px 0;
+    border: 1px solid var(--worksheet-accent);
+    border-radius: 8px;
+    background: rgba(var(--worksheet-accent-rgb), 0.06);
+    font-size: 0.9em;
+}
+
+#practice-progress {
+    margin-top: 8px;
+    color: #d9d4e6;
+    font-size: 0.9em;
+}
+
+.practice-label {
+    display: block;
+    margin-top: 16px;
+    font-size: 0.9em;
+    font-weight: bold;
+}
+
+.practice-explanation summary {
+    cursor: pointer;
+    font-weight: bold;
+    color: var(--worksheet-accent);
+}
+
+.practice-explanation > div {
+    margin-top: 12px;
+}
+
+.answer[data-result="correct"] {
+    border-color: #64f4ac;
+    background: #102018;
+}
+
+.answer[data-result="retry"],
+.answer[data-result="empty"] {
+    border-color: #ffd166;
+    background: #231d0e;
+}
+
+.answer p {
+    margin-top: 6px;
+}
+
+.practice-recognized {
+    font-size: 0.9em;
+    color: #d9d4e6;
+}
+
+.answer,
+.practice-explanation {
+    overflow-wrap: anywhere;
+}
+
+.answer .math-inline,
+.practice-explanation .math-inline {
+    white-space: normal;
+}
+
+button:focus-visible,
+summary:focus-visible,
+select:focus-visible,
+input[type="range"]:focus-visible {
+    outline: 3px solid var(--worksheet-accent);
+    outline-offset: 3px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+    button, .home-link, .mode-toggle label {
+        transition: none;
+    }
+}
