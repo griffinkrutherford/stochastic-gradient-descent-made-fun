@@ -372,6 +372,11 @@
             background: #050505;
         }
 
+        #wordvec-theme-select {
+            max-width: 100%;
+            min-width: 0;
+        }
+
         .wordvec-title {
             color: #e10600;
             font-weight: 700;
@@ -1164,7 +1169,7 @@
 
             <div class="question stats-question">
                 <div class="question-number">1. Start with the average</div>
-                <p class="question-text">Ignore study hours for a moment. What is the <strong>sample mean</strong> of the 12 quiz scores?</p>
+                <p class="question-text">Ignore study hours for a moment. What is the <strong>sample mean</strong> of the 12 quiz scores? The three number checks accept answers within 0.05 point.</p>
                 <canvas id="stats-dot-plot" width="760" height="200" role="img" aria-label="Dot plot of the twelve quiz scores, from 60 to 92 points"></canvas>
                 <label for="stats-answer-mean">Sample mean (quiz points)</label>
                 <div class="stats-answer-row"><input id="stats-answer-mean" type="number" inputmode="decimal" step="any"><button type="button" class="stats-check" data-stats-check="mean">Check</button></div>
@@ -1350,6 +1355,10 @@
                 return;
             }
             window.pauseStatisticsWorksheet?.();
+            originalWorksheet.querySelectorAll('.answer.visible').forEach(answer => {
+                const questionNumber = answer.id.replace('answer-', '');
+                answer.innerHTML = answerMap[currentMode][questionNumber];
+            });
             updateFlatSlopePlaneNote();
             updateGradientDescentSlopeNote();
             updateQuestion4Prompt();

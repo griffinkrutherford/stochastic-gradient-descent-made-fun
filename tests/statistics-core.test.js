@@ -44,3 +44,28 @@ test('repeated full-batch line fitting approaches the least-squares reference', 
     assert.ok(core.lineMeanSquaredError(rows, fitted.intercept, fitted.slope)
         < core.lineMeanSquaredError(rows, initial.intercept, initial.slope));
 });
+
+test('a stochastic mean step can raise full-data error even at the optimum', () => {
+    const optimum = core.mean(rows.map(row => row.score));
+    const next = core.meanUpdate(optimum, rows, [0], 0.25);
+    assert.ok(core.meanSquaredError(rows, next.estimate) > core.meanSquaredError(rows, optimum));
+});
+
+test('line updates agree with numerical gradients in centered, scaled coordinates', () => {
+    const xMean = core.mean(rows.map(row => row.hours));
+    const scale = 5.5;
+    const center = 66;
+    const tilt = 11;
+    const rate = 0.3;
+    const epsilon = 1e-5;
+    for (const indices of [allRows, [0], [1, 4, 7, 10]]) {
+        const batch = indices.map(index => rows[index]);
+        const objective = (height, angle) => core.lineMeanSquaredError(
+            batch, height - angle / scale * xMean, angle / scale) / 2;
+        const heightGradient = (objective(center + epsilon, tilt) - objective(center - epsilon, tilt)) / (2 * epsilon);
+        const tiltGradient = (objective(center, tilt + epsilon) - objective(center, tilt - epsilon)) / (2 * epsilon);
+        const next = core.lineUpdate({ intercept: center - tilt / scale * xMean, slope: tilt / scale }, rows, indices, rate);
+        assert.ok(Math.abs(next.intercept + next.slope * xMean - (center - rate * heightGradient)) < 1e-7);
+        assert.ok(Math.abs(next.slope * scale - (tilt - rate * tiltGradient)) < 1e-7);
+    }
+});
