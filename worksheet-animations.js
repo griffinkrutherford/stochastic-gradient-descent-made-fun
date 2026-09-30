@@ -12,13 +12,13 @@
         const element = get(id);
         const home = document.createComment(`${id} original position`);
         element.before(home);
-        return { element, home, slot: get(slot) };
+        return { element, home, statisticsSlot: get(slot), modelingSlot: get(slot.replace('stats-', 'model-')) };
     });
 
     const captions = [
-        ['#shared-marble-bowl > h3', 'The Marble Bowl: a picture of prediction error'],
-        ['#shared-marble-bowl > p:first-of-type', 'Imagine each marble is a candidate model. Lower places in the bowl represent smaller prediction errors. This illustration includes local dents and a deepest point, called the global minimum. Drag the bowl to explore it.'],
-        ['#shared-marble-bowl > p:nth-of-type(2)', 'Try the shaking slider to explore wandering and settling. Connect that motion to our randomly selected groups of scores: different groups suggest different steps. The real data-based updates are in Question 5.'],
+        ['#shared-marble-bowl > h3', 'The Marble Bowl: prediction error'],
+        ['#shared-marble-bowl > p:first-of-type', 'Each marble pictures a candidate model. Lower places picture smaller prediction errors. Green marks the global minimum; gold marks local traps. Drag to orbit.'],
+        ['#shared-marble-bowl > p:nth-of-type(2)', 'Shaking illustrates wandering and settling. Actual SGD uses randomly selected player rows. Question 5 calculates those updates.'],
         ['label[for="sgdNoise"]', 'Shaking in the bowl illustration'],
         ['#shared-training > .wordvec-title', 'Learning from examples: two visual stories'],
         ['#shared-training > .wordvec-note', 'Words becoming organized and a bowl taking shape are two ways to picture learning patterns. Connect them to our line improving its predictions step by step.'],
@@ -29,7 +29,7 @@
     });
 
     const descriptions = {
-        sgdCanvas: 'Illustrated bowl with local dents, a deepest point, and moving candidate-model marbles. The controls and counters describe the current state.',
+        sgdCanvas: 'Illustrated bowl with local dents, a deepest point, and moving candidate-model marbles. Arrow keys rotate, Home restores the view, and the controls and counters describe the current state.',
         wordVectorCanvas: 'Illustrative word-feature map. The selected lens, scanner value, and legend describe the visible words.',
         wordConvergenceCanvas: 'Illustration of words moving into organized positions during learning.',
         bowlMorphCanvas: 'Illustration of a bowl taking shape as a model learns patterns.',
@@ -42,13 +42,24 @@
         get(id).setAttribute('aria-label', description);
     }
 
-    window.syncWorksheetAnimations = isStatistics => {
-        for (const { element, home, slot } of widgets) {
-            if (isStatistics) slot.appendChild(element);
+    const modelingCaptions = [
+        'Byte’s model bowl',
+        'Picture café model candidates as marbles, and prediction error as height. Drag to orbit. The dents illustrate complex models; our actual café line fit has a single least-squares optimum.',
+        'Shaking is a physical illustration. Actual café updates use randomly selected pilot windows. See Question 4 for computed steps.',
+        'Shaking in the bowl illustration',
+        'Learning patterns: from café pilots to language examples',
+        'These moving words and the shaping bowl illustrate learning. Connect them to Byte improving a demand line using its prediction errors.',
+        'After learning, the model assigns probabilities to possible next words. Temperature changes the output distribution; it does not refit the demand line or train the language model again.'
+    ];
+    window.syncWorksheetAnimations = mode => {
+        for (const { element, home, statisticsSlot, modelingSlot } of widgets) {
+            if (mode === 'modeling') modelingSlot.appendChild(element);
+            else if (mode === 'statistics') statisticsSlot.appendChild(element);
             else home.after(element);
         }
-        for (const { element, original, statistics } of captions) {
-            if (isStatistics) element.textContent = statistics;
+        for (const [index, { element, original, statistics }] of captions.entries()) {
+            if (mode === 'modeling') element.textContent = modelingCaptions[index];
+            else if (mode === 'statistics') element.textContent = statistics;
             else element.innerHTML = original;
         }
     };
@@ -58,11 +69,11 @@
     window.areWorksheetAnimationsPaused = () => paused || document.hidden;
     const button = get('shared-animations-toggle');
     function renderMotionControl() {
-        button.textContent = paused ? 'Play bowl and word animations' : 'Pause bowl and word animations';
+        button.textContent = paused ? 'Play all visual animations' : 'Pause all visual animations';
         button.setAttribute('aria-pressed', String(paused));
         get('shared-animation-state').textContent = paused
             ? 'Animations paused. The sliders and drag controls still work.'
-            : 'Animations playing. Drag the bowls to change your view, or pause to discuss a frame.';
+            : 'Animations playing. Drag the 3D scenes to change your view, or pause to discuss a frame.';
     }
     button.addEventListener('click', () => { paused = !paused; renderMotionControl(); });
     reducedMotion.addEventListener('change', event => { paused = event.matches; renderMotionControl(); });

@@ -1,0 +1,61 @@
+body[data-worksheet-mode="modeling"] {
+    --worksheet-accent: #61c7ff;
+    --worksheet-accent-rgb: 97, 199, 255;
+    --worksheet-button-ink: #071827;
+    --worksheet-panel: #091622;
+}
+body[data-worksheet-mode="modeling"] .home-link { position: absolute; }
+.mode-toggle label[for="mode-modeling"] { border-color: #61c7ff; }
+.mode-toggle input:focus-visible + label { outline-color: var(--worksheet-accent); }
+.model-intro { padding: 26px; border: 2px solid #61c7ff; border-radius: 12px; background: radial-gradient(ellipse at top left, #173851, #0c1928 75%); }
+.model-intro h2 { color: #a6e1ff; margin: 12px 0; }
+.model-intro p + p { margin-top: 14px; }
+.model-kicker { color: #ffd166; font-size: .8em; letter-spacing: .03em; }
+.model-mission { padding: 14px; border: 1px dashed #ffd166; border-radius: 8px; }
+.model-save-status { display: block; font-size: .8em; margin-top: 12px; color: #ccdfef; }
+.model-question { background: #0d1a28; border-left-color: #61c7ff; }
+.model-question .question-number { color: #a6e1ff !important; text-decoration-color: #61c7ff !important; }
+.model-question input[type="range"] { accent-color: #61c7ff; }
+.model-question input[type="number"], .model-question select, .model-question textarea { border-color: #54788f; background: #07121f; }
+.model-question button, .model-intro button { border-color: #61c7ff; background: #61c7ff; color: #071827; box-shadow: none; }
+.model-question button.reset { border-color: #61c7ff; color: #e5edf7; background: transparent; }
+.model-question button:hover { box-shadow: 0 0 0 2px rgba(97,199,255,.35); }
+.model-question :is(button,input,select,textarea,summary):focus-visible { outline-color: #61c7ff; }
+.model-question :is(.stats-formula,.stats-state,.stats-chart-note,.stats-feedback) { border-left-color: #61c7ff; background: #102b3c; }
+.model-question .stats-feedback[data-result="incorrect"] { border-left-color: #ffd166; }
+.model-question canvas { border-color: #416a85; background: #07121f; }
+.model-question .stats-explanation, .model-instructor { background: #0c2133; border-color: #54788f; }
+.model-question .stats-explanation summary, .model-instructor summary { color: #a6e1ff; }
+.model-question textarea { width: 100%; min-height: 110px; resize: vertical; padding: 12px; color: #fff; font: inherit; border-radius: 6px; margin: 8px 0 12px; }
+.model-question label small { color: #ccdfef; }
+.model-table-wrap { overflow-x: auto; margin: 16px 0; }
+.model-table-wrap table { width: 100%; border-collapse: collapse; font-size: .9em; font-variant-numeric: tabular-nums; }
+.model-table-wrap caption { padding: 12px; color: #a6e1ff; text-align: left; }
+.model-table-wrap th, .model-table-wrap td { padding: 9px; border-bottom: 1px solid #385366; text-align: center; }
+.model-table-wrap tr.model-selected { background: #214863; outline: 2px solid #61c7ff; outline-offset: -2px; }
+.model-budget { display: grid; grid-template-columns: repeat(3,minmax(0,1fr)); gap: 10px; }
+.model-budget div { padding: 14px; background: #102b3c; border: 1px solid #416a85; border-radius: 8px; }
+.model-budget strong { display: block; color: #ffd166; font-size: 1.3em; }
+.model-budget span { font-size: .8em; }
+.model-triangle { display: block; width: 100%; max-width: 400px; margin: 18px auto; }
+.model-triangle text { fill: #e5edf7; font-size: 16px; }
+#model-validation-results[hidden] { display: none; }
+@media (max-width: 600px) {
+    .model-intro { padding: 18px; }
+    .model-budget { grid-template-columns: 1fr; }
+    .model-table-wrap table { font-size: .75em; }
+    .model-table-wrap th, .model-table-wrap td { padding: 6px 3px; overflow-wrap: anywhere; }
+}
+@media print {
+    body[data-worksheet-mode="modeling"] { background: white; color: black; }
+    body[data-worksheet-mode="modeling"] .container { background: white; color: black; margin: 0; padding: 0; }
+    body[data-worksheet-mode="modeling"] :is(.home-link,.header,.speaker-bio,.footer,#shared-animations-toggle,#shared-animation-state) { display: none; }
+    #modeling-worksheet :is(button,canvas,.stats-control-grid,.model-instructor,.stats-explanation,[id$="-slot"],.model-save-status,.stats-feedback) { display: none; }
+    #modeling-worksheet :is(.model-intro,.model-question,.stats-formula,.stats-state,.stats-chart-note,.model-budget div) { background: white; color: black; border-color: #555; box-shadow: none; }
+    #modeling-worksheet :is(h2,.question-number,strong,caption) { color: black !important; }
+    #modeling-worksheet :is(textarea,input[type="number"]) { background: white; color: black; min-height: 90px; }
+    #modeling-worksheet .question { break-inside: avoid; margin: 16px 0; padding: 16px; }
+    #modeling-worksheet table :is(th,td) { color: black; }
+    #modeling-worksheet .model-triangle text { fill: black; }
+    #modeling-worksheet .model-triangle path { stroke: black; fill: none; }
+}

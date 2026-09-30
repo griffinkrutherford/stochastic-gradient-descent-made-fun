@@ -667,6 +667,8 @@
     </style>
     <link rel="stylesheet" href="statistics.css">
     <link rel="stylesheet" href="worksheet-practice.css">
+    <link rel="stylesheet" href="modeling.css">
+    <link rel="stylesheet" href="visual-labs.css">
 </head>
 <body>
     <a class="home-link" href="https://griffinrutherford.com/">← Back to Homepage</a>
@@ -676,7 +678,7 @@
             <h2 id="worksheet-subtitle">The Math Behind ChatGPT and AI</h2>
             <h3>Guest Speaker - Griffin Rutherford - MS Computer Science - Mountain Runner</h3>
             <p id="worksheet-intro" style="margin-top: 15px; font-style: italic; color: #cfcfcf;">
-                This topic is normally only taught at the master's degree level. But I'm sure you can learn it!
+                Start with slopes and curves. Follow small steps downhill, then see how the same idea helps train AI.
             </p>
             <div class="mode-toggle" role="radiogroup" aria-label="Worksheet version">
                 <input type="radio" id="mode-algebra" name="answer-mode" value="algebra" checked>
@@ -685,6 +687,8 @@
                 <label for="mode-calculus">Calculus</label>
                 <input type="radio" id="mode-statistics" name="answer-mode" value="statistics">
                 <label for="mode-statistics">Statistics</label>
+                <input type="radio" id="mode-modeling" name="answer-mode" value="modeling">
+                <label for="mode-modeling">Modeling</label>
             </div>
             <div class="shared-animation-controls">
                 <button type="button" id="shared-animations-toggle" aria-pressed="false">Pause bowl and word animations</button>
@@ -771,7 +775,7 @@
             <div class="question-number">6.</div>
             <div class="question-text">
                 Using this quartic equation as an example: <span class="formula">y = x⁴ + 2x³ − 3x² + x + 1</span>
-                We have something that looks like a vertex, but since it's a higher order polynomial, it's a local minimum: there's no formula for this! It's at (-2.22, -13.60).
+                We have something that looks like a vertex, but this higher-order polynomial can have several turning points. There is no single parabola-vertex shortcut for this curve. One local minimum is near (-2.22, -13.60).
                 <div class="wordvec-note is-hidden" id="quartic-calculus-note" style="margin-top: 15px;">
                     In Calculus mode, we can find the x-values of extrema (local mins/maxes) by taking the derivative and solving where that derivative equals zero.
                 </div>
@@ -804,7 +808,7 @@
         <div class="question">
             <div class="question-number">8.</div>
             <div class="question-text">
-                But the world is a lot more complicated than one number in and one number out! We can actually extend this concept to 3D! Don't worry about all the underlying math, I want to focus on intuition. 3D functions are cool; they are normally not taught until Calculus III. Below is the 3D equivalent of a parabola called a paraboloid:
+                But the world is a lot more complicated than one number in and one number out! We can actually extend this concept to 3D! Don't worry about all the underlying math, I want to focus on intuition. A 3D plot can show two inputs on the floor and an output as height. Below is the 3D equivalent of a parabola called a paraboloid:
             </div>
 
             <div class="canvas-container">
@@ -925,28 +929,30 @@
             </div>
 
             <div class="sgd-simulator" id="shared-marble-bowl">
-                <h3 style="color: #49a7ff; margin-bottom: 10px;">The Training Simulator: "The 3D Marble Bowl"</h3>
+                <h3 style="color: #49a7ff; margin-bottom: 10px;">The 3D Marble Bowl</h3>
                 <p style="color: #cfcfcf; font-size: 1.08em; max-width: 840px; margin: 0 auto 15px;">
-                    Below is a 3D version of our weird bowl. The "best" result is the deepest part of the bowl (the <strong>Global Minimum</strong>). But sometimes, a marble gets stuck in a shallow dent on the side (a <strong>Local Minimum</strong>). The slider controls <strong>Stochastic Noise</strong>: the middle gives a useful shake that fades over time, while the far right can shake marbles right out of the bowl.
+                    Marbles roll across a surface with a deepest point (global minimum) and shallower dents (local minima). Drag to orbit, then try the shaking slider.
                 </p>
                 <p style="color: #cfcfcf; font-size: 1.08em; max-width: 840px; margin: 0 auto 15px;">
-                    A little shaking helps the marbles escape shallow dents, but the shaking has to calm down. If the bowl keeps shaking forever, the marbles never settle into the best spot.
+                    Shaking illustrates wandering and settling. Actual SGD uses randomly selected training examples to estimate a downhill direction; it does not add arbitrary shaking or guarantee a better minimum.
                 </p>
                 
                 <div class="sgd-canvas-container" style="height: 450px;">
-                    <canvas id="sgdCanvas" width="800" height="450"></canvas>
+                    <canvas id="sgdCanvas" tabindex="0" width="800" height="450"></canvas>
                 </div>
 
+                <p class="shared-bowl-legend">Green ring: deepest (global) minimum. Gold rings: shallower local traps. Drag, use arrow keys, or choose Auto Rotate.</p>
                 <div class="sgd-controls">
                     <div class="sgd-loop-track" aria-label="Animation loop progress">
                         <span id="sgdLoopMeter"></span>
                     </div>
                     <div>
-                        <label for="sgdNoise" style="color: #fff; font-weight: bold;">Noise / Shakiness</label>
+                        <label for="sgdNoise" style="color: #fff; font-weight: bold;">Shaking in the bowl illustration</label>
                         <input type="range" id="sgdNoise" min="0" max="100" value="28" style="width: 100%;">
                         <div class="value-display" id="sgdNoiseValue">Noise: 28%</div>
                         <div style="text-align: center; margin-top: 10px;">
                             <button type="button" id="toggle-sgd-autorotate" class="reset auto-rotate-button" aria-pressed="false" style="padding: 7px 18px; font-size: 1em; border-radius: 4px; cursor: pointer;">Auto Rotate</button>
+                            <button type="button" id="reset-sgd-view" class="reset" style="padding: 7px 18px; font-size: 1em;">Reset view</button>
                             <button type="button" onclick="restartSgdSimulator()" style="padding: 7px 18px; font-size: 1em; background: #333; color: #fff; border: 1px solid #64f4ac; border-radius: 4px; cursor: pointer;">Restart Cycle</button>
                         </div>
                     </div>
@@ -965,20 +971,20 @@
             <div class="question-number">12.</div>
             <div class="info-box">
                 <p style="font-weight: bold; color: #e10600; margin-bottom: 15px;">
-                    You just learned the concept of Stochastic Gradient Descent! This concept is not normally taught until 500-level graduate math classes 😱!
+                    You just learned the concept of Stochastic Gradient Descent! You can now connect slopes, small updates, and prediction errors to training AI!
                 </p>
                 <p style="margin-bottom: 15px;">
                     <strong>Stochastic</strong> is a fancy word for random.
                 </p>
                 <p style="margin-bottom: 15px;">
-                    To summarize, adding a bit of random "shakiness" helps computers better approximate to the best "local minimum" compared to going straight down.
+                    In actual SGD, the computer selects a random group of training examples and uses their prediction errors to estimate a downhill direction. Different groups can suggest different steps; more randomness does not guarantee a better answer.
                 </p>
 
                 <p style="margin-bottom: 15px;">
                     Some shakiness is good, but too much causes the marbles to fall out, so we need just the right amount.
                 </p>
                 <p>
-                    In AI training, this "shakiness" is usually called <strong>noise</strong> or <strong>stochasticity</strong>. Shaping the bowl is one analogy for training AI. <strong>Temperature</strong> is different: it matters later, when ChatGPT is actually writing its response.
+                    The moving marbles illustrate wandering and settling. With a fixed dataset and error measure, fitting moves a candidate across a fixed error surface. The shaping bowl later is a visual story about learning patterns. <strong>Temperature</strong> is different: it matters later, when ChatGPT is actually writing its response.
                 </p>
                 <p style="margin-top: 15px;">
                     Instead of marbles in weird bowl holes, instead picture the depth of the hole as reducing pollution, saving resources, etc.
@@ -1374,6 +1380,157 @@
             </div>
         </section>
 
+        <section id="modeling-worksheet" class="worksheet-panel" aria-labelledby="modeling-title" hidden>
+            <div class="model-intro">
+                <div class="model-kicker">Santa Fe Prep · Grades 11–12 · Integrated III → real decisions</div>
+                <h2 id="modeling-title">The Prep Pop-Up Challenge ☕</h2>
+                <p>Arts night is coming. Your team gets one hour to run a pop-up café. Byte, your enthusiastic robot intern, suggests: “Charge $100 a cup. Problem solved.” You suspect Byte needs a better model.</p>
+                <p><strong>Your mission:</strong> choose a price that earns money for the event, keeps the café welcoming, and avoids a mountain of leftovers. Build a model, test its predictions, then pitch your plan.</p>
+                <p class="model-mission">Work in pairs: one person is the model builder, the other is the skeptical event organizer. Swap jobs halfway through. All events, prices, and data below are fictional—not school records.</p>
+                <p>A model is a useful simplification. Our cycle: <strong>ask → assume → build → test → revise → decide.</strong> No calculus needed. Allow about 50–60 minutes; save the bonus missions for later.</p>
+                <button type="button" id="model-print">Print this lesson</button>
+                <span id="model-save-status" class="model-save-status">Your written responses stay in this browser when storage is available.</span>
+            </div>
+
+            <div class="question stats-question model-question">
+                <div class="question-number">1. Give Byte a better question</div>
+                <p class="question-text">“Make the most money” leaves a lot out. What decision must your team make? Name one success measure and one assumption you would need to check.</p>
+                <label for="model-response-frame">Your mission brief</label>
+                <textarea id="model-response-frame" data-model-draft placeholder="We will choose… Success means… We are assuming…"></textarea>
+                <button type="button" data-model-writing="frame">Get feedback on my explanation</button>
+                <p id="model-feedback-frame" class="stats-feedback" aria-live="polite"></p>
+                <details class="stats-explanation"><summary>Compare with an explanation</summary><p>Choose a price per cup. Profit per hour is one success measure; affordable prices, manageable queues, and little waste also matter. Assume comparable attendance, cup sizes, service time, and weather. Those assumptions need evidence. The mathematically highest profit may not be your team's best decision.</p></details>
+            </div>
+
+            <div class="question stats-question model-question">
+                <div class="question-number">2. Turn a hunch into a model</div>
+                <p>Start with two hypothetical planning estimates: at <strong>$3 per cup, 64 cups/hour</strong>; at <strong>$6 per cup, 28 cups/hour</strong>. Let <strong>p</strong> be price in dollars per cup and <strong>q</strong> be expected demand in cups per hour. Try a line: <strong>q = a + bp</strong>.</p>
+                <p class="stats-formula">64 = a + 3b &nbsp; and &nbsp; 28 = a + 6b</p>
+                <p class="question-text">Subtract the equations. What is b? Explain what its sign means before checking.</p>
+                <label for="model-answer-slope">Slope (change in cups/hour for a $1 increase in price)</label>
+                <div class="stats-answer-row"><input id="model-answer-slope" data-model-draft type="number" step="any"><button type="button" data-model-check="slope">Check</button></div>
+                <p id="model-feedback-slope" class="stats-feedback" aria-live="polite"></p>
+                <details class="stats-explanation"><summary>Compare with an explanation</summary><p>28 − 64 = (6 − 3)b, so <strong>b = −12</strong>. Then 64 = a − 36 gives <strong>a = 100</strong>. Our first model is <strong>q = 100 − 12p</strong>: each extra dollar predicts 12 fewer cups per hour. “100 cups at a $0 price” is an extrapolation, not a fact we measured. Use this model only in the $3–$6 range until you have more evidence.</p></details>
+            </div>
+
+            <div class="question stats-question model-question">
+                <div class="question-number">3. The pilots don't land perfectly on a line</div>
+                <p>The team now runs seven fictional one-hour pilots. These are the observations we will fit. They differ from the two planning estimates. Each pilot uses the same cup size; for this exercise assume the pilots could serve every interested buyer.</p>
+                <div class="model-table-wrap"><table id="model-pilots"><caption>Fictional café pilots · one hour each</caption><thead><tr><th scope="col">Pilot</th><th scope="col">Price ($/cup)</th><th scope="col">Sold (cups/hour)</th><th scope="col">Used in last step?</th></tr></thead><tbody></tbody></table></div>
+                <p class="question-text">At $4.50, our first model predicts 46 cups/hour; the pilot sold 48. What is the <strong>residual</strong> (observed − predicted)?</p>
+                <label for="model-answer-residual">Residual (cups/hour)</label>
+                <div class="stats-answer-row"><input id="model-answer-residual" data-model-draft type="number" step="any"><button type="button" data-model-check="residual">Check</button></div>
+                <p id="model-feedback-residual" class="stats-feedback" aria-live="polite"></p>
+                <details class="stats-explanation"><summary>Compare with an explanation</summary><p><strong>48 − 46 = +2 cups/hour.</strong> The model underpredicted. We compare candidate lines using the average of the squared residuals across all seven pilots. Squaring stops positive and negative misses from canceling. A small error on these pilots still does not establish that price caused the sales difference.</p></details>
+            </div>
+
+            <div class="question stats-question model-question">
+                <div class="question-number">4. Teach Byte to fit the line</div>
+                <p class="question-text">Move the line by hand first. Then predict: will steps using one pilot look smoother or noisier than steps using all seven? Run both. Every update below is calculated from the highlighted pilots.</p>
+                <div class="stats-control-grid">
+                    <label for="model-intercept">Starting height a: <output id="model-intercept-value">80</output><input id="model-intercept" type="range" min="30" max="150" step="0.1" value="80"></label>
+                    <label for="model-slope">Slope b: <output id="model-slope-value">−8</output><input id="model-slope" type="range" min="-25" max="0" step="0.1" value="-8"></label>
+                    <label for="model-batch">Pilots per step (batch size)<select id="model-batch"><option value="1">1 pilot</option><option value="3" selected>3 pilots</option><option value="7">All 7 pilots</option></select></label>
+                    <label for="model-rate">Step fraction (learning rate)<select id="model-rate"><option value="0.1">10%</option><option value="0.3" selected>30%</option><option value="0.6">60%</option><option value="1.25">125% · overshoot challenge</option></select></label>
+                </div>
+                <div class="stats-buttons"><button type="button" id="model-step">Take one step</button><button type="button" id="model-run">Run 30 steps</button><button type="button" id="model-reset" class="reset">Reset fit</button><button type="button" id="model-sequence" class="reset">Try a new random sequence</button><button type="button" id="model-reference" class="reset" aria-pressed="false">Show best-fit reference</button></div>
+                <p id="model-step-summary" class="stats-state" aria-live="polite"></p>
+                <canvas id="model-fit-chart" width="760" height="350" role="img" aria-label="Café pilots and demand line. Horizontal axis: price in dollars per cup. Vertical axis: cups per hour."></canvas>
+                <canvas id="model-error-chart" width="760" height="240" role="img" aria-label="Full-data average squared error against number of updates."></canvas>
+                <p id="model-fit-summary" class="stats-state"></p>
+                <p class="stats-chart-note">A batch is a fresh random group of distinct pilots. Different groups can suggest different steps; a step can increase the error across all seven pilots. A constant step fraction can keep a small-batch fit fluctuating. This page scales price internally so height and tilt can use sensible step fractions.</p>
+                <details class="stats-explanation"><summary>Compare with an explanation</summary><p>All seven pilots give the same full-data direction for a given line. Smaller groups use fewer observations per update but introduce variation. The least-squares reference is <strong>q = 100 − 12p</strong>, with average squared error about <strong>3.14 (cups/hour)²</strong>. It can also be found directly; this example makes iterative fitting visible. SGD means <em>stochastic gradient descent</em>: random groups supply estimates of the downhill direction. Arbitrary shaking is not its update rule.</p></details>
+            </div>
+
+            <div class="question stats-question model-question">
+                <div class="question-number">5. Sales aren't profit</div>
+                <p>For this calculation, use <strong>q = 100 − 12p</strong>. At $5, expect 40 cups/hour. Each cup costs $1.25 to supply, and the event has $30 in fixed costs per hour.</p>
+                <p class="stats-formula">revenue = price × cups sold<br>cost = fixed cost + cost per cup × cups sold<br>profit = revenue − cost</p>
+                <p class="question-text">What is the expected profit for this hour? Byte counted the entire revenue as profit. Show where Byte went wrong.</p>
+                <label for="model-answer-profit">Expected profit ($ for the one-hour event)</label>
+                <div class="stats-answer-row"><input id="model-answer-profit" data-model-draft type="number" step="any"><button type="button" data-model-check="profit">Check</button></div>
+                <p id="model-feedback-profit" class="stats-feedback" aria-live="polite"></p>
+                <details class="stats-explanation"><summary>Compare with an explanation</summary><p>Revenue is 5 × 40 = $200. Cost is 30 + 1.25 × 40 = $80. <strong>Profit is $120.</strong> Expected demand can be fractional because it is a prediction of an average rate, not a claim that we can sell part of a cup.</p></details>
+            </div>
+
+            <div class="question stats-question model-question">
+                <div class="question-number">6. The queue changes your answer</div>
+                <p class="question-text">Your team can serve only 40 cups/hour. What happens if demand is higher? This planner uses <strong>your current fitted line from Question 4</strong>. Try doubling capacity, changing costs, and moving the price. Does “sell more” always mean “earn more”?</p>
+                <div class="stats-buttons"><button type="button" id="model-use-reference">Use the best-fit line in the planner</button></div>
+                <div class="stats-control-grid">
+                    <label for="model-price">Price: <output id="model-price-value">$5.00</output> / cup<input id="model-price" type="range" min="3" max="6" step="0.25" value="5"></label>
+                    <label for="model-capacity">Serving capacity: <output id="model-capacity-value">40</output> cups/hour<input id="model-capacity" type="range" min="20" max="80" step="5" value="40"></label>
+                    <label for="model-variable-cost">Cost per cup: <output id="model-variable-cost-value">$1.25</output><input id="model-variable-cost" type="range" min="0.75" max="2.5" step="0.25" value="1.25"></label>
+                    <label for="model-fixed-cost">Fixed cost: <output id="model-fixed-cost-value">$30</output> / hour<input id="model-fixed-cost" type="range" min="0" max="60" step="5" value="30"></label>
+                </div>
+                <div id="model-budget" class="model-budget" aria-live="polite"></div>
+                <canvas id="model-profit-chart" width="760" height="320" role="img" aria-label="Expected hourly profit against price, with service capacity and costs included."></canvas>
+                <p id="model-plan-summary" class="stats-state"></p>
+                <p class="stats-formula">cups sold = smaller of expected demand and capacity<br>π = (p − cost per cup) × cups sold − fixed cost</p>
+                <details class="stats-explanation"><summary>Compare with an explanation</summary><p>With q = 100 − 12p and 40-cup capacity, solve <strong>100 − 12p = 40</strong> to find <strong>p = $5</strong>. Lower prices fill capacity but earn less per cup; higher prices lose enough sales to reduce profit here. The best price on our 25¢ grid is $5 with $120 expected profit. Without a capacity limit, multiplying price and linear demand gives a quadratic profit model with a vertex near $4.79. Constraints can change the answer. These recommendations depend on our chosen goal and assumptions.</p></details>
+            </div>
+
+            <div class="question stats-question model-question">
+                <div class="question-number">7. Plot twist: arts night gets rainy</div>
+                <p class="question-text">A smooth fitted line is not the finish line. These three new observations were held out of fitting. Predict how a rainy-day crowd could affect the model, then reveal the checks. Should Byte keep fitting the old pilots, or collect new evidence?</p>
+                <label for="model-validation-day">Test context<select id="model-validation-day"><option value="similar">Another similar school day</option><option value="rainy">Rainy-day turnout</option></select></label>
+                <div class="stats-buttons"><button type="button" id="model-validate">Reveal new-day checks</button></div>
+                <div id="model-validation-results" hidden><div class="model-table-wrap"><table id="model-validation-table"><caption>New-day checks · never used to update the fit</caption><thead><tr><th scope="col">Price ($/cup)</th><th scope="col">Observed (cups/hour)</th><th scope="col">Predicted (cups/hour)</th><th scope="col">Residual (cups/hour)</th></tr></thead><tbody></tbody></table></div><p id="model-validation-summary" class="stats-state" aria-live="polite"></p></div>
+                <details class="stats-explanation"><summary>Compare with an explanation</summary><p>The reference line's average squared error is <strong>2</strong> on the similar day but about <strong>262.33 (cups/hour)²</strong> on the rainy day. Repeating SGD on the same old pilots will not fix a missing crowd or weather assumption. Collect relevant data and consider a revised model. Pilot sales below serving capacity would hide unmet demand; we assumed that did not happen in our training data.</p></details>
+            </div>
+
+            <div class="question stats-question model-question">
+                <div class="question-number">8. Pitch your plan to the event organizer</div>
+                <p class="question-text">Write a four-sentence recommendation: your price; predicted profit with units and capacity; a tradeoff or assumption; and what you would check next. Your partner should challenge one claim. Would a reusable-cup option or a lower price change your goal?</p>
+                <label for="model-response-pitch">Your café pitch</label>
+                <textarea id="model-response-pitch" data-model-draft placeholder="We recommend… Our model predicts… A tradeoff is… Before committing, we will check…"></textarea>
+                <button type="button" data-model-writing="pitch">Get feedback on my explanation</button><p id="model-feedback-pitch" class="stats-feedback" aria-live="polite"></p>
+                <details class="stats-explanation"><summary>Compare with an explanation</summary><p>With the reference fit and default costs, recommend $5 per cup for about $120 profit over one hour, assuming 40-cup serving capacity and demand like the pilots. A lower price might be more welcoming; reusable cups could change costs and waste. Check attendance, staffing, and weather before buying supplies. A recommendation can reasonably prioritize access or sustainability over maximum profit.</p></details>
+            </div>
+
+            <div class="question stats-question model-question">
+                <div class="question-number">9. Your model, pictured as a marble in a bowl</div>
+                <p>The two numbers a and b locate a candidate demand model. Imagine the bowl's height is its prediction error: lower means a better fit. Each batch of café pilots suggests a small move.</p>
+                <div id="model-marble-bowl-slot"></div>
+                <p class="stats-chart-note">This shared bowl has several dents to illustrate more complicated optimization. Our fixed-data, squared-error line fit has one best-fit solution and a fixed error surface. Fitting moves the candidate across that surface. The shaking slider is an illustration; the actual random-pilot updates are in Question 4. The price-planning curve is a separate decision model.</p>
+                <p class="question-text">What corresponds to the marble, its height, and one step in our café example? Why doesn't reaching the bottom prove the rainy-day predictions will work?</p>
+                <details class="stats-explanation"><summary>Compare with an explanation</summary><p>The marble is a candidate pair (a, b); height is the average squared prediction error on the training pilots; a step updates a and b using selected pilots. The bottom gives the best fit to this dataset and model family. It does not validate our assumptions, new-day predictions, or final price recommendation.</p></details>
+            </div>
+
+            <div class="question stats-question model-question">
+                <div class="question-number">10. From café predictions to AI</div>
+                <p>Our model turns numbers into predictions. Language models also use numerical features, but far more than our price and demand. Explore these invented word features, watch the learning story, then change output temperature.</p>
+                <div id="model-word-vectors-slot"></div>
+                <p class="stats-chart-note">These word positions and axes are invented for the illustration. Moving the scanner changes the view; it does not fit our café model.</p>
+                <div id="model-training-slot"></div>
+                <p class="stats-chart-note">The moving words and shaping bowl tell a visual story about learning patterns. Our real café fitting calculations move coefficients over a fixed error surface. Language models use a different prediction-error measure.</p>
+                <div id="model-output-slot"></div>
+                <p class="stats-chart-note">Temperature changes the toy model's next-word probabilities after training. It is different from the step fraction or the number of pilots in an SGD update.</p>
+                <label for="model-response-ai">Your closing connection</label><textarea id="model-response-ai" data-model-draft placeholder="Fitting our model resembles AI training because… Choosing a price differs from fitting because… Output temperature changes…"></textarea>
+                <button type="button" data-model-writing="ai">Get feedback on my explanation</button><p id="model-feedback-ai" class="stats-feedback" aria-live="polite"></p>
+                <details class="stats-explanation"><summary>Compare with an explanation</summary><p>Both fitting processes use prediction errors to adjust learned numbers. Selecting a price uses the fitted demand model plus costs, capacity, and goals; it does not refit the line. AI output temperature changes how concentrated possible outputs are; it does not train the model again. Predictions, recommendations, and fluent AI outputs all need evidence and judgment.</p></details>
+            </div>
+
+            <div class="question stats-question model-question model-bonus">
+                <div class="question-number">Bonus missions · digital world &amp; the arts</div>
+                <p><strong>Promotion:</strong> a fictional post starts with 30 views and gains 25% per hour. Model views as V(t) = 30(1.25)<sup>t</sup>. How many views does it predict after three hours? What makes this growth assumption fail eventually? Views are not buyers.</p>
+                <label for="model-answer-growth">Predicted views after three hours (round to 0.1)</label><div class="stats-answer-row"><input id="model-answer-growth" data-model-draft type="number" step="any"><button type="button" data-model-check="growth">Check</button></div><p id="model-feedback-growth" class="stats-feedback" aria-live="polite"></p>
+                <p><strong>Poster photo:</strong> the top of a café banner is 2.4 m above a camera, and the camera is 1.8 m horizontally from it. What angle of elevation frames the top? Sketch the right triangle and use degree mode.</p>
+                <svg class="model-triangle" viewBox="0 0 400 230" role="img" aria-label="Right triangle: horizontal leg 1.8 meters, vertical leg 2.4 meters, angle of elevation at the camera."><path d="M50 180 L310 180 L310 30 Z" fill="#10253a" stroke="#61c7ff" stroke-width="3"/><path d="M295 180 V165 H310" fill="none" stroke="white"/><text x="130" y="208">1.8 m</text><text x="325" y="110">2.4 m</text><text x="77" y="168">θ</text><text x="20" y="225">camera</text><text x="240" y="20">banner top</text></svg>
+                <label for="model-answer-angle">Angle of elevation (degrees, round to 0.1)</label><div class="stats-answer-row"><input id="model-answer-angle" data-model-draft type="number" step="any"><button type="button" data-model-check="angle">Check</button></div><p id="model-feedback-angle" class="stats-feedback" aria-live="polite"></p>
+                <details class="stats-explanation"><summary>Compare with an explanation</summary><p>V(3) = 30(1.25)³ = <strong>58.59375 ≈ 58.6 views</strong>. A limited audience and slowing shares make indefinite exponential growth unrealistic. For the photo, tan θ = 2.4/1.8, so θ = tan⁻¹(2.4/1.8) ≈ <strong>53.1°</strong>. The straight-line distance is 3 m. Measurements and the right-angle assumption affect accuracy.</p></details>
+            </div>
+
+            <details class="stats-explanation model-instructor"><summary>Instructor notes · pacing, answers, and discussion</summary>
+                <p>Designed for an Introduction to Mathematical Modeling class, grades 11–12, with Integrated III preparation. This is one guest lesson, not a semester curriculum. Use pairs and pause for predictions before pressing Run. Calculators are enough; coefficient-update derivations are optional teacher background.</p>
+                <p><strong>50-minute route:</strong> mission and systems (Q1–3), 12 min; fitting (Q4), 8 min; profit, constraints, and validation (Q5–7), 15 min; partner pitch (Q8), 5 min; bowl and AI discussion (Q9–10), 10 min. For a shorter visit, demonstrate the AI widgets rather than exploring each lens. Bonus missions are follow-up work. Confirm pacing in a classroom walkthrough.</p>
+                <p><strong>Answer key:</strong> slope −12; intercept 100; residual +2; Q5 profit $120. OLS reference q = 100 − 12p; pilot MSE = 22/7 ≈ 3.14. Default 40-cup capacity and costs give $5 on the 25¢ grid and $120 expected profit. Similar-day reference MSE = 2; rainy-day MSE ≈ 262.33. Bonus: 58.6 views and 53.1°.</p>
+                <p><strong>Listen for:</strong> revenue versus profit; demand versus capacity-limited sales; interpolating versus extrapolating; fitting versus validating versus deciding; SGD batch randomness versus changes in the real world; output temperature versus training controls. Price–sales association in these fictional observational pilots does not prove causation.</p>
+                <p><strong>Numerical background:</strong> updates minimize half the average squared error in centered, scaled price coordinates. The displayed coefficients use original price units. The least-squares line has a unique minimum here. Fresh uniform subsets are sampled independently per update, without repeated rows inside a batch. Compare both updates and pilot observations processed. With a constant learning rate, small batches need not settle exactly at the reference.</p>
+                <p><strong>Career connections:</strong> event planning, business analysis, environmental choices about waste, and communicating a recommendation to a community. Ask whether fixed costs, unpaid labor, affordable access, or reusable supplies would change the decision. Extension themes add digital promotion, exponential functions, and right-triangle trigonometry for a photo composition.</p>
+            </details>
+        </section>
+
         <!-- Speaker Bio -->
         <div class="speaker-bio">
             <h2 style="margin-bottom: 20px; text-align: center;">About the Speaker (Griffin Rutherford)</h2>
@@ -1431,28 +1588,41 @@
 
         let worksheetAccent = '#e10600';
         let worksheetAccentRGB = '225, 6, 0';
+        const requestedMode = new URLSearchParams(location.search).get('version');
+        const requestedRadio = [...document.querySelectorAll('input[name="answer-mode"]')].find(input => input.value === requestedMode);
+        if (requestedRadio) requestedRadio.checked = true;
         let currentMode = document.querySelector('input[name="answer-mode"]:checked')?.value || 'algebra';
         const originalWorksheet = document.getElementById('original-worksheet');
         const statisticsWorksheet = document.getElementById('statistics-worksheet');
+        const modelingWorksheet = document.getElementById('modeling-worksheet');
         const originalIntro = document.getElementById('worksheet-intro').textContent.trim();
 
         function syncWorksheetMode() {
             const isStatistics = currentMode === 'statistics';
+            const isModeling = currentMode === 'modeling';
             document.body.dataset.worksheetMode = currentMode;
             const theme = getComputedStyle(document.body);
             worksheetAccent = theme.getPropertyValue('--worksheet-accent').trim();
             worksheetAccentRGB = theme.getPropertyValue('--worksheet-accent-rgb').trim();
             document.body.classList.toggle('statistics-mode', isStatistics);
-            originalWorksheet.hidden = isStatistics;
+            originalWorksheet.hidden = isStatistics || isModeling;
             statisticsWorksheet.hidden = !isStatistics;
+            modelingWorksheet.hidden = !isModeling;
             document.getElementById('worksheet-subtitle').textContent = isStatistics
                 ? 'Statistics at the Meteor Munch Arcade'
-                : 'The Math Behind ChatGPT and AI';
+                : isModeling ? 'Mathematical Modeling: the Prep Pop-Up Challenge' : 'The Math Behind ChatGPT and AI';
             document.getElementById('worksheet-intro').textContent = isStatistics
                 ? 'Help Byte turn arcade scorecards into smarter guesses—then follow the same ideas into AI. No calculus needed.'
-                : originalIntro;
+                : isModeling ? 'Build a model. Test a plot twist. Pitch your café plan—then connect your predictions to AI.' : originalIntro;
 
-            window.syncWorksheetAnimations(isStatistics);
+            window.syncWorksheetAnimations(currentMode);
+            window.syncVisualLabs?.(currentMode);
+            if (!isStatistics) window.pauseStatisticsWorksheet?.();
+            if (!isModeling) window.pauseModelingWorksheet?.();
+            if (isModeling) {
+                window.renderModelingWorksheet?.();
+                return;
+            }
             if (isStatistics) {
                 window.renderStatisticsWorksheet?.();
                 return;
@@ -1521,6 +1691,9 @@
         document.querySelectorAll('input[name=\"answer-mode\"]').forEach((input) => {
             input.addEventListener('change', (e) => {
                 currentMode = e.target.value;
+                const versionUrl = new URL(location.href);
+                versionUrl.searchParams.set('version', currentMode);
+                history.replaceState(null, '', versionUrl);
                 syncWorksheetMode();
             });
         });
@@ -2406,6 +2579,7 @@
         let sgdLastX = 0;
         let sgdLastY = 0;
         let sgdAutoRotate = false;
+        let sgdViewFrame = { scale: 1, offsetX: 0, offsetY: 0 };
 
         let sgdMarbles = [];
         let sgdLoopStart = 0;
@@ -2433,8 +2607,8 @@
 
         function projectSgd(x, y, z) {
             const centerX = sgdCanvas.width / 2;
-            const centerY = sgdCanvas.height / 2 + 40;
-            const scale = 55; // Zoomed out from 75
+            const centerY = sgdCanvas.height / 2 + 10;
+            const scale = sgdCanvas.clientWidth < 480 ? 98 : 63; // Enlarge the bowl within a taller phone frame.
 
             // Rotate around Y axis (yaw) FIRST to preserve world-vertical orientation
             let x1 = x * Math.cos(sgdAngleY) - y * Math.sin(sgdAngleY);
@@ -2445,7 +2619,7 @@
             let z2 = y1 * Math.sin(sgdAngleX) + z * Math.cos(sgdAngleX);
 
             const perspective = 350 / (350 + z2 * 40);
-            return { x: centerX + x1 * scale * perspective, y: centerY - y2 * scale * perspective, depth: z2, perspective };
+            return { x: (centerX + x1 * scale * perspective) * sgdViewFrame.scale + sgdViewFrame.offsetX, y: (centerY - y2 * scale * perspective) * sgdViewFrame.scale + sgdViewFrame.offsetY, depth: z2, perspective: perspective * sgdViewFrame.scale };
         }
 
         function resetSgdCamera() {
@@ -2567,10 +2741,23 @@
             if (sgdAutoRotate && !sgdDragging) sgdAngleY += 0.006 * dt;
             if (!paused) updateSgdMarbles(dt, elapsed);
 
+            const responsiveBowlHeight = sgdCanvas.clientWidth < 480 ? 650 : 450;
+            if (sgdCanvas.height !== responsiveBowlHeight) sgdCanvas.height = responsiveBowlHeight;
+            sgdCanvas.parentElement.style.aspectRatio = `800 / ${responsiveBowlHeight}`;
             sgdCtx.clearRect(0, 0, sgdCanvas.width, sgdCanvas.height);
             const bg = sgdCtx.createRadialGradient(sgdCanvas.width / 2, sgdCanvas.height / 2, 40, sgdCanvas.width / 2, sgdCanvas.height / 2, 430);
             bg.addColorStop(0, '#111'); bg.addColorStop(1, '#000');
             sgdCtx.fillStyle = bg; sgdCtx.fillRect(0, 0, sgdCanvas.width, sgdCanvas.height);
+
+            // Frame the actual surface for this camera, including the deepest well.
+            sgdViewFrame = { scale: 1, offsetX: 0, offsetY: 0 };
+            const framePoints = [];
+            for (let x = -2.5; x <= 2.5; x += .5) for (let y = -2.5; y <= 2.5; y += .5) framePoints.push(projectSgd(x, y, getSgdHeight(x, y)));
+            sgdWells.forEach(well => framePoints.push(projectSgd(well.x, well.y, getSgdHeight(well.x, well.y))));
+            const left = Math.min(...framePoints.map(p => p.x)), right = Math.max(...framePoints.map(p => p.x));
+            const top = Math.min(...framePoints.map(p => p.y)), bottom = Math.max(...framePoints.map(p => p.y));
+            const fitScale = Math.min(1.2, (sgdCanvas.width - 80) / (right - left), (sgdCanvas.height - 80) / (bottom - top));
+            sgdViewFrame = { scale: fitScale, offsetX: sgdCanvas.width / 2 - (left + right) / 2 * fitScale, offsetY: sgdCanvas.height / 2 - (top + bottom) / 2 * fitScale };
 
             // Draw bowl grid
             const gridSize = 2.5;
@@ -2645,9 +2832,7 @@
                 sgdStatus.textContent = noisePercent >= 75 ? 'Too Much Noise: Marbles can shake right out of the bowl.' : 'Sustained Noise: The bowl keeps shaking, so marbles may not settle cleanly.';
                 sgdStatus.style.color = '#ff4b3e';
             } else {
-                sgdStatus.textContent = currentMode === 'statistics'
-                    ? 'Illustration: the shake fades as the marbles settle. Real SGD uses randomly selected rows.'
-                    : 'Optimal Noise: The shake helps early, then fades so marbles can settle.';
+                sgdStatus.textContent = 'Illustration: the shake fades as the marbles settle. Real SGD uses randomly selected rows.';
                 sgdStatus.style.color = '#64f4ac';
             }
 
@@ -2680,6 +2865,18 @@
             toggleSgdAutoRotate.textContent = enabled ? 'Stop Rotation' : 'Auto Rotate';
         }
 
+        document.getElementById('reset-sgd-view').addEventListener('click', () => {
+            sgdAngleX = SGD_INITIAL_ANGLE_X; sgdAngleY = SGD_INITIAL_ANGLE_Y;
+        });
+        sgdCanvas.addEventListener('keydown', event => {
+            if (!['ArrowLeft', 'ArrowRight', 'ArrowUp', 'ArrowDown', 'Home'].includes(event.key)) return;
+            event.preventDefault();
+            if (event.key === 'ArrowLeft') sgdAngleY -= .12;
+            if (event.key === 'ArrowRight') sgdAngleY += .12;
+            if (event.key === 'ArrowUp') sgdAngleX = Math.max(SGD_MIN_ANGLE_X, sgdAngleX - .08);
+            if (event.key === 'ArrowDown') sgdAngleX = Math.min(SGD_MAX_ANGLE_X, sgdAngleX + .08);
+            if (event.key === 'Home') { sgdAngleX = SGD_INITIAL_ANGLE_X; sgdAngleY = SGD_INITIAL_ANGLE_Y; }
+        });
         sgdCanvas.addEventListener('mousedown', startSgdDrag);
         sgdCanvas.addEventListener('mousemove', moveSgdDrag);
         window.addEventListener('mouseup', endSgdDrag);
@@ -3993,5 +4190,8 @@
     </script>
     <script src="statistics-core.js"></script>
     <script src="statistics.js"></script>
+    <script src="modeling-core.js"></script>
+    <script src="modeling.js"></script>
+    <script src="visual-labs.js"></script>
 </body>
 </html>

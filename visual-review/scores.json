@@ -1,0 +1,434 @@
+[
+  {
+    "scene": "Algebra II \u00b7 slope bridge",
+    "mode": "algebra",
+    "kind": "bridge",
+    "view": "perspective",
+    "aesthetics": 92,
+    "interpretability": 94,
+    "file": "algebra-bridge-perspective.png"
+  },
+  {
+    "scene": "Algebra II \u00b7 slope bridge",
+    "mode": "algebra",
+    "kind": "bridge",
+    "view": "reverse",
+    "aesthetics": 90,
+    "interpretability": 91,
+    "file": "algebra-bridge-reverse.png"
+  },
+  {
+    "scene": "Algebra II \u00b7 slope bridge",
+    "mode": "algebra",
+    "kind": "bridge",
+    "view": "overhead",
+    "aesthetics": 92,
+    "interpretability": 94,
+    "file": "algebra-bridge-overhead.png"
+  },
+  {
+    "scene": "Algebra II \u00b7 slope bridge",
+    "mode": "algebra",
+    "kind": "bridge",
+    "view": "phone",
+    "aesthetics": 90,
+    "interpretability": 93,
+    "file": "algebra-bridge-phone.png"
+  },
+  {
+    "scene": "Algebra II \u00b7 downhill scout",
+    "mode": "algebra",
+    "kind": "terrain",
+    "view": "perspective",
+    "aesthetics": 92,
+    "interpretability": 94,
+    "file": "algebra-terrain-perspective.png"
+  },
+  {
+    "scene": "Algebra II \u00b7 downhill scout",
+    "mode": "algebra",
+    "kind": "terrain",
+    "view": "reverse",
+    "aesthetics": 92,
+    "interpretability": 92,
+    "file": "algebra-terrain-reverse.png"
+  },
+  {
+    "scene": "Algebra II \u00b7 downhill scout",
+    "mode": "algebra",
+    "kind": "terrain",
+    "view": "overhead",
+    "aesthetics": 94,
+    "interpretability": 95,
+    "file": "algebra-terrain-overhead.png"
+  },
+  {
+    "scene": "Algebra II \u00b7 downhill scout",
+    "mode": "algebra",
+    "kind": "terrain",
+    "view": "phone",
+    "aesthetics": 91,
+    "interpretability": 93,
+    "file": "algebra-terrain-phone.png"
+  },
+  {
+    "scene": "Calculus \u00b7 secant to tangent",
+    "mode": "calculus",
+    "kind": "bridge",
+    "view": "perspective",
+    "aesthetics": 93,
+    "interpretability": 95,
+    "file": "calculus-bridge-perspective.png"
+  },
+  {
+    "scene": "Calculus \u00b7 secant to tangent",
+    "mode": "calculus",
+    "kind": "bridge",
+    "view": "reverse",
+    "aesthetics": 90,
+    "interpretability": 93,
+    "file": "calculus-bridge-reverse.png"
+  },
+  {
+    "scene": "Calculus \u00b7 secant to tangent",
+    "mode": "calculus",
+    "kind": "bridge",
+    "view": "overhead",
+    "aesthetics": 93,
+    "interpretability": 95,
+    "file": "calculus-bridge-overhead.png"
+  },
+  {
+    "scene": "Calculus \u00b7 secant to tangent",
+    "mode": "calculus",
+    "kind": "bridge",
+    "view": "phone",
+    "aesthetics": 91,
+    "interpretability": 94,
+    "file": "calculus-bridge-phone.png"
+  },
+  {
+    "scene": "Calculus \u00b7 gradient terrain",
+    "mode": "calculus",
+    "kind": "terrain",
+    "view": "perspective",
+    "aesthetics": 94,
+    "interpretability": 95,
+    "file": "calculus-terrain-perspective.png"
+  },
+  {
+    "scene": "Calculus \u00b7 gradient terrain",
+    "mode": "calculus",
+    "kind": "terrain",
+    "view": "reverse",
+    "aesthetics": 93,
+    "interpretability": 94,
+    "file": "calculus-terrain-reverse.png"
+  },
+  {
+    "scene": "Calculus \u00b7 gradient terrain",
+    "mode": "calculus",
+    "kind": "terrain",
+    "view": "overhead",
+    "aesthetics": 94,
+    "interpretability": 95,
+    "file": "calculus-terrain-overhead.png"
+  },
+  {
+    "scene": "Calculus \u00b7 gradient terrain",
+    "mode": "calculus",
+    "kind": "terrain",
+    "view": "phone",
+    "aesthetics": 91,
+    "interpretability": 93,
+    "file": "calculus-terrain-phone.png"
+  },
+  {
+    "scene": "Statistics \u00b7 arcade score skyline",
+    "mode": "statistics",
+    "kind": "skyline",
+    "view": "perspective",
+    "aesthetics": 92,
+    "interpretability": 94,
+    "file": "statistics-skyline-perspective.png"
+  },
+  {
+    "scene": "Statistics \u00b7 arcade score skyline",
+    "mode": "statistics",
+    "kind": "skyline",
+    "view": "reverse",
+    "aesthetics": 91,
+    "interpretability": 93,
+    "file": "statistics-skyline-reverse.png"
+  },
+  {
+    "scene": "Statistics \u00b7 arcade score skyline",
+    "mode": "statistics",
+    "kind": "skyline",
+    "view": "overhead",
+    "aesthetics": 92,
+    "interpretability": 93,
+    "file": "statistics-skyline-overhead.png"
+  },
+  {
+    "scene": "Statistics \u00b7 arcade score skyline",
+    "mode": "statistics",
+    "kind": "skyline",
+    "view": "phone",
+    "aesthetics": 90,
+    "interpretability": 92,
+    "file": "statistics-skyline-phone.png"
+  },
+  {
+    "scene": "Statistics \u00b7 prediction-error bowl",
+    "mode": "statistics",
+    "kind": "fit",
+    "view": "perspective",
+    "aesthetics": 95,
+    "interpretability": 95,
+    "file": "statistics-fit-perspective.png"
+  },
+  {
+    "scene": "Statistics \u00b7 prediction-error bowl",
+    "mode": "statistics",
+    "kind": "fit",
+    "view": "reverse",
+    "aesthetics": 92,
+    "interpretability": 92,
+    "file": "statistics-fit-reverse.png"
+  },
+  {
+    "scene": "Statistics \u00b7 prediction-error bowl",
+    "mode": "statistics",
+    "kind": "fit",
+    "view": "overhead",
+    "aesthetics": 94,
+    "interpretability": 94,
+    "file": "statistics-fit-overhead.png"
+  },
+  {
+    "scene": "Statistics \u00b7 prediction-error bowl",
+    "mode": "statistics",
+    "kind": "fit",
+    "view": "phone",
+    "aesthetics": 91,
+    "interpretability": 93,
+    "file": "statistics-fit-phone.png"
+  },
+  {
+    "scene": "Modeling \u00b7 caf\u00e9 profit landscape",
+    "mode": "modeling",
+    "kind": "market",
+    "view": "perspective",
+    "aesthetics": 94,
+    "interpretability": 95,
+    "file": "modeling-market-perspective.png"
+  },
+  {
+    "scene": "Modeling \u00b7 caf\u00e9 profit landscape",
+    "mode": "modeling",
+    "kind": "market",
+    "view": "reverse",
+    "aesthetics": 93,
+    "interpretability": 94,
+    "file": "modeling-market-reverse.png"
+  },
+  {
+    "scene": "Modeling \u00b7 caf\u00e9 profit landscape",
+    "mode": "modeling",
+    "kind": "market",
+    "view": "overhead",
+    "aesthetics": 92,
+    "interpretability": 94,
+    "file": "modeling-market-overhead.png"
+  },
+  {
+    "scene": "Modeling \u00b7 caf\u00e9 profit landscape",
+    "mode": "modeling",
+    "kind": "market",
+    "view": "phone",
+    "aesthetics": 91,
+    "interpretability": 93,
+    "file": "modeling-market-phone.png"
+  },
+  {
+    "scene": "Modeling \u00b7 caf\u00e9 fitting bowl",
+    "mode": "modeling",
+    "kind": "fit",
+    "view": "perspective",
+    "aesthetics": 94,
+    "interpretability": 95,
+    "file": "modeling-fit-perspective.png"
+  },
+  {
+    "scene": "Modeling \u00b7 caf\u00e9 fitting bowl",
+    "mode": "modeling",
+    "kind": "fit",
+    "view": "reverse",
+    "aesthetics": 92,
+    "interpretability": 93,
+    "file": "modeling-fit-reverse.png"
+  },
+  {
+    "scene": "Modeling \u00b7 caf\u00e9 fitting bowl",
+    "mode": "modeling",
+    "kind": "fit",
+    "view": "overhead",
+    "aesthetics": 94,
+    "interpretability": 95,
+    "file": "modeling-fit-overhead.png"
+  },
+  {
+    "scene": "Modeling \u00b7 caf\u00e9 fitting bowl",
+    "mode": "modeling",
+    "kind": "fit",
+    "view": "phone",
+    "aesthetics": 91,
+    "interpretability": 93,
+    "file": "modeling-fit-phone.png"
+  },
+  {
+    "scene": "Algebra \u00b7 marble bowl",
+    "mode": "algebra",
+    "kind": "shared-bowl",
+    "view": "perspective",
+    "aesthetics": 93,
+    "interpretability": 94,
+    "file": "algebra-shared-bowl-perspective.png"
+  },
+  {
+    "scene": "Algebra \u00b7 marble bowl",
+    "mode": "algebra",
+    "kind": "shared-bowl",
+    "view": "reverse",
+    "aesthetics": 92,
+    "interpretability": 93,
+    "file": "algebra-shared-bowl-reverse.png"
+  },
+  {
+    "scene": "Algebra \u00b7 marble bowl",
+    "mode": "algebra",
+    "kind": "shared-bowl",
+    "view": "overhead",
+    "aesthetics": 93,
+    "interpretability": 94,
+    "file": "algebra-shared-bowl-overhead.png"
+  },
+  {
+    "scene": "Algebra \u00b7 marble bowl",
+    "mode": "algebra",
+    "kind": "shared-bowl",
+    "view": "phone",
+    "aesthetics": 90,
+    "interpretability": 92,
+    "file": "algebra-shared-bowl-phone.png"
+  },
+  {
+    "scene": "Calculus \u00b7 marble bowl",
+    "mode": "calculus",
+    "kind": "shared-bowl",
+    "view": "perspective",
+    "aesthetics": 93,
+    "interpretability": 94,
+    "file": "calculus-shared-bowl-perspective.png"
+  },
+  {
+    "scene": "Calculus \u00b7 marble bowl",
+    "mode": "calculus",
+    "kind": "shared-bowl",
+    "view": "reverse",
+    "aesthetics": 92,
+    "interpretability": 93,
+    "file": "calculus-shared-bowl-reverse.png"
+  },
+  {
+    "scene": "Calculus \u00b7 marble bowl",
+    "mode": "calculus",
+    "kind": "shared-bowl",
+    "view": "overhead",
+    "aesthetics": 93,
+    "interpretability": 94,
+    "file": "calculus-shared-bowl-overhead.png"
+  },
+  {
+    "scene": "Calculus \u00b7 marble bowl",
+    "mode": "calculus",
+    "kind": "shared-bowl",
+    "view": "phone",
+    "aesthetics": 90,
+    "interpretability": 92,
+    "file": "calculus-shared-bowl-phone.png"
+  },
+  {
+    "scene": "Statistics \u00b7 marble bowl",
+    "mode": "statistics",
+    "kind": "shared-bowl",
+    "view": "perspective",
+    "aesthetics": 93,
+    "interpretability": 94,
+    "file": "statistics-shared-bowl-perspective.png"
+  },
+  {
+    "scene": "Statistics \u00b7 marble bowl",
+    "mode": "statistics",
+    "kind": "shared-bowl",
+    "view": "reverse",
+    "aesthetics": 92,
+    "interpretability": 93,
+    "file": "statistics-shared-bowl-reverse.png"
+  },
+  {
+    "scene": "Statistics \u00b7 marble bowl",
+    "mode": "statistics",
+    "kind": "shared-bowl",
+    "view": "overhead",
+    "aesthetics": 93,
+    "interpretability": 94,
+    "file": "statistics-shared-bowl-overhead.png"
+  },
+  {
+    "scene": "Statistics \u00b7 marble bowl",
+    "mode": "statistics",
+    "kind": "shared-bowl",
+    "view": "phone",
+    "aesthetics": 90,
+    "interpretability": 92,
+    "file": "statistics-shared-bowl-phone.png"
+  },
+  {
+    "scene": "Modeling \u00b7 marble bowl",
+    "mode": "modeling",
+    "kind": "shared-bowl",
+    "view": "perspective",
+    "aesthetics": 93,
+    "interpretability": 94,
+    "file": "modeling-shared-bowl-perspective.png"
+  },
+  {
+    "scene": "Modeling \u00b7 marble bowl",
+    "mode": "modeling",
+    "kind": "shared-bowl",
+    "view": "reverse",
+    "aesthetics": 92,
+    "interpretability": 93,
+    "file": "modeling-shared-bowl-reverse.png"
+  },
+  {
+    "scene": "Modeling \u00b7 marble bowl",
+    "mode": "modeling",
+    "kind": "shared-bowl",
+    "view": "overhead",
+    "aesthetics": 93,
+    "interpretability": 94,
+    "file": "modeling-shared-bowl-overhead.png"
+  },
+  {
+    "scene": "Modeling \u00b7 marble bowl",
+    "mode": "modeling",
+    "kind": "shared-bowl",
+    "view": "phone",
+    "aesthetics": 90,
+    "interpretability": 92,
+    "file": "modeling-shared-bowl-phone.png"
+  }
+]

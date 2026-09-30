@@ -30,6 +30,7 @@
     const lineState = {
         intercept: 55,
         slope: 2,
+        path: [{ intercept: 55, slope: 2 }],
         steps: 0,
         random: core.makeRandom(2048),
         selected: [],
@@ -262,6 +263,7 @@
         lineState.slope = nextLine.slope;
         lineState.selected = selected;
         lineState.steps++;
+        lineState.path.push({ intercept: lineState.intercept, slope: lineState.slope });
         renderLine();
     }
 
@@ -270,6 +272,7 @@
         lineState.intercept = 55;
         lineState.slope = 2;
         lineState.steps = 0;
+        lineState.path = [{ intercept: 55, slope: 2 }];
         lineState.selected = [];
         lineState.random = core.makeRandom(2048);
         renderLine();
@@ -355,6 +358,8 @@
             lineState.intercept = Number(get('stats-intercept').value);
             lineState.slope = Number(get('stats-slope').value);
             lineState.selected = [];
+            lineState.steps = 0;
+            lineState.path = [{ intercept: lineState.intercept, slope: lineState.slope }];
             renderLine();
         });
     }
@@ -379,6 +384,7 @@
     get('stats-new-sample').addEventListener('click', drawNewSample);
 
     window.pauseStatisticsWorksheet = () => { pauseMean(); pauseLine(); };
+    window.getStatisticsLine = () => ({ intercept: lineState.intercept, slope: lineState.slope, steps: lineState.steps, path: lineState.path.map(point => ({ ...point })) });
     window.renderStatisticsWorksheet = () => { drawDotPlot(); renderMean(); renderLine(); };
     window.renderStatisticsWorksheet();
 })();

@@ -22,17 +22,17 @@ const assert = require('node:assert/strict');
         const canvasIds = ['sgdCanvas', 'wordVectorCanvas', 'wordConvergenceCanvas',
             'bowlMorphCanvas', 'outputWordCanvas', 'outputBowlCanvas', 'outputDistributionCanvas'];
 
-        for (const mode of ['statistics', 'algebra', 'calculus', 'statistics', 'algebra', 'statistics']) {
+        for (const mode of ['modeling', 'statistics', 'algebra', 'calculus', 'modeling', 'statistics', 'algebra', 'modeling']) {
             await selectMode(mode);
             for (const id of canvasIds) {
                 const canvas = page.locator(`#${id}`);
                 assert.equal(await canvas.count(), 1);
                 assert.ok(await canvas.isVisible());
                 assert.equal(await canvas.evaluate(element => element.closest('.worksheet-panel').id),
-                    mode === 'statistics' ? 'statistics-worksheet' : 'original-worksheet');
+                    mode === 'modeling' ? 'modeling-worksheet' : mode === 'statistics' ? 'statistics-worksheet' : 'original-worksheet');
             }
             const caption = await page.locator('label[for="sgdNoise"]').textContent();
-            assert.ok(caption.includes(mode === 'statistics' ? 'illustration' : 'Noise'));
+            assert.ok(caption.includes('illustration'));
         }
         console.log('PASS: seven shared canvases and original captions survive repeated mode changes.');
 
@@ -65,14 +65,14 @@ const assert = require('node:assert/strict');
 
         for (const width of [1440, 390, 320]) {
             await page.setViewportSize({ width, height: 900 });
-            for (const mode of ['algebra', 'calculus', 'statistics']) {
+            for (const mode of ['algebra', 'calculus', 'statistics', 'modeling']) {
                 await selectMode(mode);
                 assert.ok(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth),
                     `${mode} overflows at ${width}px`);
             }
         }
         assert.deepEqual(errors, []);
-        console.log('PASS: all three modes fit desktop and phone widths without JavaScript errors.');
+        console.log('PASS: all four modes fit desktop and phone widths without JavaScript errors.');
     } finally {
         await browser.close();
     }

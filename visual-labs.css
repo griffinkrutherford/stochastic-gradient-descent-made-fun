@@ -1,0 +1,46 @@
+.home-link { position: absolute; }
+.visual-lab {
+    margin: 24px 0;
+    padding: 20px;
+    border: 1px solid rgba(var(--worksheet-accent-rgb), .55);
+    border-radius: 14px;
+    background: radial-gradient(ellipse at top right, rgba(var(--worksheet-accent-rgb), .11), #090f19 65%);
+    box-shadow: 0 14px 40px #0005;
+    overflow: hidden;
+}
+.visual-lab[hidden] { display: none; }
+.visual-lab h3 { color: var(--worksheet-accent); font-size: 1.1em; font-style: normal; margin-bottom: 8px; }
+.visual-lab .lab-kicker { font: bold .65em/1.5 ui-monospace, monospace; color: #ffd166; letter-spacing: .1em; text-transform: uppercase; }
+.visual-lab p { font-size: .9em; }
+.visual-lab .lab-stage { position: relative; margin: 14px 0; border: 1px solid #3a495d; border-radius: 10px; background: #070d16; overflow: hidden; }
+.visual-lab canvas { display: block; width: 100%; height: 440px; margin: 0; border: 0; border-radius: 0; background: transparent; cursor: grab; touch-action: pan-y; }
+.visual-lab canvas:active { cursor: grabbing; }
+.visual-lab .lab-controls { display: flex; flex-wrap: wrap; align-items: end; gap: 12px; margin-top: 14px; }
+.visual-lab .lab-controls label { flex: 1 1 180px; display: block; font-size: .8em; margin: 0; }
+.visual-lab .lab-controls input { width: 100%; accent-color: var(--worksheet-accent); }
+.visual-lab button, .stats-question .visual-lab button { background: var(--worksheet-accent); color: var(--worksheet-button-ink); border: 1px solid var(--worksheet-accent); border-radius: 7px; padding: 8px 12px; margin: 0; font: bold .75em/1.5 Arial, sans-serif; box-shadow: none; }
+.visual-lab button.lab-secondary, .stats-question .visual-lab button.lab-secondary { background: #0d1724; color: #e4edf7; }
+.visual-lab .lab-view-controls { display: flex; gap: 8px; flex-wrap: wrap; margin-top: 10px; }
+.visual-lab .lab-summary { padding: 12px; margin-top: 14px; background: #0c1b2d; border-left: 3px solid var(--worksheet-accent); border-radius: 5px; font-variant-numeric: tabular-nums; }
+.visual-lab .lab-note { margin-top: 12px; color: #c1d3e4; font-size: .75em; }
+.visual-lab canvas:focus-visible { outline: 3px solid var(--worksheet-accent); outline-offset: -3px; }
+@media (max-width: 600px) {
+    .visual-lab { padding: 12px; }
+    .visual-lab canvas { height: 330px; }
+    .visual-lab .lab-controls label { flex-basis: 100%; }
+}
+@media print { .visual-lab { display: none !important; } }
+
+body[data-worksheet-mode="algebra"] .visual-lab h3 { color: #ff8f87; }
+.visual-lab canvas, .stats-question .visual-lab canvas { border: 0; box-shadow: none; }
+
+.visual-lab select { display: block; width: 100%; padding: 8px; background: #0d1724; color: #e4edf7; border: 1px solid #6586ae; border-radius: 6px; font: inherit; }
+
+.sgd-canvas-container { height: auto !important; aspect-ratio: 800 / 450; }
+#shared-marble-bowl { border-color: var(--worksheet-accent); background: radial-gradient(ellipse at top left, rgba(var(--worksheet-accent-rgb), .08), #080d15 65%); }
+#shared-marble-bowl > h3 { color: var(--worksheet-accent) !important; }
+.shared-bowl-legend { margin: 10px 0 16px; color: #d5e3ef; font-size: .85em; }
+@media (max-width: 600px) { #shared-marble-bowl { padding: 12px; } }
+
+#shared-marble-bowl > p { font-size: .9em !important; line-height: 1.65; }
+body[data-worksheet-mode="algebra"] #shared-marble-bowl > h3 { color: #ff8f87 !important; }
