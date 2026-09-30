@@ -678,6 +678,10 @@
                 <input type="radio" id="mode-statistics" name="answer-mode" value="statistics">
                 <label for="mode-statistics">Statistics</label>
             </div>
+            <div class="shared-animation-controls">
+                <button type="button" id="shared-animations-toggle" aria-pressed="false">Pause bowl and word animations</button>
+                <p id="shared-animation-state" aria-live="polite">Drag the bowls to change your view. Pause the animations to discuss a frame.</p>
+            </div>
         </div>
 
         <section id="original-worksheet" class="worksheet-panel" aria-label="Algebra II and Calculus worksheet">
@@ -908,7 +912,7 @@
                 What could you do to try to get the most marbles in the deepest hole after the marbles are dropped? Could anything be done?
             </div>
 
-            <div class="sgd-simulator">
+            <div class="sgd-simulator" id="shared-marble-bowl">
                 <h3 style="color: #49a7ff; margin-bottom: 10px;">The Training Simulator: "The 3D Marble Bowl"</h3>
                 <p style="color: #cfcfcf; font-size: 1.08em; max-width: 840px; margin: 0 auto 15px;">
                     Below is a 3D version of our weird bowl. The "best" result is the deepest part of the bowl (the <strong>Global Minimum</strong>). But sometimes, a marble gets stuck in a shallow dent on the side (a <strong>Local Minimum</strong>). The slider controls <strong>Stochastic Noise</strong>: the middle gives a useful shake that fades over time, while the far right can shake marbles right out of the bowl.
@@ -1005,7 +1009,7 @@
                 Vector projection is the same core idea in math: we take something with more information and ask, "How much of it points in this direction?" A word vector can be projected onto axes like royalty, temperature, or activity intensity, and each projection gives us one meaningful part of the full concept.
                 <br><br>
                 Now let’s add one more dimension. Below, the words sit in 3D concept space, but they only "exist" when the slider matches their hidden 4th dimension. You can choose different "lenses" to see how AI organizes concepts like <strong>Flavor</strong>, <strong>Vibe</strong>, or <strong>Arcane Power</strong>.
-                <div class="wordvec-visualizer" aria-label="4D word vector visualization">
+                <div class="wordvec-visualizer" id="shared-word-vectors" aria-label="4D word vector visualization">
                     <div class="wordvec-title" id="wordvec-display-title">4D Word Vector Visualization: The Flavor-Scanner</div>
                     
                     <div style="text-align: center; margin-bottom: 15px;">
@@ -1052,7 +1056,7 @@
                 <br><br>
                 Both visuals are simplified ways to imagine training: the model is gradually learning patterns from data.
 
-                <div class="wordvec-visualizer">
+                <div class="wordvec-visualizer" id="shared-training">
                     <div class="wordvec-title">What Does it Mean to Train AI?</div>
                     <p class="wordvec-note">
                         This animation is a depiction of how ChatGPT is "trained" to know what to say. Words coming into place and a bowl being shaped are both analogies for what it means to train AI.
@@ -1084,7 +1088,7 @@
         <!-- Question 14 -->
         <div class="question">
             <div class="question-number">14.</div>
-            <div class="wordvec-visualizer" aria-label="ChatGPT output generation visualization">
+            <div class="wordvec-visualizer" id="shared-output" aria-label="ChatGPT output generation visualization">
                 <div class="wordvec-title">How ChatGPT Generates an Output</div>
                 <p class="wordvec-note">
                     After training, the model uses the patterns it learned to choose one word after another. The word space helps represent possible next words, and the shaped bowl is an analogy for the trained model already being ready to guide the output.
@@ -1267,11 +1271,65 @@
             </div>
 
             <div class="question stats-question">
-                <div class="question-number">8. Explain the result</div>
+                <div class="question-number">8. Explain the fit so far</div>
                 <p class="question-text">In your own words: where did the randomness in SGD come from? If the computer reaches a stable line, what else should a statistician ask before trusting it?</p>
                 <label for="stats-final-response">Your explanation</label>
                 <textarea id="stats-final-response" placeholder="Think about which rows were chosen, the scatterplot, and the students we did not observe."></textarea>
                 <details class="stats-explanation"><summary>Compare with an explanation</summary><p>SGD chose different students' rows to estimate a direction for each step. A stable fit only tells us the calculation has settled for this data. We still need to ask whether a line fits the pattern, whether the sample represents the larger group, and whether another explanation could account for the association.</p></details>
+            </div>
+
+            <div class="stats-intro stats-finale-intro">
+                <h2>From quiz scores to bowls to AI</h2>
+                <p>You have already used prediction errors to improve an estimate. Now picture that same idea as a marble moving through a bowl, and follow it into the familiar word and AI animations.</p>
+            </div>
+
+            <div class="question stats-question">
+                <div class="question-number">9. Put our estimates in a bowl</div>
+                <p class="question-text">The error curve in Question 5 was a bowl seen from the side. For the fitted line, we can move in two directions: change its starting height or change its slope. Imagine a bowl whose height measures the error for each possible line.</p>
+                <table class="stats-analogy-table">
+                    <caption>Translate the bowl into statistics</caption>
+                    <thead><tr><th scope="col">In the picture</th><th scope="col">In our quiz-score model</th></tr></thead>
+                    <tbody>
+                        <tr><th scope="row">A marble's position</th><td>One candidate line, with a particular starting height and slope</td></tr>
+                        <tr><th scope="row">Height above the bottom</th><td>How much prediction error that line makes</td></tr>
+                        <tr><th scope="row">A small move downhill</th><td>An update aimed at reducing prediction error</td></tr>
+                        <tr><th scope="row">The bottom</th><td>The best-fit reference for the data we have</td></tr>
+                    </tbody>
+                </table>
+                <div id="stats-marble-bowl-slot"></div>
+                <p class="stats-chart-note">This animated bowl illustrates a more complicated error landscape, with several dents. Our sample-mean and straight-line problems each have one best solution. Their bowls stay fixed while we change the estimate. In real SGD, varying directions come from randomly selected rows, as you saw in Question 5.</p>
+                <p class="question-text">Try little shaking, then lots. What does a marble that keeps bouncing remind you of in our small-batch estimator? Does a bouncy path prove the final answer is more accurate?</p>
+                <label for="stats-bowl-response">Connect the bowl to our data</label>
+                <textarea id="stats-bowl-response" placeholder="Describe what the marble, bowl height, and changing direction represent."></textarea>
+                <details class="stats-explanation"><summary>Compare with an explanation</summary><p>The marble represents a candidate fit, and its height represents prediction error. Bouncing resembles the varying updates made from different small groups. More movement does not guarantee a better estimate. Our actual simulator calculates steps from selected students; the shaking slider here controls the physical analogy.</p></details>
+            </div>
+
+            <div class="question stats-question">
+                <div class="question-number">10. From two numbers to many</div>
+                <p class="question-text">Our student table represented each person using numbers: study hours and quiz score. AI language models also work with numerical representations, including lists of numbers called <strong>vectors</strong>. This playful diagram uses a few made-up features to show how words can be placed near words with related features.</p>
+                <div id="stats-word-vectors-slot"></div>
+                <p class="stats-chart-note">These axes and word positions are invented for the illustration. Changing the lens or scanner changes what you see; it does not train a model. Actual language models learn many numerical features rather than using this small hand-labeled map.</p>
+                <p class="question-text">Change the lens and move the scanner. Why might two numbers be too few to describe all the patterns in language?</p>
+                <details class="stats-explanation"><summary>Compare with an explanation</summary><p>Two numbers were enough to record our study-time example. Language has many patterns, such as meanings, context, and relationships among words. More numerical features let a model represent more of those patterns. We can draw a few directions on screen even when the model uses many more.</p></details>
+            </div>
+
+            <div class="question stats-question">
+                <div class="question-number">11. Watch a model learn</div>
+                <p class="question-text">Think back to the line slowly fitting our scatterplot. A language model also makes predictions, measures its misses, and updates its learned numbers. Watch the words move into place and the bowl take shape: both pictures tell the story of learning patterns from examples.</p>
+                <div id="stats-training-slot"></div>
+                <p class="stats-chart-note">The shaping bowl is a visual story about a model becoming organized through learning. In our actual fixed-data error plot, training moves the estimate across a fixed surface. The moving words and changing bowl are illustrations, not calculations from the 12 students.</p>
+                <p class="question-text">What plays the role of quiz-score prediction error when a language model is learning to predict the next piece of text?</p>
+                <details class="stats-explanation"><summary>Compare with an explanation</summary><p>The model assigns probabilities to possible next pieces of text. Training compares those predictions with what actually followed in the example, then adjusts the learned numbers. It uses a different error measure from our squared quiz-score errors, but the idea of predicting, measuring error, and updating carries over.</p></details>
+            </div>
+
+            <div class="question stats-question">
+                <div class="question-number">12. Training is finished—now choose an output</div>
+                <p class="question-text">Once a model is trained, it can use what it learned to make a new prediction. In this animation, the model assigns probabilities to possible next words. <strong>Temperature</strong> changes how concentrated those choices are. Predict what will happen to the probability bars when you turn it up, then try it.</p>
+                <div id="stats-output-slot"></div>
+                <p class="stats-chart-note">The bars show probabilities for this toy word example. Lower temperature concentrates the choices; higher temperature spreads them out. The moving marbles illustrate that variety. Choosing an output does not refit our quiz-score line or train the language model again.</p>
+                <label for="stats-ai-response">Your final connection</label>
+                <textarea id="stats-ai-response" placeholder="Connect one idea from our student data to the bowl or word animations. Then explain how random training rows differ from random output choices."></textarea>
+                <details class="stats-explanation"><summary>Compare with an explanation</summary><p>Our line and a language model both learn by using prediction errors to update numbers. During SGD training, randomness comes from choosing examples for an update. During output generation, randomness can come from sampling a possible next piece of text. Temperature affects those output probabilities; it is not our learning rate or batch size. A fluent output, like a stable fitted line, still needs checking.</p></details>
             </div>
 
             <div class="question stats-question stats-challenge">
@@ -1295,6 +1353,7 @@
         </div>
     </div>
 
+    <script src="worksheet-animations.js"></script>
     <script>
         const mi = (value) => `<span class="math-inline">${value}</span>`;
 
@@ -1350,6 +1409,7 @@
                 ? 'Use averages, residuals, and random samples to discover how a model learns from data. No calculus needed.'
                 : originalIntro;
 
+            window.syncWorksheetAnimations(isStatistics);
             if (isStatistics) {
                 window.renderStatisticsWorksheet?.();
                 return;
@@ -2460,18 +2520,16 @@
         }
 
         function drawSgdScene(now = performance.now()) {
-            if (currentMode === 'statistics') {
-                requestAnimationFrame(drawSgdScene);
-                return;
-            }
             if (!sgdLoopStart) initSgdSimulator(now);
+            const paused = window.areWorksheetAnimationsPaused();
+            if (paused) sgdLoopStart += now - sgdLastFrame;
             let elapsed = now - sgdLoopStart;
             if (elapsed >= sgdLoopDuration) { initSgdSimulator(now); elapsed = 0; }
 
-            const dt = Math.min(0.6, (now - sgdLastFrame) / 16.67);
+            const dt = paused ? 0 : Math.min(0.6, (now - sgdLastFrame) / 16.67);
             sgdLastFrame = now;
             if (sgdAutoRotate && !sgdDragging) sgdAngleY += 0.006 * dt;
-            updateSgdMarbles(dt, elapsed);
+            if (!paused) updateSgdMarbles(dt, elapsed);
 
             sgdCtx.clearRect(0, 0, sgdCanvas.width, sgdCanvas.height);
             const bg = sgdCtx.createRadialGradient(sgdCanvas.width / 2, sgdCanvas.height / 2, 40, sgdCanvas.width / 2, sgdCanvas.height / 2, 430);
@@ -2551,7 +2609,9 @@
                 sgdStatus.textContent = noisePercent >= 75 ? 'Too Much Noise: Marbles can shake right out of the bowl.' : 'Sustained Noise: The bowl keeps shaking, so marbles may not settle cleanly.';
                 sgdStatus.style.color = '#ff4b3e';
             } else {
-                sgdStatus.textContent = 'Optimal Noise: The shake helps early, then fades so marbles can settle.';
+                sgdStatus.textContent = currentMode === 'statistics'
+                    ? 'Illustration: the shake fades as the marbles settle. Real SGD uses randomly selected rows.'
+                    : 'Optimal Noise: The shake helps early, then fades so marbles can settle.';
                 sgdStatus.style.color = '#64f4ac';
             }
 
@@ -2907,6 +2967,7 @@
         function rotateWordVectors() {
             if (wordRotationInterval) return;
             wordRotationInterval = setInterval(() => {
+                if (window.areWorksheetAnimationsPaused()) return;
                 wordAngleY += 0.018;
                 drawWordVectorScene();
             }, 30);
@@ -2973,16 +3034,13 @@
         }
 
         function drawConvScene() {
-            if (currentMode === 'statistics') {
-                requestAnimationFrame(drawConvScene);
-                return;
-            }
             convCtx.clearRect(0, 0, convCanvas.width, convCanvas.height);
             const gradient = convCtx.createRadialGradient(convCanvas.width/2, convCanvas.height/2, 40, convCanvas.width/2, convCanvas.height/2, 430);
             gradient.addColorStop(0, '#121212'); gradient.addColorStop(1, '#000');
             convCtx.fillStyle = gradient; convCtx.fillRect(0, 0, convCanvas.width, convCanvas.height);
 
-            convLoopTimer++;
+            const paused = window.areWorksheetAnimationsPaused();
+            if (!paused) convLoopTimer++;
             if (convLoopTimer > CONV_LOOP_DURATION) {
                 convLoopTimer = 0;
                 initConvSimulator();
@@ -3008,7 +3066,7 @@
 
             const currentPositions = convWords.map(w => {
                 const targetX = w.target[0]; const targetY = w.target[1]; const targetZ = w.target[2];
-                const jitter = isPaused ? 0.01 : (1 - smoothT) * 0.15;
+                const jitter = paused ? 0 : isPaused ? 0.01 : (1 - smoothT) * 0.15;
                 const nx = (Math.random() - 0.5) * jitter;
                 const ny = (Math.random() - 0.5) * jitter;
                 const nz = (Math.random() - 0.5) * jitter;
@@ -3118,11 +3176,7 @@
 
         function drawBowlMorphScene() {
             if (!bowlMorphCtx) return;
-            if (currentMode === 'statistics') {
-                requestAnimationFrame(drawBowlMorphScene);
-                return;
-            }
-            bowlMorphFrame++;
+            if (!window.areWorksheetAnimationsPaused()) bowlMorphFrame++;
             const progress = getBowlMorphProgress();
             bowlMorphCtx.clearRect(0, 0, bowlMorphCanvas.width, bowlMorphCanvas.height);
 
@@ -3831,16 +3885,13 @@
         }
 
         function drawOutputGenerationScene() {
-            if (currentMode === 'statistics') {
-                requestAnimationFrame(drawOutputGenerationScene);
-                return;
-            }
-            if (!outputAnimationPaused) outputFrame++;
-            if (!outputAnimationPaused && outputBowlAutoRotate && !outputBowlDragging) outputBowlAngleY += 0.0045;
+            const paused = outputAnimationPaused || window.areWorksheetAnimationsPaused();
+            if (!paused) outputFrame++;
+            if (!paused && outputBowlAutoRotate && !outputBowlDragging) outputBowlAngleY += 0.0045;
             updateOutputTemperatureLabel();
             drawOutputWordScene();
             drawOutputDistributionScene();
-            drawOutputBowlScene(!outputAnimationPaused);
+            drawOutputBowlScene(!paused);
             requestAnimationFrame(drawOutputGenerationScene);
         }
 

@@ -277,6 +277,85 @@
     border-left-color: #ffd166;
 }
 
+.shared-animation-controls {
+    margin-top: 20px;
+}
+
+.shared-animation-controls button {
+    padding: 8px 14px;
+    font-size: 0.85em;
+}
+
+.shared-animation-controls p {
+    margin-top: 8px;
+    font-size: 0.85em;
+    color: #cfcfcf;
+}
+
+.stats-finale-intro {
+    margin-top: 40px;
+}
+
+.stats-analogy-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 20px 0;
+    font-size: 0.9em;
+}
+
+.stats-analogy-table caption {
+    text-align: left;
+    color: #adf9ce;
+    font-weight: bold;
+    margin-bottom: 8px;
+}
+
+.stats-analogy-table th,
+.stats-analogy-table td {
+    text-align: left;
+    padding: 10px;
+    border: 1px solid #578567;
+    overflow-wrap: anywhere;
+}
+
+.stats-question .sgd-simulator,
+.stats-question .wordvec-visualizer {
+    margin: 22px 0;
+    padding: 16px;
+    border-color: #3f8660;
+    font-size: 0.9em;
+}
+
+.stats-question .sgd-simulator > h3 {
+    font-style: normal;
+}
+
+.stats-question .wordvec-stage,
+.stats-question .training-loop-panel {
+    border-color: #3f8660;
+}
+
+.stats-question .training-loop-panel-title,
+.stats-question .wordvec-title {
+    color: #adf9ce;
+}
+
+.stats-question .wordvec-visualizer canvas,
+.stats-question .sgd-simulator canvas {
+    margin: 0;
+    border: 0;
+    cursor: grab;
+}
+
+.stats-question #outputDistributionCanvas {
+    cursor: default;
+}
+
+.shared-animation-controls button:focus-visible {
+    outline: 3px solid #64f4ac;
+    outline-offset: 3px;
+}
+
 @media (max-width: 680px) {
     .statistics-mode {
         font-size: 18px;
@@ -307,6 +386,16 @@
 
     .stats-buttons button {
         flex: 1 1 180px;
+    }
+
+    .stats-question .sgd-simulator,
+    .stats-question .wordvec-visualizer {
+        padding: 10px;
+    }
+
+    .stats-question .sgd-canvas-container {
+        height: auto !important;
+        aspect-ratio: 800 / 450;
     }
 }
 
