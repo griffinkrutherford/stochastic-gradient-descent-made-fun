@@ -47,6 +47,50 @@
     margin-top: 12px;
 }
 
+.stats-arcade-intro {
+    display: grid;
+    grid-template-columns: 150px minmax(0, 1fr);
+    gap: 24px;
+    align-items: start;
+    background: radial-gradient(ellipse at top left, #24442e, #102018 65%);
+    box-shadow: 0 0 24px rgba(100, 244, 172, 0.1);
+}
+
+.stats-arcade-art {
+    padding-top: 20px;
+    text-align: center;
+}
+
+.stats-arcade-art svg {
+    width: 100%;
+    display: block;
+}
+
+.stats-arcade-art span {
+    display: block;
+    margin-top: 12px;
+    color: #d7eadc;
+    font-size: 0.8em;
+    line-height: 1.5;
+}
+
+.stats-arcade-kicker {
+    color: #ffd166;
+    font: bold 0.75em/1.5 ui-monospace, monospace;
+    text-transform: uppercase;
+    letter-spacing: 0.07em;
+    margin-bottom: 12px;
+}
+
+.stats-arcade-mission {
+    padding: 12px;
+    background: #09120c;
+    border: 1px dashed #ffd166;
+    border-radius: 6px;
+    color: #ffd166;
+    font-size: 0.9em;
+}
+
 .stats-data-panel {
     margin: 28px 0;
     overflow-x: auto;
@@ -67,6 +111,10 @@
     color: #adf9ce;
     font-weight: bold;
     background: #102018;
+}
+
+#stats-data-table tbody th {
+    color: #ffd166;
 }
 
 #stats-data-table th,
@@ -364,6 +412,24 @@
 
     .stats-intro {
         padding: 18px;
+    }
+
+    .stats-arcade-intro {
+        grid-template-columns: 1fr;
+        gap: 18px;
+    }
+
+    .stats-arcade-art {
+        display: flex;
+        align-items: center;
+        gap: 16px;
+        padding-top: 0;
+        text-align: left;
+    }
+
+    .stats-arcade-art svg {
+        width: 90px;
+        flex: 0 0 90px;
     }
 
     #stats-data-table th,

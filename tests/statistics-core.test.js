@@ -2,7 +2,7 @@ const test = require('node:test');
 const assert = require('node:assert/strict');
 const core = require('../statistics-core');
 
-const rows = core.STUDENTS;
+const rows = core.PLAYERS;
 const allRows = rows.map((_, index) => index);
 
 test('the worksheet dataset and hand-calculated examples agree', () => {
@@ -21,7 +21,7 @@ test('a full-batch mean step moves toward the sample mean and lowers full-data e
     assert.ok(core.meanSquaredError(rows, next.estimate) < startError);
 });
 
-test('random batches are reproducible and contain distinct valid students', () => {
+test('random batches are reproducible and contain distinct valid players', () => {
     const first = core.makeRandom(1234);
     const second = core.makeRandom(1234);
     for (let i = 0; i < 20; i++) {
@@ -52,7 +52,7 @@ test('a stochastic mean step can raise full-data error even at the optimum', () 
 });
 
 test('line updates agree with numerical gradients in centered, scaled coordinates', () => {
-    const xMean = core.mean(rows.map(row => row.hours));
+    const xMean = core.mean(rows.map(row => row.practiceRounds));
     const scale = 5.5;
     const center = 66;
     const tilt = 11;

@@ -2,13 +2,13 @@
 (function (root) {
     'use strict';
 
-    const STUDENTS = Object.freeze([
-        { hours: 0, score: 62 }, { hours: 1, score: 68 },
-        { hours: 2, score: 60 }, { hours: 3, score: 72 },
-        { hours: 4, score: 70 }, { hours: 5, score: 78 },
-        { hours: 6, score: 74 }, { hours: 7, score: 84 },
-        { hours: 8, score: 82 }, { hours: 9, score: 80 },
-        { hours: 10, score: 90 }, { hours: 11, score: 92 }
+    const PLAYERS = Object.freeze([
+        { name: "Astro", practiceRounds: 0, score: 62 }, { name: "Bloop", practiceRounds: 1, score: 68 },
+        { name: "Comet", practiceRounds: 2, score: 60 }, { name: "Doodle", practiceRounds: 3, score: 72 },
+        { name: "Echo", practiceRounds: 4, score: 70 }, { name: "Fizz", practiceRounds: 5, score: 78 },
+        { name: "Gizmo", practiceRounds: 6, score: 74 }, { name: "Hex", practiceRounds: 7, score: 84 },
+        { name: "Iggy", practiceRounds: 8, score: 82 }, { name: "Jinx", practiceRounds: 9, score: 80 },
+        { name: "Koko", practiceRounds: 10, score: 90 }, { name: "Luma", practiceRounds: 11, score: 92 }
     ]);
 
     function mean(values) {
@@ -50,39 +50,39 @@
     }
 
     function lineMeanSquaredError(rows, intercept, slope) {
-        return mean(rows.map(row => (row.score - intercept - slope * row.hours) ** 2));
+        return mean(rows.map(row => (row.score - intercept - slope * row.practiceRounds) ** 2));
     }
 
     function leastSquaresLine(rows) {
-        const xMean = mean(rows.map(row => row.hours));
+        const xMean = mean(rows.map(row => row.practiceRounds));
         const yMean = mean(rows.map(row => row.score));
-        const spread = rows.reduce((sum, row) => sum + (row.hours - xMean) ** 2, 0);
-        if (spread === 0) throw new Error('A line needs at least two different study-hour values.');
-        const slope = rows.reduce((sum, row) => sum + (row.hours - xMean) * (row.score - yMean), 0) / spread;
+        const spread = rows.reduce((sum, row) => sum + (row.practiceRounds - xMean) ** 2, 0);
+        if (spread === 0) throw new Error('A line needs at least two different practice-round values.');
+        const slope = rows.reduce((sum, row) => sum + (row.practiceRounds - xMean) * (row.score - yMean), 0) / spread;
         return { intercept: yMean - slope * xMean, slope };
     }
 
-    // Center and scale hours internally so one step size works for height and tilt.
+    // Center and scale practiceRounds internally so one step size works for height and tilt.
     function lineUpdate(line, rows, indices, rate) {
-        const xMean = mean(rows.map(row => row.hours));
-        const scale = Math.max(1, (Math.max(...rows.map(row => row.hours)) - Math.min(...rows.map(row => row.hours))) / 2);
+        const xMean = mean(rows.map(row => row.practiceRounds));
+        const scale = Math.max(1, (Math.max(...rows.map(row => row.practiceRounds)) - Math.min(...rows.map(row => row.practiceRounds))) / 2);
         let center = line.intercept + line.slope * xMean;
         let tilt = line.slope * scale;
         let heightError = 0;
         let tiltError = 0;
         for (const index of indices) {
             const row = rows[index];
-            const centeredHours = (row.hours - xMean) / scale;
-            const error = center + tilt * centeredHours - row.score;
+            const centeredRounds = (row.practiceRounds - xMean) / scale;
+            const error = center + tilt * centeredRounds - row.score;
             heightError += error;
-            tiltError += error * centeredHours;
+            tiltError += error * centeredRounds;
         }
         center -= rate * heightError / indices.length;
         tilt -= rate * tiltError / indices.length;
         return { intercept: center - (tilt / scale) * xMean, slope: tilt / scale };
     }
 
-    const api = { STUDENTS, mean, meanSquaredError, makeRandom, sampleIndices, meanUpdate,
+    const api = { PLAYERS, mean, meanSquaredError, makeRandom, sampleIndices, meanUpdate,
         lineMeanSquaredError, leastSquaresLine, lineUpdate };
     if (typeof module !== 'undefined' && module.exports) module.exports = api;
     root.StatsCore = api;

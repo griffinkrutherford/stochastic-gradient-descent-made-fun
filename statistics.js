@@ -5,13 +5,13 @@
     if (!section || !window.StatsCore) return;
 
     const core = window.StatsCore;
-    const rows = core.STUDENTS;
+    const rows = core.PLAYERS;
     const scores = rows.map(row => row.score);
     const sampleMean = core.mean(scores);
     const bestLine = core.leastSquaresLine(rows);
     const get = id => document.getElementById(id);
     const format = (value, digits = 1) => Number(value).toFixed(digits).replace(/\.0$/, '');
-    const studentName = index => String.fromCharCode(65 + index);
+    const playerName = index => rows[index].name;
 
     const meanState = {
         estimate: 60,
@@ -69,7 +69,7 @@
             ctx.beginPath(); ctx.arc(x(score), baseline - 16, 7, 0, Math.PI * 2); ctx.fill();
         }
         ctx.fillStyle = '#d7eadc';
-        ctx.fillText('Quiz score (points)', canvas.width / 2, canvas.height - 18);
+        ctx.fillText('Arcade score (points)', canvas.width / 2, canvas.height - 18);
     }
 
     function drawMeanLoss() {
@@ -133,12 +133,12 @@
             row.classList.toggle('stats-selected', meanState.selected.includes(Number(row.dataset.statsRow)));
         });
         const error = core.meanSquaredError(rows, meanState.estimate);
-        writeText('stats-mean-summary', `Current estimate: ${format(meanState.estimate, 2)} points · Full-sample mean: ${format(sampleMean)} · Average squared error: ${format(error, 1)} · Steps: ${meanState.steps} · Scores inspected: ${meanState.seen}.`);
+        writeText('stats-mean-summary', `Byte's estimate: ${format(meanState.estimate, 2)} points · Full-sample mean: ${format(sampleMean)} · Average squared error: ${format(error, 1)} · Steps: ${meanState.steps} · Scores inspected: ${meanState.seen}.`);
         if (meanState.selected.length) {
-            const selectedNames = meanState.selected.map(studentName).join(', ');
-            writeText('stats-selected', `Selected students: ${selectedNames}. Their average: ${format(meanState.selectedMean, 2)}. Update: ${format(meanState.previousEstimate, 2)} + ${format(meanState.lastRate, 2)} × (${format(meanState.selectedMean, 2)} − ${format(meanState.previousEstimate, 2)}) = ${format(meanState.estimate, 2)}.`);
+            const selectedNames = meanState.selected.map(playerName).join(', ');
+            writeText('stats-selected', `Byte picked: ${selectedNames}. Their average: ${format(meanState.selectedMean, 2)}. Update: ${format(meanState.previousEstimate, 2)} + ${format(meanState.lastRate, 2)} × (${format(meanState.selectedMean, 2)} − ${format(meanState.previousEstimate, 2)}) = ${format(meanState.estimate, 2)}.`);
         } else {
-            writeText('stats-selected', `Random sequence ${meanState.sequence}. Take a step to see which students were selected.`);
+            writeText('stats-selected', `Random sequence ${meanState.sequence}. Take a step to see which players were selected.`);
         }
         drawMeanLoss();
     }
@@ -184,7 +184,7 @@
         const ctx = canvas.getContext('2d');
         styleChart(ctx, canvas.width, canvas.height);
         const left = 62, right = canvas.width - 35, top = 30, bottom = canvas.height - 55;
-        const x = hours => left + hours / 11 * (right - left);
+        const x = rounds => left + rounds / 11 * (right - left);
         const y = score => bottom - (score - 45) / 60 * (bottom - top);
         ctx.textAlign = 'center';
         ctx.strokeStyle = '#42634c';
@@ -215,7 +215,7 @@
         ctx.lineTo(x(11), y(lineState.intercept + lineState.slope * 11));
         ctx.stroke();
         for (const row of rows) {
-            const px = x(row.hours), predicted = lineState.intercept + lineState.slope * row.hours;
+            const px = x(row.practiceRounds), predicted = lineState.intercept + lineState.slope * row.practiceRounds;
             ctx.strokeStyle = '#ff908d';
             ctx.lineWidth = 2;
             ctx.beginPath(); ctx.moveTo(px, y(row.score)); ctx.lineTo(px, y(predicted)); ctx.stroke();
@@ -224,9 +224,9 @@
         }
         ctx.fillStyle = '#d7eadc';
         ctx.textAlign = 'center';
-        ctx.fillText('Study hours', canvas.width / 2, canvas.height - 15);
+        ctx.fillText('Practice rounds', canvas.width / 2, canvas.height - 15);
         ctx.textAlign = 'left';
-        ctx.fillText('Quiz score', left, 14);
+        ctx.fillText('Arcade score', left, 14);
         if (lineState.showReference) {
             ctx.fillStyle = '#ffd166';
             ctx.fillText('Dashed: best-fit reference', right - 180, 14);
@@ -243,8 +243,8 @@
     function renderLine() {
         syncLineControls();
         const error = core.lineMeanSquaredError(rows, lineState.intercept, lineState.slope);
-        const selected = lineState.selected.length ? ` Last step used students ${lineState.selected.map(studentName).join(', ')}.` : '';
-        writeText('stats-line-summary', `Current line: predicted score = ${format(lineState.intercept, 1)} + ${format(lineState.slope, 2)} × study hours. Average squared error: ${format(error, 1)}. Fitting steps: ${lineState.steps}.${selected}`);
+        const selected = lineState.selected.length ? ` Last step used players ${lineState.selected.map(playerName).join(', ')}.` : '';
+        writeText('stats-line-summary', `Current line: predicted score = ${format(lineState.intercept, 1)} + ${format(lineState.slope, 2)} × practice rounds. Average squared error: ${format(error, 1)}. Fitting steps: ${lineState.steps}.${selected}`);
         drawRegression();
     }
 
@@ -284,7 +284,7 @@
 
     let optimizerTrial = 0;
     let sampleTrial = 0;
-    const largerClassScores = [...scores, 58, 63, 66, 69, 71, 73, 75, 77, 79, 81, 83, 85, 87, 89, 91, 93, 95, 97];
+    const arcadeCrowdScores = [...scores, 58, 63, 66, 69, 71, 73, 75, 77, 79, 81, 83, 85, 87, 89, 91, 93, 95, 97];
 
     function repeatOptimizer() {
         optimizerTrial++;
@@ -300,9 +300,9 @@
     function drawNewSample() {
         sampleTrial++;
         const random = core.makeRandom(9000 + sampleTrial * 47);
-        const selected = core.sampleIndices(largerClassScores.length, 12, random);
-        const sample = selected.map(index => largerClassScores[index]);
-        appendResult(get('stats-sample-results'), `New group's exact mean: ${format(core.mean(sample), 1)} points`);
+        const selected = core.sampleIndices(arcadeCrowdScores.length, 12, random);
+        const sample = selected.map(index => arcadeCrowdScores[index]);
+        appendResult(get('stats-sample-results'), `New arcade crowd's exact mean: ${format(core.mean(sample), 1)} points`);
     }
 
     const checks = {

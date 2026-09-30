@@ -1,6 +1,6 @@
 # Stochastic Gradient Descent Made Fun
 
-An interactive worksheet about stochastic gradient descent and the math behind AI. The tabs at the top offer Algebra II, Calculus, and a high school Statistics lesson. The Statistics tab uses a fictional class dataset to explore sample means, residuals, random mini-batches, and fitting a line without calculus. It then leads into the same marble bowl, word-feature map, training, and output-generation animations as the original lessons, with explanations grounded in prediction error and probability.
+An interactive worksheet about stochastic gradient descent and the math behind AI. The tabs at the top offer Algebra II, Calculus, and a high school Statistics lesson. In Statistics, the robot Byte learns to predict scores for the fictional arcade game Meteor Munch. Players' scorecards and practice rounds introduce sample means, residuals, random mini-batches, and fitting a line without calculus. The lesson then leads into the same marble bowl, word-feature map, training, and output-generation animations as the original lessons, with explanations grounded in prediction error and probability.
 
 This is a static site: open `index.html` in a browser, or serve this directory with `python3 -m http.server` and visit `http://localhost:8000/`. Use the Statistics tab for an approximately one-class-period activity; students can check three short calculations, run the simulations, and compare their written explanations with the provided examples. The optional challenge extends the lesson to outliers and overshooting.
 

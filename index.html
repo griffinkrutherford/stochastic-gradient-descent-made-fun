@@ -1156,70 +1156,93 @@
         </section>
 
         <section id="statistics-worksheet" class="worksheet-panel" aria-labelledby="statistics-title" hidden>
-            <div class="stats-intro">
-                <h2 id="statistics-title">Statistics: from sample means to SGD</h2>
-                <p>Imagine 12 students recorded their study hours and quiz scores. This fictional dataset is small enough to calculate with, but big enough to see why a computer might learn from one row at a time.</p>
-                <p>We will estimate an average, improve it in small steps, and then fit a line. You need averages, plots, and simple algebra—no calculus. A relationship between study time and scores does <strong>not</strong> prove that one caused the other.</p>
+            <div class="stats-intro stats-arcade-intro">
+                <div class="stats-arcade-art" aria-hidden="true">
+                    <svg viewBox="0 0 180 210" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M24 15h132v180H24z" fill="#0a1711" stroke="#64f4ac" stroke-width="4"/>
+                        <path d="M34 25h112v25H34z" fill="#264733"/>
+                        <text x="90" y="41" fill="#ffd166" text-anchor="middle" font-family="monospace" font-size="12">METEOR MUNCH</text>
+                        <rect x="38" y="60" width="104" height="88" rx="8" fill="#07110c" stroke="#49a7ff" stroke-width="2"/>
+                        <path d="M90 75v10M82 75h16" stroke="#ffd166" stroke-width="4"/>
+                        <rect x="62" y="87" width="56" height="43" rx="8" fill="#64f4ac"/>
+                        <path d="M71 99h8v8h-8zM101 99h8v8h-8zM80 117h20" fill="#07110c" stroke="#07110c" stroke-width="3"/>
+                        <path d="M51 78l3 6 7 1-5 5 1 7-6-3-6 3 1-7-5-5 7-1zM129 116l3 6 7 1-5 5 1 7-6-3-6 3 1-7-5-5 7-1z" fill="#ffd166"/>
+                        <path d="M24 158h132" stroke="#64f4ac" stroke-width="3"/>
+                        <path d="M55 179v-14" stroke="#49a7ff" stroke-width="4"/>
+                        <circle cx="55" cy="164" r="5" fill="#49a7ff"/>
+                        <circle cx="109" cy="173" r="6" fill="#ffd166"/>
+                        <circle cx="128" cy="173" r="6" fill="#ff908d"/>
+                    </svg>
+                    <span>Meet Byte, your score-predicting sidekick.</span>
+                </div>
+                <div>
+                    <p class="stats-arcade-kicker">Fictional arcade. Real statistics.</p>
+                    <h2 id="statistics-title">Welcome to Meteor Munch</h2>
+                    <p>Scoop up space snacks, dodge asteroids, and rack up points! Twelve players have tried our fictional arcade game. Each recorded their number of warm-up rounds and a score from one challenge round. Their scorecards are below.</p>
+                    <p>The arcade’s little robot, <strong>Byte</strong>, wants to guess a typical score. Its first guess? <strong>60 points.</strong> Your mission: teach it to use the scorecards, improve its guesses, and eventually predict scores using practice rounds.</p>
+                    <p class="stats-arcade-mission">Read a few scorecards → update the guess → try again</p>
+                    <p>You need averages, plots, and simple algebra. Our invented scores show an association with practice; they do <strong>not</strong> prove that practice caused the difference. Previous gaming experience could matter too.</p>
+                </div>
             </div>
 
             <div class="stats-data-panel">
                 <table id="stats-data-table">
-                    <caption>Our fictional sample of 12 students</caption>
-                    <thead><tr><th scope="col">Student</th><th scope="col">Study hours</th><th scope="col">Quiz score</th></tr></thead>
+                    <caption>Meteor Munch scorecards · a fictional sample of 12 players</caption>
+                    <thead><tr><th scope="col">Player</th><th scope="col">Practice rounds</th><th scope="col">Arcade score</th></tr></thead>
                     <tbody>
-                        <tr data-stats-row="0"><th scope="row">A</th><td>0</td><td>62</td></tr>
-                        <tr data-stats-row="1"><th scope="row">B</th><td>1</td><td>68</td></tr>
-                        <tr data-stats-row="2"><th scope="row">C</th><td>2</td><td>60</td></tr>
-                        <tr data-stats-row="3"><th scope="row">D</th><td>3</td><td>72</td></tr>
-                        <tr data-stats-row="4"><th scope="row">E</th><td>4</td><td>70</td></tr>
-                        <tr data-stats-row="5"><th scope="row">F</th><td>5</td><td>78</td></tr>
-                        <tr data-stats-row="6"><th scope="row">G</th><td>6</td><td>74</td></tr>
-                        <tr data-stats-row="7"><th scope="row">H</th><td>7</td><td>84</td></tr>
-                        <tr data-stats-row="8"><th scope="row">I</th><td>8</td><td>82</td></tr>
-                        <tr data-stats-row="9"><th scope="row">J</th><td>9</td><td>80</td></tr>
-                        <tr data-stats-row="10"><th scope="row">K</th><td>10</td><td>90</td></tr>
-                        <tr data-stats-row="11"><th scope="row">L</th><td>11</td><td>92</td></tr>
+                        <tr data-stats-row="0"><th scope="row">Astro</th><td>0</td><td>62</td></tr>
+                        <tr data-stats-row="1"><th scope="row">Bloop</th><td>1</td><td>68</td></tr>
+                        <tr data-stats-row="2"><th scope="row">Comet</th><td>2</td><td>60</td></tr>
+                        <tr data-stats-row="3"><th scope="row">Doodle</th><td>3</td><td>72</td></tr>
+                        <tr data-stats-row="4"><th scope="row">Echo</th><td>4</td><td>70</td></tr>
+                        <tr data-stats-row="5"><th scope="row">Fizz</th><td>5</td><td>78</td></tr>
+                        <tr data-stats-row="6"><th scope="row">Gizmo</th><td>6</td><td>74</td></tr>
+                        <tr data-stats-row="7"><th scope="row">Hex</th><td>7</td><td>84</td></tr>
+                        <tr data-stats-row="8"><th scope="row">Iggy</th><td>8</td><td>82</td></tr>
+                        <tr data-stats-row="9"><th scope="row">Jinx</th><td>9</td><td>80</td></tr>
+                        <tr data-stats-row="10"><th scope="row">Koko</th><td>10</td><td>90</td></tr>
+                        <tr data-stats-row="11"><th scope="row">Luma</th><td>11</td><td>92</td></tr>
                     </tbody>
                 </table>
             </div>
 
             <div class="question stats-question">
-                <div class="question-number">1. Start with the average</div>
-                <p class="question-text">Ignore study hours for a moment. What is the <strong>sample mean</strong> of the 12 quiz scores? The three number checks accept answers within 0.05 point.</p>
-                <canvas id="stats-dot-plot" width="760" height="200" role="img" aria-label="Dot plot of the twelve quiz scores, from 60 to 92 points"></canvas>
-                <label for="stats-answer-mean">Sample mean (quiz points)</label>
+                <div class="question-number">1. Set a score to beat</div>
+                <p class="question-text">Byte needs a sensible score target. Ignore practice rounds for a moment: what is the <strong>sample mean</strong> of the 12 arcade scores? The three number checks accept answers within 0.05 point.</p>
+                <canvas id="stats-dot-plot" width="760" height="200" role="img" aria-label="Dot plot of the twelve arcade scores, from 60 to 92 points"></canvas>
+                <label for="stats-answer-mean">Sample mean (arcade points)</label>
                 <div class="stats-answer-row"><input id="stats-answer-mean" type="number" inputmode="decimal" step="any"><button type="button" class="stats-check" data-stats-check="mean">Check</button></div>
                 <p id="stats-feedback-mean" class="stats-feedback" aria-live="polite"></p>
-                <details class="stats-explanation"><summary>Compare with an explanation</summary><p>The scores add to 912. Divide by 12 students to get a sample mean of <strong>76 points</strong>. A different group of students might have a different sample mean.</p></details>
+                <details class="stats-explanation"><summary>Compare with an explanation</summary><p>The scores add to 912. Divide by 12 players to get a sample mean of <strong>76 points</strong>. A different group of players might have a different sample mean.</p></details>
             </div>
 
             <div class="question stats-question">
-                <div class="question-number">2. Measure a miss</div>
-                <p class="question-text">Suppose our current guess for every student's score is <strong>70</strong>. Student I scored <strong>82</strong>. What is that student's residual, observed score minus predicted score?</p>
-                <label for="stats-answer-residual">Residual (quiz points)</label>
+                <div class="question-number">2. Byte missed! By how much?</div>
+                <p class="question-text">Byte predicts everyone will score <strong>70</strong>. Iggy scored <strong>82</strong>. What is that player's residual, observed score minus predicted score?</p>
+                <label for="stats-answer-residual">Residual (arcade points)</label>
                 <div class="stats-answer-row"><input id="stats-answer-residual" type="number" inputmode="decimal" step="any"><button type="button" class="stats-check" data-stats-check="residual">Check</button></div>
                 <p id="stats-feedback-residual" class="stats-feedback" aria-live="polite"></p>
                 <details class="stats-explanation"><summary>Compare with an explanation</summary><p>The residual is <strong>82 − 70 = 12 points</strong>. Squaring a residual makes misses on either side count as positive error. The computer will try to make the average squared residual smaller.</p></details>
             </div>
 
             <div class="question stats-question">
-                <div class="question-number">3. Take one small step</div>
-                <p class="question-text">Start with an estimate of <strong>60</strong>. The selected student's score is <strong>80</strong>. Move one quarter of the way from 60 toward 80. What is the new estimate?</p>
+                <div class="question-number">3. Give Byte a small nudge</div>
+                <p class="question-text">Byte starts with a guess of <strong>60</strong> points and picks Jinx’s scorecard: <strong>80</strong> points. Move one quarter of the way from 60 toward 80. What is the new estimate?</p>
                 <p class="stats-formula">new estimate = old estimate + step fraction × (selected score − old estimate)</p>
-                <label for="stats-answer-step">New estimate (quiz points)</label>
+                <label for="stats-answer-step">New estimate (arcade points)</label>
                 <div class="stats-answer-row"><input id="stats-answer-step" type="number" inputmode="decimal" step="any"><button type="button" class="stats-check" data-stats-check="step">Check</button></div>
                 <p id="stats-feedback-step" class="stats-feedback" aria-live="polite"></p>
                 <details class="stats-explanation"><summary>Compare with an explanation</summary><p><strong>60 + 0.25 × (80 − 60) = 65.</strong> The 25% step fraction is called a <em>learning rate</em>. It controls how far the estimate moves on each update.</p></details>
             </div>
 
             <div class="question stats-question">
-                <div class="question-number">4. Make the step stochastic</div>
+                <div class="question-number">4. Pick a random scorecard</div>
                 <p class="question-text">A step based on all 12 scores points toward their average of 76. A step based on one randomly selected score points toward that score instead. Why might two single-score steps point in different directions?</p>
-                <details class="stats-explanation"><summary>Compare with an explanation</summary><p>Different students have different scores. The data stay fixed, but the row chosen for an update can change. That random choice is the <em>stochastic</em> part of stochastic gradient descent (SGD). We are not adding arbitrary shaking to the graph.</p></details>
+                <details class="stats-explanation"><summary>Compare with an explanation</summary><p>Astro, Iggy, and Jinx earned different scores. The data stay fixed, but the row chosen for an update can change. That random choice is the <em>stochastic</em> part of stochastic gradient descent (SGD). We are not adding arbitrary shaking to the graph.</p></details>
             </div>
 
             <div class="question stats-question">
-                <div class="question-number">5. Run the estimator</div>
+                <div class="question-number">5. Train the arcade score bot</div>
                 <p class="question-text">Predict which will look smoother: using 1 score per step or all 12. Then try both. Each step selects real rows from the table above and updates the estimate toward their average.</p>
                 <div class="stats-control-grid">
                     <label for="stats-batch-size">How many scores per step? <small>(batch size)</small>
@@ -1235,7 +1258,7 @@
                     <button type="button" id="stats-reset" class="reset">Reset</button>
                     <button type="button" id="stats-new-sequence" class="reset">Try a new random sequence</button>
                 </div>
-                <p id="stats-selected" class="stats-state" aria-live="polite">Take a step to see which students were selected.</p>
+                <p id="stats-selected" class="stats-state" aria-live="polite">Take a step to see which players were selected.</p>
                 <p id="stats-mean-summary" class="stats-state">Starting estimate: 60 points. The full-sample mean is 76.</p>
                 <canvas id="stats-loss-chart" width="760" height="330" role="img" aria-label="Average squared error by candidate estimate, showing the current estimate and the full-sample mean"></canvas>
                 <p class="stats-chart-note">The curve shows <strong>average squared error across all 12 scores</strong>. A random mini-batch step can sometimes make that full-data error rise before later steps bring it down.</p>
@@ -1243,18 +1266,18 @@
             </div>
 
             <div class="question stats-question">
-                <div class="question-number">6. Fit a line instead of one number</div>
-                <p class="question-text">Now bring study hours back. Move the line until its predictions seem close to the points. Each vertical segment is a <strong>residual</strong>: actual score minus predicted score. What do the line's starting height and slope tell you?</p>
+                <div class="question-number">6. Does practice help predict the score?</div>
+                <p class="question-text">Did a few warm-up rounds help players get the hang of Meteor Munch? Use the practice-round column and move the line until its predictions seem close to the points. Each vertical segment is a <strong>residual</strong>: actual score minus predicted score. What do the line's starting height and slope tell you?</p>
                 <div class="stats-control-grid">
                     <label for="stats-intercept">Line's starting height: <output id="stats-intercept-value">55</output> points
                         <input id="stats-intercept" type="range" min="30" max="90" value="55" step="1">
                     </label>
-                    <label for="stats-slope">Change per study hour: <output id="stats-slope-value">2.0</output> points
+                    <label for="stats-slope">Change per practice round: <output id="stats-slope-value">2.0</output> points
                         <input id="stats-slope" type="range" min="-2" max="8" value="2" step="0.1">
                     </label>
                 </div>
                 <div class="stats-control-grid"><label for="stats-line-batch">Rows used per fitting step
-                    <select id="stats-line-batch"><option value="1">1 student</option><option value="4" selected>4 students</option><option value="12">All 12 students</option></select>
+                    <select id="stats-line-batch"><option value="1">1 player</option><option value="4" selected>4 players</option><option value="12">All 12 players</option></select>
                 </label></div>
                 <div class="stats-buttons">
                     <button type="button" id="stats-line-step">Fit one step</button>
@@ -1263,35 +1286,35 @@
                     <button type="button" id="stats-line-reference" class="reset" aria-pressed="false">Show best-fit reference</button>
                 </div>
                 <p id="stats-line-summary" class="stats-state" aria-live="polite"></p>
-                <canvas id="stats-regression-chart" width="760" height="370" role="img" aria-label="Scatterplot of study hours and quiz scores with a fitted line and residuals"></canvas>
-                <p class="stats-chart-note">The computer adjusts the line's height and tilt using the selected students' prediction errors. You do not need to calculate those two adjustments by hand. The dashed reference line, when shown, is the best-fitting line for these 12 students.</p>
-                <details class="stats-explanation"><summary>Compare with an explanation</summary><p>The starting height predicts the score at zero study hours. The slope says how many points the line predicts for one additional study hour. It describes an association in this sample, not proof that extra study hours caused the score difference.</p></details>
+                <canvas id="stats-regression-chart" width="760" height="370" role="img" aria-label="Scatterplot of practice rounds and arcade scores with a fitted line and residuals"></canvas>
+                <p class="stats-chart-note">The computer adjusts the line's height and tilt using the selected players' prediction errors. You do not need to calculate those two adjustments by hand. The dashed reference line, when shown, is the best-fitting line for these 12 players.</p>
+                <details class="stats-explanation"><summary>Compare with an explanation</summary><p>The starting height predicts the score at zero practice rounds. The slope says how many points the line predicts for one additional practice round. It describes an association in this sample, not proof that extra practice rounds caused the score difference.</p></details>
             </div>
 
             <div class="question stats-question">
-                <div class="question-number">7. Two different kinds of variation</div>
-                <p class="question-text">First, repeat a short run with the <strong>same 12 scores</strong> but different randomly chosen rows. Then draw new groups of 12 from a fictional larger class. Which result changes because the computer's steps changed, and which changes because the data changed?</p>
+                <div class="question-number">7. New training run or new arcade crowd?</div>
+                <p class="question-text">First, repeat a short run with the <strong>same 12 scores</strong> but different randomly chosen rows. Then draw new groups of 12 from a fictional larger arcade crowd. Which result changes because the computer's steps changed, and which changes because the data changed?</p>
                 <div class="stats-buttons">
                     <button type="button" id="stats-repeat-optimizer">Same data, new random steps</button>
-                    <button type="button" id="stats-new-sample">New sample of students</button>
+                    <button type="button" id="stats-new-sample">Invite a new arcade crowd</button>
                 </div>
                 <div class="stats-variation-grid">
                     <div><h3>Same data (mean = 76)</h3><ol id="stats-optimizer-results" aria-live="polite"></ol></div>
-                    <div><h3>New group of 12</h3><ol id="stats-sample-results" aria-live="polite"></ol></div>
+                    <div><h3>New crowd of 12</h3><ol id="stats-sample-results" aria-live="polite"></ol></div>
                 </div>
-                <details class="stats-explanation"><summary>Compare with an explanation</summary><p>With the same data, short runs can end at different estimates because the computer chooses different rows. With a new group of students, the sample mean itself may change. Optimizer variation is not a confidence interval or a measure of uncertainty about the whole population.</p></details>
+                <details class="stats-explanation"><summary>Compare with an explanation</summary><p>With the same data, short runs can end at different estimates because the computer chooses different rows. With a new group of players, the sample mean itself may change. Optimizer variation is not a confidence interval or a measure of uncertainty about the whole population.</p></details>
             </div>
 
             <div class="question stats-question">
-                <div class="question-number">8. Explain the fit so far</div>
-                <p class="question-text">In your own words: where did the randomness in SGD come from? If the computer reaches a stable line, what else should a statistician ask before trusting it?</p>
+                <div class="question-number">8. Ready for opening night?</div>
+                <p class="question-text">Byte’s predictions have settled down. Is it ready to predict scores for everyone at the arcade? Explain where SGD’s randomness came from and what you would check before trusting the bot.</p>
                 <label for="stats-final-response">Your explanation</label>
-                <textarea id="stats-final-response" placeholder="Think about which rows were chosen, the scatterplot, and the students we did not observe."></textarea>
-                <details class="stats-explanation"><summary>Compare with an explanation</summary><p>SGD chose different students' rows to estimate a direction for each step. A stable fit only tells us the calculation has settled for this data. We still need to ask whether a line fits the pattern, whether the sample represents the larger group, and whether another explanation could account for the association.</p></details>
+                <textarea id="stats-final-response" placeholder="Think about which rows were chosen, the scatterplot, and the players we did not observe."></textarea>
+                <details class="stats-explanation"><summary>Compare with an explanation</summary><p>SGD chose different players' rows to estimate a direction for each step. A stable fit only tells us the calculation has settled for this data. We still need to ask whether a line fits the pattern, whether the sample represents the larger group, and whether another explanation could account for the association.</p></details>
             </div>
 
             <div class="stats-intro stats-finale-intro">
-                <h2>From quiz scores to bowls to AI</h2>
+                <h2>From the arcade to bowls to AI</h2>
                 <p>You have already used prediction errors to improve an estimate. Now picture that same idea as a marble moving through a bowl, and follow it into the familiar word and AI animations.</p>
             </div>
 
@@ -1300,7 +1323,7 @@
                 <p class="question-text">The error curve in Question 5 was a bowl seen from the side. For the fitted line, we can move in two directions: change its starting height or change its slope. Imagine a bowl whose height measures the error for each possible line.</p>
                 <table class="stats-analogy-table">
                     <caption>Translate the bowl into statistics</caption>
-                    <thead><tr><th scope="col">In the picture</th><th scope="col">In our quiz-score model</th></tr></thead>
+                    <thead><tr><th scope="col">In the picture</th><th scope="col">In our arcade-score model</th></tr></thead>
                     <tbody>
                         <tr><th scope="row">A marble's position</th><td>One candidate line, with a particular starting height and slope</td></tr>
                         <tr><th scope="row">Height above the bottom</th><td>How much prediction error that line makes</td></tr>
@@ -1313,41 +1336,41 @@
                 <p class="question-text">Try little shaking, then lots. What does a marble that keeps bouncing remind you of in our small-batch estimator? Does a bouncy path prove the final answer is more accurate?</p>
                 <label for="stats-bowl-response">Connect the bowl to our data</label>
                 <textarea id="stats-bowl-response" placeholder="Describe what the marble, bowl height, and changing direction represent."></textarea>
-                <details class="stats-explanation"><summary>Compare with an explanation</summary><p>The marble represents a candidate fit, and its height represents prediction error. Bouncing resembles the varying updates made from different small groups. More movement does not guarantee a better estimate. Our actual simulator calculates steps from selected students; the shaking slider here controls the physical analogy.</p></details>
+                <details class="stats-explanation"><summary>Compare with an explanation</summary><p>The marble represents a candidate fit, and its height represents prediction error. Bouncing resembles the varying updates made from different small groups. More movement does not guarantee a better estimate. Our actual simulator calculates steps from selected players; the shaking slider here controls the physical analogy.</p></details>
             </div>
 
             <div class="question stats-question">
                 <div class="question-number">10. From two numbers to many</div>
-                <p class="question-text">Our student table represented each person using numbers: study hours and quiz score. AI language models also work with numerical representations, including lists of numbers called <strong>vectors</strong>. This playful diagram uses a few made-up features to show how words can be placed near words with related features.</p>
+                <p class="question-text">Our arcade scorecards represented each person using numbers: practice rounds and arcade score. AI language models also work with numerical representations, including lists of numbers called <strong>vectors</strong>. This playful diagram uses a few made-up features to show how words can be placed near words with related features.</p>
                 <div id="stats-word-vectors-slot"></div>
                 <p class="stats-chart-note">These axes and word positions are invented for the illustration. Changing the lens or scanner changes what you see; it does not train a model. Actual language models learn many numerical features rather than using this small hand-labeled map.</p>
                 <p class="question-text">Change the lens and move the scanner. Why might two numbers be too few to describe all the patterns in language?</p>
-                <details class="stats-explanation"><summary>Compare with an explanation</summary><p>Two numbers were enough to record our study-time example. Language has many patterns, such as meanings, context, and relationships among words. More numerical features let a model represent more of those patterns. We can draw a few directions on screen even when the model uses many more.</p></details>
+                <details class="stats-explanation"><summary>Compare with an explanation</summary><p>Two numbers were enough to record our arcade example. Language has many patterns, such as meanings, context, and relationships among words. More numerical features let a model represent more of those patterns. We can draw a few directions on screen even when the model uses many more.</p></details>
             </div>
 
             <div class="question stats-question">
                 <div class="question-number">11. Watch a model learn</div>
                 <p class="question-text">Think back to the line slowly fitting our scatterplot. A language model also makes predictions, measures its misses, and updates its learned numbers. Watch the words move into place and the bowl take shape: both pictures tell the story of learning patterns from examples.</p>
                 <div id="stats-training-slot"></div>
-                <p class="stats-chart-note">The shaping bowl is a visual story about a model becoming organized through learning. In our actual fixed-data error plot, training moves the estimate across a fixed surface. The moving words and changing bowl are illustrations, not calculations from the 12 students.</p>
-                <p class="question-text">What plays the role of quiz-score prediction error when a language model is learning to predict the next piece of text?</p>
-                <details class="stats-explanation"><summary>Compare with an explanation</summary><p>The model assigns probabilities to possible next pieces of text. Training compares those predictions with what actually followed in the example, then adjusts the learned numbers. It uses a different error measure from our squared quiz-score errors, but the idea of predicting, measuring error, and updating carries over.</p></details>
+                <p class="stats-chart-note">The shaping bowl is a visual story about a model becoming organized through learning. In our actual fixed-data error plot, training moves the estimate across a fixed surface. The moving words and changing bowl are illustrations, not calculations from the 12 players.</p>
+                <p class="question-text">What plays the role of arcade-score prediction error when a language model is learning to predict the next piece of text?</p>
+                <details class="stats-explanation"><summary>Compare with an explanation</summary><p>The model assigns probabilities to possible next pieces of text. Training compares those predictions with what actually followed in the example, then adjusts the learned numbers. It uses a different error measure from our squared arcade-score errors, but the idea of predicting, measuring error, and updating carries over.</p></details>
             </div>
 
             <div class="question stats-question">
                 <div class="question-number">12. Training is finished—now choose an output</div>
                 <p class="question-text">Once a model is trained, it can use what it learned to make a new prediction. In this animation, the model assigns probabilities to possible next words. <strong>Temperature</strong> changes how concentrated those choices are. Predict what will happen to the probability bars when you turn it up, then try it.</p>
                 <div id="stats-output-slot"></div>
-                <p class="stats-chart-note">The bars show probabilities for this toy word example. Lower temperature concentrates the choices; higher temperature spreads them out. The moving marbles illustrate that variety. Choosing an output does not refit our quiz-score line or train the language model again.</p>
+                <p class="stats-chart-note">The bars show probabilities for this toy word example. Lower temperature concentrates the choices; higher temperature spreads them out. The moving marbles illustrate that variety. Choosing an output does not refit our arcade-score line or train the language model again.</p>
                 <label for="stats-ai-response">Your final connection</label>
-                <textarea id="stats-ai-response" placeholder="Connect one idea from our student data to the bowl or word animations. Then explain how random training rows differ from random output choices."></textarea>
+                <textarea id="stats-ai-response" placeholder="Connect one idea from our player data to the bowl or word animations. Then explain how random training rows differ from random output choices."></textarea>
                 <details class="stats-explanation"><summary>Compare with an explanation</summary><p>Our line and a language model both learn by using prediction errors to update numbers. During SGD training, randomness comes from choosing examples for an update. During output generation, randomness can come from sampling a possible next piece of text. Temperature affects those output probabilities; it is not our learning rate or batch size. A fluent output, like a stable fitted line, still needs checking.</p></details>
             </div>
 
             <div class="question stats-question stats-challenge">
                 <div class="question-number">Optional challenge</div>
-                <p>Suppose a new student scored 100. Would the sample mean rise or fall? How might an unusually high score affect the fitted line? Then try a 125% step in Question 5. Does every step reduce the full-data error?</p>
-                <details class="stats-explanation"><summary>Compare with an explanation</summary><p>The mean rises from 76 to about 77.85 because 100 is above the current mean. A high score can pull a fitted line, especially if its study-hours value is far from the others. A 125% step can overshoot the selected-group average; it does not guarantee a smaller error across all 12 scores.</p></details>
+                <p>Surprise guest Nova hits a jackpot score of 100 points. Would the sample mean rise or fall? How might an unusually high score affect the fitted line? Then try a 125% step in Question 5. Does every step reduce the full-data error?</p>
+                <details class="stats-explanation"><summary>Compare with an explanation</summary><p>The mean rises from 76 to about 77.85 because 100 is above the current mean. A high score can pull a fitted line, especially if that player’s number of practice rounds is far from the others. A 125% step can overshoot the selected-group average; it does not guarantee a smaller error across all 12 scores.</p></details>
             </div>
         </section>
 
@@ -1423,10 +1446,10 @@
             originalWorksheet.hidden = isStatistics;
             statisticsWorksheet.hidden = !isStatistics;
             document.getElementById('worksheet-subtitle').textContent = isStatistics
-                ? 'A High School Statistics Investigation'
+                ? 'Statistics at the Meteor Munch Arcade'
                 : 'The Math Behind ChatGPT and AI';
             document.getElementById('worksheet-intro').textContent = isStatistics
-                ? 'Use averages, residuals, and random samples to discover how a model learns from data. No calculus needed.'
+                ? 'Help Byte turn arcade scorecards into smarter guesses—then follow the same ideas into AI. No calculus needed.'
                 : originalIntro;
 
             window.syncWorksheetAnimations(isStatistics);
