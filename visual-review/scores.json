@@ -1,6 +1,6 @@
 [
   {
-    "scene": "Algebra II \u00b7 slope bridge",
+    "scene": "Algebra II · slope bridge",
     "mode": "algebra",
     "kind": "bridge",
     "view": "perspective",
@@ -9,7 +9,7 @@
     "file": "algebra-bridge-perspective.png"
   },
   {
-    "scene": "Algebra II \u00b7 slope bridge",
+    "scene": "Algebra II · slope bridge",
     "mode": "algebra",
     "kind": "bridge",
     "view": "reverse",
@@ -18,7 +18,7 @@
     "file": "algebra-bridge-reverse.png"
   },
   {
-    "scene": "Algebra II \u00b7 slope bridge",
+    "scene": "Algebra II · slope bridge",
     "mode": "algebra",
     "kind": "bridge",
     "view": "overhead",
@@ -27,7 +27,7 @@
     "file": "algebra-bridge-overhead.png"
   },
   {
-    "scene": "Algebra II \u00b7 slope bridge",
+    "scene": "Algebra II · slope bridge",
     "mode": "algebra",
     "kind": "bridge",
     "view": "phone",
@@ -36,7 +36,7 @@
     "file": "algebra-bridge-phone.png"
   },
   {
-    "scene": "Algebra II \u00b7 downhill scout",
+    "scene": "Algebra II · downhill scout",
     "mode": "algebra",
     "kind": "terrain",
     "view": "perspective",
@@ -45,7 +45,7 @@
     "file": "algebra-terrain-perspective.png"
   },
   {
-    "scene": "Algebra II \u00b7 downhill scout",
+    "scene": "Algebra II · downhill scout",
     "mode": "algebra",
     "kind": "terrain",
     "view": "reverse",
@@ -54,7 +54,7 @@
     "file": "algebra-terrain-reverse.png"
   },
   {
-    "scene": "Algebra II \u00b7 downhill scout",
+    "scene": "Algebra II · downhill scout",
     "mode": "algebra",
     "kind": "terrain",
     "view": "overhead",
@@ -63,7 +63,7 @@
     "file": "algebra-terrain-overhead.png"
   },
   {
-    "scene": "Algebra II \u00b7 downhill scout",
+    "scene": "Algebra II · downhill scout",
     "mode": "algebra",
     "kind": "terrain",
     "view": "phone",
@@ -72,7 +72,7 @@
     "file": "algebra-terrain-phone.png"
   },
   {
-    "scene": "Calculus \u00b7 secant to tangent",
+    "scene": "Calculus · secant to tangent",
     "mode": "calculus",
     "kind": "bridge",
     "view": "perspective",
@@ -81,7 +81,7 @@
     "file": "calculus-bridge-perspective.png"
   },
   {
-    "scene": "Calculus \u00b7 secant to tangent",
+    "scene": "Calculus · secant to tangent",
     "mode": "calculus",
     "kind": "bridge",
     "view": "reverse",
@@ -90,7 +90,7 @@
     "file": "calculus-bridge-reverse.png"
   },
   {
-    "scene": "Calculus \u00b7 secant to tangent",
+    "scene": "Calculus · secant to tangent",
     "mode": "calculus",
     "kind": "bridge",
     "view": "overhead",
@@ -99,7 +99,7 @@
     "file": "calculus-bridge-overhead.png"
   },
   {
-    "scene": "Calculus \u00b7 secant to tangent",
+    "scene": "Calculus · secant to tangent",
     "mode": "calculus",
     "kind": "bridge",
     "view": "phone",
@@ -108,7 +108,7 @@
     "file": "calculus-bridge-phone.png"
   },
   {
-    "scene": "Calculus \u00b7 gradient terrain",
+    "scene": "Calculus · gradient terrain",
     "mode": "calculus",
     "kind": "terrain",
     "view": "perspective",
@@ -117,7 +117,7 @@
     "file": "calculus-terrain-perspective.png"
   },
   {
-    "scene": "Calculus \u00b7 gradient terrain",
+    "scene": "Calculus · gradient terrain",
     "mode": "calculus",
     "kind": "terrain",
     "view": "reverse",
@@ -126,7 +126,7 @@
     "file": "calculus-terrain-reverse.png"
   },
   {
-    "scene": "Calculus \u00b7 gradient terrain",
+    "scene": "Calculus · gradient terrain",
     "mode": "calculus",
     "kind": "terrain",
     "view": "overhead",
@@ -135,7 +135,7 @@
     "file": "calculus-terrain-overhead.png"
   },
   {
-    "scene": "Calculus \u00b7 gradient terrain",
+    "scene": "Calculus · gradient terrain",
     "mode": "calculus",
     "kind": "terrain",
     "view": "phone",
@@ -144,7 +144,7 @@
     "file": "calculus-terrain-phone.png"
   },
   {
-    "scene": "Statistics \u00b7 arcade score skyline",
+    "scene": "Statistics · arcade score skyline",
     "mode": "statistics",
     "kind": "skyline",
     "view": "perspective",
@@ -153,7 +153,7 @@
     "file": "statistics-skyline-perspective.png"
   },
   {
-    "scene": "Statistics \u00b7 arcade score skyline",
+    "scene": "Statistics · arcade score skyline",
     "mode": "statistics",
     "kind": "skyline",
     "view": "reverse",
@@ -162,7 +162,7 @@
     "file": "statistics-skyline-reverse.png"
   },
   {
-    "scene": "Statistics \u00b7 arcade score skyline",
+    "scene": "Statistics · arcade score skyline",
     "mode": "statistics",
     "kind": "skyline",
     "view": "overhead",
@@ -171,7 +171,7 @@
     "file": "statistics-skyline-overhead.png"
   },
   {
-    "scene": "Statistics \u00b7 arcade score skyline",
+    "scene": "Statistics · arcade score skyline",
     "mode": "statistics",
     "kind": "skyline",
     "view": "phone",
@@ -180,7 +180,7 @@
     "file": "statistics-skyline-phone.png"
   },
   {
-    "scene": "Statistics \u00b7 prediction-error bowl",
+    "scene": "Statistics · prediction-error bowl",
     "mode": "statistics",
     "kind": "fit",
     "view": "perspective",
@@ -189,7 +189,7 @@
     "file": "statistics-fit-perspective.png"
   },
   {
-    "scene": "Statistics \u00b7 prediction-error bowl",
+    "scene": "Statistics · prediction-error bowl",
     "mode": "statistics",
     "kind": "fit",
     "view": "reverse",
@@ -198,7 +198,7 @@
     "file": "statistics-fit-reverse.png"
   },
   {
-    "scene": "Statistics \u00b7 prediction-error bowl",
+    "scene": "Statistics · prediction-error bowl",
     "mode": "statistics",
     "kind": "fit",
     "view": "overhead",
@@ -207,7 +207,7 @@
     "file": "statistics-fit-overhead.png"
   },
   {
-    "scene": "Statistics \u00b7 prediction-error bowl",
+    "scene": "Statistics · prediction-error bowl",
     "mode": "statistics",
     "kind": "fit",
     "view": "phone",
@@ -216,7 +216,7 @@
     "file": "statistics-fit-phone.png"
   },
   {
-    "scene": "Modeling \u00b7 caf\u00e9 profit landscape",
+    "scene": "Modeling · café profit landscape",
     "mode": "modeling",
     "kind": "market",
     "view": "perspective",
@@ -225,7 +225,7 @@
     "file": "modeling-market-perspective.png"
   },
   {
-    "scene": "Modeling \u00b7 caf\u00e9 profit landscape",
+    "scene": "Modeling · café profit landscape",
     "mode": "modeling",
     "kind": "market",
     "view": "reverse",
@@ -234,7 +234,7 @@
     "file": "modeling-market-reverse.png"
   },
   {
-    "scene": "Modeling \u00b7 caf\u00e9 profit landscape",
+    "scene": "Modeling · café profit landscape",
     "mode": "modeling",
     "kind": "market",
     "view": "overhead",
@@ -243,7 +243,7 @@
     "file": "modeling-market-overhead.png"
   },
   {
-    "scene": "Modeling \u00b7 caf\u00e9 profit landscape",
+    "scene": "Modeling · café profit landscape",
     "mode": "modeling",
     "kind": "market",
     "view": "phone",
@@ -252,7 +252,7 @@
     "file": "modeling-market-phone.png"
   },
   {
-    "scene": "Modeling \u00b7 caf\u00e9 fitting bowl",
+    "scene": "Modeling · café fitting bowl",
     "mode": "modeling",
     "kind": "fit",
     "view": "perspective",
@@ -261,7 +261,7 @@
     "file": "modeling-fit-perspective.png"
   },
   {
-    "scene": "Modeling \u00b7 caf\u00e9 fitting bowl",
+    "scene": "Modeling · café fitting bowl",
     "mode": "modeling",
     "kind": "fit",
     "view": "reverse",
@@ -270,7 +270,7 @@
     "file": "modeling-fit-reverse.png"
   },
   {
-    "scene": "Modeling \u00b7 caf\u00e9 fitting bowl",
+    "scene": "Modeling · café fitting bowl",
     "mode": "modeling",
     "kind": "fit",
     "view": "overhead",
@@ -279,7 +279,7 @@
     "file": "modeling-fit-overhead.png"
   },
   {
-    "scene": "Modeling \u00b7 caf\u00e9 fitting bowl",
+    "scene": "Modeling · café fitting bowl",
     "mode": "modeling",
     "kind": "fit",
     "view": "phone",
@@ -288,7 +288,7 @@
     "file": "modeling-fit-phone.png"
   },
   {
-    "scene": "Algebra \u00b7 marble bowl",
+    "scene": "Algebra · marble bowl",
     "mode": "algebra",
     "kind": "shared-bowl",
     "view": "perspective",
@@ -297,7 +297,7 @@
     "file": "algebra-shared-bowl-perspective.png"
   },
   {
-    "scene": "Algebra \u00b7 marble bowl",
+    "scene": "Algebra · marble bowl",
     "mode": "algebra",
     "kind": "shared-bowl",
     "view": "reverse",
@@ -306,7 +306,7 @@
     "file": "algebra-shared-bowl-reverse.png"
   },
   {
-    "scene": "Algebra \u00b7 marble bowl",
+    "scene": "Algebra · marble bowl",
     "mode": "algebra",
     "kind": "shared-bowl",
     "view": "overhead",
@@ -315,7 +315,7 @@
     "file": "algebra-shared-bowl-overhead.png"
   },
   {
-    "scene": "Algebra \u00b7 marble bowl",
+    "scene": "Algebra · marble bowl",
     "mode": "algebra",
     "kind": "shared-bowl",
     "view": "phone",
@@ -324,7 +324,7 @@
     "file": "algebra-shared-bowl-phone.png"
   },
   {
-    "scene": "Calculus \u00b7 marble bowl",
+    "scene": "Calculus · marble bowl",
     "mode": "calculus",
     "kind": "shared-bowl",
     "view": "perspective",
@@ -333,7 +333,7 @@
     "file": "calculus-shared-bowl-perspective.png"
   },
   {
-    "scene": "Calculus \u00b7 marble bowl",
+    "scene": "Calculus · marble bowl",
     "mode": "calculus",
     "kind": "shared-bowl",
     "view": "reverse",
@@ -342,7 +342,7 @@
     "file": "calculus-shared-bowl-reverse.png"
   },
   {
-    "scene": "Calculus \u00b7 marble bowl",
+    "scene": "Calculus · marble bowl",
     "mode": "calculus",
     "kind": "shared-bowl",
     "view": "overhead",
@@ -351,7 +351,7 @@
     "file": "calculus-shared-bowl-overhead.png"
   },
   {
-    "scene": "Calculus \u00b7 marble bowl",
+    "scene": "Calculus · marble bowl",
     "mode": "calculus",
     "kind": "shared-bowl",
     "view": "phone",
@@ -360,7 +360,7 @@
     "file": "calculus-shared-bowl-phone.png"
   },
   {
-    "scene": "Statistics \u00b7 marble bowl",
+    "scene": "Statistics · marble bowl",
     "mode": "statistics",
     "kind": "shared-bowl",
     "view": "perspective",
@@ -369,7 +369,7 @@
     "file": "statistics-shared-bowl-perspective.png"
   },
   {
-    "scene": "Statistics \u00b7 marble bowl",
+    "scene": "Statistics · marble bowl",
     "mode": "statistics",
     "kind": "shared-bowl",
     "view": "reverse",
@@ -378,7 +378,7 @@
     "file": "statistics-shared-bowl-reverse.png"
   },
   {
-    "scene": "Statistics \u00b7 marble bowl",
+    "scene": "Statistics · marble bowl",
     "mode": "statistics",
     "kind": "shared-bowl",
     "view": "overhead",
@@ -387,7 +387,7 @@
     "file": "statistics-shared-bowl-overhead.png"
   },
   {
-    "scene": "Statistics \u00b7 marble bowl",
+    "scene": "Statistics · marble bowl",
     "mode": "statistics",
     "kind": "shared-bowl",
     "view": "phone",
@@ -396,7 +396,7 @@
     "file": "statistics-shared-bowl-phone.png"
   },
   {
-    "scene": "Modeling \u00b7 marble bowl",
+    "scene": "Modeling · marble bowl",
     "mode": "modeling",
     "kind": "shared-bowl",
     "view": "perspective",
@@ -405,7 +405,7 @@
     "file": "modeling-shared-bowl-perspective.png"
   },
   {
-    "scene": "Modeling \u00b7 marble bowl",
+    "scene": "Modeling · marble bowl",
     "mode": "modeling",
     "kind": "shared-bowl",
     "view": "reverse",
@@ -414,7 +414,7 @@
     "file": "modeling-shared-bowl-reverse.png"
   },
   {
-    "scene": "Modeling \u00b7 marble bowl",
+    "scene": "Modeling · marble bowl",
     "mode": "modeling",
     "kind": "shared-bowl",
     "view": "overhead",
@@ -423,12 +423,300 @@
     "file": "modeling-shared-bowl-overhead.png"
   },
   {
-    "scene": "Modeling \u00b7 marble bowl",
+    "scene": "Modeling · marble bowl",
     "mode": "modeling",
     "kind": "shared-bowl",
     "view": "phone",
     "aesthetics": 90,
     "interpretability": 92,
     "file": "modeling-shared-bowl-phone.png"
+  },
+  {
+    "scene": "Beyond 3D · Build a dimension",
+    "mode": "dimensions",
+    "kind": "ladder",
+    "view": "perspective",
+    "aesthetics": 94,
+    "interpretability": 95,
+    "file": "dimensions-ladder-perspective.png"
+  },
+  {
+    "scene": "Beyond 3D · Build a dimension",
+    "mode": "dimensions",
+    "kind": "ladder",
+    "view": "reverse",
+    "aesthetics": 93,
+    "interpretability": 94,
+    "file": "dimensions-ladder-reverse.png"
+  },
+  {
+    "scene": "Beyond 3D · Build a dimension",
+    "mode": "dimensions",
+    "kind": "ladder",
+    "view": "overhead",
+    "aesthetics": 92,
+    "interpretability": 93,
+    "file": "dimensions-ladder-overhead.png"
+  },
+  {
+    "scene": "Beyond 3D · Build a dimension",
+    "mode": "dimensions",
+    "kind": "ladder",
+    "view": "phone",
+    "aesthetics": 93,
+    "interpretability": 95,
+    "file": "dimensions-ladder-phone.png"
+  },
+  {
+    "scene": "Beyond 3D · A visitor to Flatland",
+    "mode": "dimensions",
+    "kind": "slice",
+    "view": "perspective",
+    "aesthetics": 94,
+    "interpretability": 96,
+    "file": "dimensions-slice-perspective.png"
+  },
+  {
+    "scene": "Beyond 3D · A visitor to Flatland",
+    "mode": "dimensions",
+    "kind": "slice",
+    "view": "reverse",
+    "aesthetics": 93,
+    "interpretability": 95,
+    "file": "dimensions-slice-reverse.png"
+  },
+  {
+    "scene": "Beyond 3D · A visitor to Flatland",
+    "mode": "dimensions",
+    "kind": "slice",
+    "view": "overhead",
+    "aesthetics": 92,
+    "interpretability": 95,
+    "file": "dimensions-slice-overhead.png"
+  },
+  {
+    "scene": "Beyond 3D · A visitor to Flatland",
+    "mode": "dimensions",
+    "kind": "slice",
+    "view": "phone",
+    "aesthetics": 93,
+    "interpretability": 96,
+    "file": "dimensions-slice-phone.png"
+  },
+  {
+    "scene": "Beyond 3D · A shadow forgets something",
+    "mode": "dimensions",
+    "kind": "shadow",
+    "view": "perspective",
+    "aesthetics": 93,
+    "interpretability": 96,
+    "file": "dimensions-shadow-perspective.png"
+  },
+  {
+    "scene": "Beyond 3D · A shadow forgets something",
+    "mode": "dimensions",
+    "kind": "shadow",
+    "view": "reverse",
+    "aesthetics": 93,
+    "interpretability": 96,
+    "file": "dimensions-shadow-reverse.png"
+  },
+  {
+    "scene": "Beyond 3D · A shadow forgets something",
+    "mode": "dimensions",
+    "kind": "shadow",
+    "view": "overhead",
+    "aesthetics": 91,
+    "interpretability": 94,
+    "file": "dimensions-shadow-overhead.png"
+  },
+  {
+    "scene": "Beyond 3D · A shadow forgets something",
+    "mode": "dimensions",
+    "kind": "shadow",
+    "view": "phone",
+    "aesthetics": 93,
+    "interpretability": 96,
+    "file": "dimensions-shadow-phone.png"
+  },
+  {
+    "scene": "Beyond 3D · Turn in a direction you cannot point",
+    "mode": "dimensions",
+    "kind": "tesseract",
+    "view": "perspective",
+    "aesthetics": 95,
+    "interpretability": 96,
+    "file": "dimensions-tesseract-perspective.png"
+  },
+  {
+    "scene": "Beyond 3D · Turn in a direction you cannot point",
+    "mode": "dimensions",
+    "kind": "tesseract",
+    "view": "reverse",
+    "aesthetics": 94,
+    "interpretability": 95,
+    "file": "dimensions-tesseract-reverse.png"
+  },
+  {
+    "scene": "Beyond 3D · Turn in a direction you cannot point",
+    "mode": "dimensions",
+    "kind": "tesseract",
+    "view": "overhead",
+    "aesthetics": 93,
+    "interpretability": 94,
+    "file": "dimensions-tesseract-overhead.png"
+  },
+  {
+    "scene": "Beyond 3D · Turn in a direction you cannot point",
+    "mode": "dimensions",
+    "kind": "tesseract",
+    "view": "phone",
+    "aesthetics": 93,
+    "interpretability": 95,
+    "file": "dimensions-tesseract-phone.png"
+  },
+  {
+    "scene": "Beyond 3D · Open the box. Then open the next box.",
+    "mode": "dimensions",
+    "kind": "net",
+    "view": "perspective",
+    "aesthetics": 93,
+    "interpretability": 94,
+    "file": "dimensions-net-perspective.png"
+  },
+  {
+    "scene": "Beyond 3D · Open the box. Then open the next box.",
+    "mode": "dimensions",
+    "kind": "net",
+    "view": "reverse",
+    "aesthetics": 92,
+    "interpretability": 93,
+    "file": "dimensions-net-reverse.png"
+  },
+  {
+    "scene": "Beyond 3D · Open the box. Then open the next box.",
+    "mode": "dimensions",
+    "kind": "net",
+    "view": "overhead",
+    "aesthetics": 91,
+    "interpretability": 92,
+    "file": "dimensions-net-overhead.png"
+  },
+  {
+    "scene": "Beyond 3D · Open the box. Then open the next box.",
+    "mode": "dimensions",
+    "kind": "net",
+    "view": "phone",
+    "aesthetics": 92,
+    "interpretability": 94,
+    "file": "dimensions-net-phone.png"
+  },
+  {
+    "scene": "Beyond 3D · A 4D visitor to our world",
+    "mode": "dimensions",
+    "kind": "hypersphere",
+    "view": "perspective",
+    "aesthetics": 92,
+    "interpretability": 95,
+    "file": "dimensions-hypersphere-perspective.png"
+  },
+  {
+    "scene": "Beyond 3D · A 4D visitor to our world",
+    "mode": "dimensions",
+    "kind": "hypersphere",
+    "view": "reverse",
+    "aesthetics": 92,
+    "interpretability": 95,
+    "file": "dimensions-hypersphere-reverse.png"
+  },
+  {
+    "scene": "Beyond 3D · A 4D visitor to our world",
+    "mode": "dimensions",
+    "kind": "hypersphere",
+    "view": "overhead",
+    "aesthetics": 91,
+    "interpretability": 94,
+    "file": "dimensions-hypersphere-overhead.png"
+  },
+  {
+    "scene": "Beyond 3D · A 4D visitor to our world",
+    "mode": "dimensions",
+    "kind": "hypersphere",
+    "view": "phone",
+    "aesthetics": 92,
+    "interpretability": 95,
+    "file": "dimensions-hypersphere-phone.png"
+  },
+  {
+    "scene": "Beyond 3D · Six dimensions can taste like a smoothie",
+    "mode": "dimensions",
+    "kind": "features",
+    "view": "reference",
+    "aesthetics": 92,
+    "interpretability": 95,
+    "file": "dimensions-features-reference.png"
+  },
+  {
+    "scene": "Beyond 3D · Six dimensions can taste like a smoothie",
+    "mode": "dimensions",
+    "kind": "features",
+    "view": "hidden",
+    "aesthetics": 93,
+    "interpretability": 96,
+    "file": "dimensions-features-hidden.png"
+  },
+  {
+    "scene": "Beyond 3D · Six dimensions can taste like a smoothie",
+    "mode": "dimensions",
+    "kind": "features",
+    "view": "mixed",
+    "aesthetics": 94,
+    "interpretability": 96,
+    "file": "dimensions-features-mixed.png"
+  },
+  {
+    "scene": "Beyond 3D · Six dimensions can taste like a smoothie",
+    "mode": "dimensions",
+    "kind": "features",
+    "view": "phone",
+    "aesthetics": 92,
+    "interpretability": 95,
+    "file": "dimensions-features-phone.png"
+  },
+  {
+    "scene": "Beyond 3D · The extra-direction trick",
+    "mode": "dimensions",
+    "kind": "escape",
+    "view": "perspective",
+    "aesthetics": 94,
+    "interpretability": 95,
+    "file": "dimensions-escape-perspective.png"
+  },
+  {
+    "scene": "Beyond 3D · The extra-direction trick",
+    "mode": "dimensions",
+    "kind": "escape",
+    "view": "reverse",
+    "aesthetics": 93,
+    "interpretability": 94,
+    "file": "dimensions-escape-reverse.png"
+  },
+  {
+    "scene": "Beyond 3D · The extra-direction trick",
+    "mode": "dimensions",
+    "kind": "escape",
+    "view": "overhead",
+    "aesthetics": 92,
+    "interpretability": 94,
+    "file": "dimensions-escape-overhead.png"
+  },
+  {
+    "scene": "Beyond 3D · The extra-direction trick",
+    "mode": "dimensions",
+    "kind": "escape",
+    "view": "phone",
+    "aesthetics": 93,
+    "interpretability": 95,
+    "file": "dimensions-escape-phone.png"
   }
 ]

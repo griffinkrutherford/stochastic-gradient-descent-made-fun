@@ -39,7 +39,7 @@ const path = require('node:path');
             await card.screenshot({path:path.join(out,`dimensions-${kind}-phone.png`)});
             await page.setViewportSize({width:1440,height:1100});
         }
-        for(const [id,value,expected] of [['dim-ladder-dimension','0','1 corner'],['dim-ladder-dimension','4','16 corners'],['dim-slice-slice','.6','0.80'],['dim-slice-slice','1.2','no disk exists'],['dim-hypersphere-slice','.6','0.80'],['dim-escape-progress','1','back on the sheet']]){
+        for(const [id,value,expected] of [['dim-ladder-dimension','0','1 corner'],['dim-ladder-dimension','4','16 corners'],['dim-slice-slice','0.6','0.80'],['dim-slice-slice','1.2','no disk exists'],['dim-hypersphere-slice','0.6','0.80'],['dim-escape-progress','1','back on the sheet']]){
             await page.locator('#'+id).fill(value);
             const kind=id.split('-')[1];await page.locator(`#dim-${kind}-canvas`).scrollIntoViewIfNeeded();
             await page.waitForFunction(({kind,expected})=>document.getElementById(`dim-${kind}-summary`).textContent.includes(expected),{kind,expected});

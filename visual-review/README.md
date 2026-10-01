@@ -1,6 +1,6 @@
 # Worksheet visual review
 
-Reviewed September 30, 2026. 48 reviewed screenshots: eight new early 3D scenes and the shared marble bowl in all four lessons, each viewed from perspective, reverse, overhead, and a 390-pixel phone layout. Every reviewed view meets the 90/100 threshold for both criteria.
+Reviewed September 30, 2026. 80 reviewed screenshots: 48 original lesson views and 32 Beyond 3D bonus views. Every reviewed view meets the 90/100 threshold for both criteria.
 
 Scores are **subjective agent assessments**, not independent student/teacher validation. A 90-point view has readable controls and mathematical explanation, identifiable reference/current states, intentional framing, and no clipping or label collisions that obscure the lesson. Minor depth occlusion is acceptable when a labeled inset and numeric summary preserve the information.
 
@@ -35,3 +35,18 @@ Each cell is **aesthetics / interpretability**, out of 100, and links to the ful
 Chrome captures: desktop 1440 × 1100; phone 390 × 844. The images document the tested angles; arbitrary camera positions are user-controllable. Tests also cover 320-pixel layouts, keyboard use, actual coefficient updates, linked planning controls, seeded replay, and print behavior. Classroom pacing and comprehension still need a teacher/student walkthrough.
 
 Regenerate early-scene screenshots with `tests/visual-labs.browser.cjs` and bowl captures with `tests/bowl-review.browser.cjs` using the documented browser environment. New captures require visual reassessment; the script does not award scores.
+
+## Beyond 3D bonus
+
+| Stop | Perspective / reference | Reverse / hidden | Overhead / mixed | Phone |
+| --- | --- | --- | --- | --- |
+| Build a dimension | [94/95](dimensions-ladder-perspective.png) | [93/94](dimensions-ladder-reverse.png) | [92/93](dimensions-ladder-overhead.png) | [93/95](dimensions-ladder-phone.png) |
+| A visitor to Flatland | [94/96](dimensions-slice-perspective.png) | [93/95](dimensions-slice-reverse.png) | [92/95](dimensions-slice-overhead.png) | [93/96](dimensions-slice-phone.png) |
+| A shadow forgets something | [93/96](dimensions-shadow-perspective.png) | [93/96](dimensions-shadow-reverse.png) | [91/94](dimensions-shadow-overhead.png) | [93/96](dimensions-shadow-phone.png) |
+| Turn in a direction you cannot point | [95/96](dimensions-tesseract-perspective.png) | [94/95](dimensions-tesseract-reverse.png) | [93/94](dimensions-tesseract-overhead.png) | [93/95](dimensions-tesseract-phone.png) |
+| Open the box. Then open the next box. | [93/94](dimensions-net-perspective.png) | [92/93](dimensions-net-reverse.png) | [91/92](dimensions-net-overhead.png) | [92/94](dimensions-net-phone.png) |
+| A 4D visitor to our world | [92/95](dimensions-hypersphere-perspective.png) | [92/95](dimensions-hypersphere-reverse.png) | [91/94](dimensions-hypersphere-overhead.png) | [92/95](dimensions-hypersphere-phone.png) |
+| Six dimensions can taste like a smoothie | [92/95](dimensions-features-reference.png) | [93/96](dimensions-features-hidden.png) | [94/96](dimensions-features-mixed.png) | [92/95](dimensions-features-phone.png) |
+| The extra-direction trick | [94/95](dimensions-escape-perspective.png) | [93/94](dimensions-escape-reverse.png) | [92/94](dimensions-escape-overhead.png) | [93/95](dimensions-escape-phone.png) |
+
+See [the bonus review notes](DIMENSIONS_REVIEW.md) for states, corrections, and validation.
