@@ -670,6 +670,7 @@
     <link rel="stylesheet" href="modeling.css">
     <link rel="stylesheet" href="visual-labs.css">
     <link rel="stylesheet" href="dimensions.css">
+    <link rel="stylesheet" href="attention.css">
 </head>
 <body>
     <a class="home-link" href="https://griffinrutherford.com/">← Back to Homepage</a>
@@ -692,6 +693,8 @@
                 <label for="mode-modeling">Modeling</label>
                 <input type="radio" id="mode-dimensions" name="answer-mode" value="dimensions">
                 <label for="mode-dimensions">Bonus · Beyond 3D</label>
+                <input type="radio" id="mode-attention" name="answer-mode" value="attention">
+                <label for="mode-attention">Bonus · The Attention Machine</label>
             </div>
             <div class="shared-animation-controls">
                 <button type="button" id="shared-animations-toggle" aria-pressed="false">Pause bowl and word animations</button>
@@ -1565,6 +1568,43 @@
             </div>
         </section>
 
+        <section id="attention-worksheet" class="worksheet-panel" aria-labelledby="attention-title" hidden>
+            <div class="att-hero">
+                <div class="att-kicker">Bonus lecture · from ChatGPT to your next swipe</div>
+                <h2 id="attention-title">The feed that ate<br>your lunch break.</h2>
+                <p>You opened a clip about a goat. Somehow it is twenty minutes later, the goat has a sequel, and strangers are arguing about hiking socks. How did “one more” become a whole afternoon?</p>
+                <p>Start with the same loss-bowl idea that helps explain AI training. Then separate three things: what catches attention, what people learn from feedback, and what a feed chooses to amplify. Rage bait tries to provoke a reaction. “Brain rot” is slang here, not a diagnosis; silly content can be fun without being harmful.</p>
+                <p class="att-principle">Lower error means better at the chosen task. It does not automatically mean better for the person.</p>
+                <p class="att-note">Eight interactive studios · about 45–55 minutes · high school algebra and probability. All simulation data, rewards, and behavior coefficients are fictional. Research findings have nearby links; the explanations identify where an analogy or hypothesis takes over.</p>
+                <nav class="att-chips" aria-label="Attention lecture studios"><a href="#att-language">01 · ChatGPT foundation</a><a href="#att-objective">02 · Whose goal?</a><a href="#att-ranking">03 · The ranking gate</a><a href="#att-outrage">04 · The outrage loop</a><a href="#att-surprise">05 · Maybe the next one</a><a href="#att-stopping">06 · A missing finish line</a><a href="#att-exposure">07 · Missing evidence</a><a href="#att-redesign">08 · Redesign the feed</a></nav>
+            </div>
+            <div id="attention-labs"></div>
+            <div class="att-ending">
+                <div class="att-kicker">Your exit ticket · explain the mechanism</div>
+                <h3>A useful question before “one more.”</h3>
+                <p>Am I choosing this next item, or repeating a choice I already meant to stop? Sometimes the answer is “I’m having fun,” and that counts. The aim is to understand the system well enough to choose deliberately.</p>
+                <label for="att-exit-response">Explain how a low-loss model can still recommend something you regret. Include one human feedback loop, one limitation of the bowl analogy, and a design change you would test.</label>
+                <textarea id="att-exit-response" placeholder="Connect the objective, the observed signal, and the person’s intention…"></textarea>
+                <p class="att-note">Your response stays in this browser when storage is available. Nothing is submitted or automatically graded.</p>
+                <details class="att-reasoning"><summary>Compare with an explanation</summary><p>A model can accurately predict comments without knowing whether they came from enjoyment or disagreement. A creator may learn that outrage earns approval; a ranker may then expose more people to it. That describes interacting feedback processes, not a brain rolling down a neural-network loss surface. I would test a reflective feedback question and optional stopping checkpoints, measuring satisfaction and whether people finish when they intend to, alongside engagement. The toy results alone do not establish the effect on real people.</p></details>
+                <div class="att-actions"><button type="button" onclick="window.print()">Print lecture handout</button></div>
+                <details id="att-instructor" class="att-reasoning"><summary>Instructor notes · timing, answers, and misconceptions</summary>
+                    <p>Allow 5 minutes for the opening, 10 minutes for each pair of studios (1–2, 3–4, 5–6, and 7–8), and 5 minutes for the exit discussion. This makes a 50-minute lesson; add 5 minutes for open exploration if time permits. Students need weighted averages, probability, and simple algebra. Softmax, cross-entropy, and sigmoid can remain named computer calculations; the optional explanations provide deeper mathematics.</p>
+                    <ol>
+                        <li><strong>Training bowl:</strong> from equal starting probabilities, the first all-data step raises the steep score and slightly lowers the quiet score. Continued fitting reaches the 60/30/10 distribution. A single muddy observation can lower both. The full-data minimum is at (ln 6, ln 3). It minimizes cross-entropy, not a truthfulness score.</li>
+                        <li><strong>Objective:</strong> watching-only target is (0.8, 0.7); reflection-only is (−0.5, −0.3). A 50/50 target is (0.15, 0.20). Changing the target changes the surface; sampling fixed examples does not.</li>
+                        <li><strong>Ranking:</strong> comments-only puts Sock war first; reflection-only puts Trail tip first. A comment is an ambiguous behavioral label. A tower’s height is a ranking score, not loss.</li>
+                        <li><strong>Outrage:</strong> feedback trains expectations about rewarded expression. Set the approval bonus to zero and reset. Random finite runs can still favor a type; that does not contradict equal expected rewards. Research does not make every person or group identical.</li>
+                        <li><strong>Surprise:</strong> 0.4 + 0.25(1 − 0.4) = 0.55. The deck mean is 0.4; different orders generally produce different final expectations with a constant update rate. Do not call these bars dopamine levels.</li>
+                        <li><strong>Stopping:</strong> zero checkpoint friction makes the lanes identical. Positive friction affects only the marked decisions. Summing reach probabilities gives expected clip count; it does not predict a particular student’s session.</li>
+                        <li><strong>Exposure:</strong> the initial quiet gradient is exactly zero because its exposure count is zero. Fitting can reach zero observed loss without learning quiet preference. Balanced observations add information; small samples still vary.</li>
+                        <li><strong>Design:</strong> search checks 121 discrete choices. The stepped ranking landscape is not differentiated. A numerical optimum requires testing its assumptions and omitted goals: trust, privacy, creative choice, context, and student-defined value.</li>
+                    </ol>
+                    <p>Invite students to discuss fictional scenarios rather than disclose personal screen-time habits. Ask for a prediction before each preset, then a numerical observation and a limitation. Avoid “all social media is bad,” “dopamine is a pleasure meter,” “brains run SGD,” “ChatGPT is the feed algorithm,” and “every variable reward causes addiction.” The research supports specific mechanisms and contexts, not that entire package.</p>
+                </details>
+            </div>
+        </section>
+
         <div class="speaker-bio">
             <h2 style="margin-bottom: 20px; text-align: center;">About the Speaker (Griffin Rutherford)</h2>
             <p>
@@ -1629,34 +1669,38 @@
         const statisticsWorksheet = document.getElementById('statistics-worksheet');
         const modelingWorksheet = document.getElementById('modeling-worksheet');
         const dimensionsWorksheet = document.getElementById('dimensions-worksheet');
+        const attentionWorksheet = document.getElementById('attention-worksheet');
         const originalIntro = document.getElementById('worksheet-intro').textContent.trim();
 
         function syncWorksheetMode() {
             const isStatistics = currentMode === 'statistics';
             const isModeling = currentMode === 'modeling';
             const isDimensions = currentMode === 'dimensions';
+            const isAttention = currentMode === 'attention';
             document.body.dataset.worksheetMode = currentMode;
             const theme = getComputedStyle(document.body);
             worksheetAccent = theme.getPropertyValue('--worksheet-accent').trim();
             worksheetAccentRGB = theme.getPropertyValue('--worksheet-accent-rgb').trim();
             document.body.classList.toggle('statistics-mode', isStatistics);
-            originalWorksheet.hidden = isStatistics || isModeling || isDimensions;
+            originalWorksheet.hidden = isStatistics || isModeling || isDimensions || isAttention;
             statisticsWorksheet.hidden = !isStatistics;
             modelingWorksheet.hidden = !isModeling;
             dimensionsWorksheet.hidden = !isDimensions;
+            attentionWorksheet.hidden = !isAttention;
             document.getElementById('worksheet-subtitle').textContent = isStatistics
                 ? 'Statistics at the Meteor Munch Arcade'
-                : isDimensions ? 'Bonus: a visual expedition beyond three dimensions' : isModeling ? 'Mathematical Modeling: the Pop-Up Café Challenge' : 'The Math Behind ChatGPT and AI';
+                : isAttention ? 'Bonus lecture: rage bait, brain rot, and the attention machine' : isDimensions ? 'Bonus: a visual expedition beyond three dimensions' : isModeling ? 'Mathematical Modeling: the Pop-Up Café Challenge' : 'The Math Behind ChatGPT and AI';
             document.getElementById('worksheet-intro').textContent = isStatistics
                 ? 'Help Byte turn arcade scorecards into smarter guesses—then follow the same ideas into AI. No calculus needed.'
-                : isDimensions ? 'A playful tour through slices, shadows, tesseracts, and hidden coordinates. No calculus required.' : isModeling ? 'Build a model. Test a plot twist. Pitch your café plan—then connect your predictions to AI.' : originalIntro;
+                : isAttention ? 'Follow the bowl from language-model training to feeds, feedback, and choosing what success means.' : isDimensions ? 'A playful tour through slices, shadows, tesseracts, and hidden coordinates. No calculus required.' : isModeling ? 'Build a model. Test a plot twist. Pitch your café plan—then connect your predictions to AI.' : originalIntro;
 
             window.syncWorksheetAnimations(currentMode);
             window.syncVisualLabs?.(currentMode);
             window.syncDimensions?.(currentMode);
+            window.syncAttention?.(currentMode);
             if (!isStatistics) window.pauseStatisticsWorksheet?.();
             if (!isModeling) window.pauseModelingWorksheet?.();
-            if (isDimensions) return;
+            if (isDimensions || isAttention) return;
             if (isModeling) {
                 window.renderModelingWorksheet?.();
                 return;
@@ -4234,5 +4278,8 @@
     <script src="dimensions-core.js"></script>
     <script src="dimensions-stories.js"></script>
     <script src="dimensions.js"></script>
+    <script src="attention-core.js"></script>
+    <script src="attention-stories.js"></script>
+    <script src="attention.js"></script>
 </body>
 </html>

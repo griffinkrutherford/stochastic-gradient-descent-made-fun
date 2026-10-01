@@ -826,5 +826,437 @@
     "aesthetics": 92,
     "interpretability": 96,
     "file": "dimensions-volume-phone.png"
+  },
+  {
+    "scene": "Attention Machine \u00b7 Start with the bowl. What is learning?",
+    "mode": "attention",
+    "kind": "language",
+    "view": "perspective",
+    "aesthetics": 94,
+    "interpretability": 97,
+    "file": "attention-language-perspective.png"
+  },
+  {
+    "scene": "Attention Machine \u00b7 Start with the bowl. What is learning?",
+    "mode": "attention",
+    "kind": "language",
+    "view": "reverse",
+    "aesthetics": 93,
+    "interpretability": 96,
+    "file": "attention-language-reverse.png"
+  },
+  {
+    "scene": "Attention Machine \u00b7 Start with the bowl. What is learning?",
+    "mode": "attention",
+    "kind": "language",
+    "view": "overhead",
+    "aesthetics": 94,
+    "interpretability": 97,
+    "file": "attention-language-overhead.png"
+  },
+  {
+    "scene": "Attention Machine \u00b7 Start with the bowl. What is learning?",
+    "mode": "attention",
+    "kind": "language",
+    "view": "phone",
+    "aesthetics": 92,
+    "interpretability": 96,
+    "file": "attention-language-phone.png"
+  },
+  {
+    "scene": "Attention Machine \u00b7 Start with the bowl. What is learning?",
+    "mode": "attention",
+    "kind": "language",
+    "view": "fit",
+    "aesthetics": 94,
+    "interpretability": 97,
+    "file": "attention-language-fit.png"
+  },
+  {
+    "scene": "Attention Machine \u00b7 Start with the bowl. What is learning?",
+    "mode": "attention",
+    "kind": "language",
+    "view": "reasoning-phone",
+    "aesthetics": 92,
+    "interpretability": 97,
+    "file": "attention-language-reasoning-phone.png"
+  },
+  {
+    "scene": "Attention Machine \u00b7 Downhill toward\u2026 whose goal?",
+    "mode": "attention",
+    "kind": "objective",
+    "view": "perspective",
+    "aesthetics": 94,
+    "interpretability": 97,
+    "file": "attention-objective-perspective.png"
+  },
+  {
+    "scene": "Attention Machine \u00b7 Downhill toward\u2026 whose goal?",
+    "mode": "attention",
+    "kind": "objective",
+    "view": "reverse",
+    "aesthetics": 93,
+    "interpretability": 96,
+    "file": "attention-objective-reverse.png"
+  },
+  {
+    "scene": "Attention Machine \u00b7 Downhill toward\u2026 whose goal?",
+    "mode": "attention",
+    "kind": "objective",
+    "view": "overhead",
+    "aesthetics": 94,
+    "interpretability": 97,
+    "file": "attention-objective-overhead.png"
+  },
+  {
+    "scene": "Attention Machine \u00b7 Downhill toward\u2026 whose goal?",
+    "mode": "attention",
+    "kind": "objective",
+    "view": "phone",
+    "aesthetics": 92,
+    "interpretability": 96,
+    "file": "attention-objective-phone.png"
+  },
+  {
+    "scene": "Attention Machine \u00b7 Downhill toward\u2026 whose goal?",
+    "mode": "attention",
+    "kind": "objective",
+    "view": "reflection",
+    "aesthetics": 94,
+    "interpretability": 97,
+    "file": "attention-objective-reflection.png"
+  },
+  {
+    "scene": "Attention Machine \u00b7 Downhill toward\u2026 whose goal?",
+    "mode": "attention",
+    "kind": "objective",
+    "view": "reasoning-phone",
+    "aesthetics": 92,
+    "interpretability": 97,
+    "file": "attention-objective-reasoning-phone.png"
+  },
+  {
+    "scene": "Attention Machine \u00b7 A hate-watch still leaves a signal",
+    "mode": "attention",
+    "kind": "ranking",
+    "view": "perspective",
+    "aesthetics": 94,
+    "interpretability": 97,
+    "file": "attention-ranking-perspective.png"
+  },
+  {
+    "scene": "Attention Machine \u00b7 A hate-watch still leaves a signal",
+    "mode": "attention",
+    "kind": "ranking",
+    "view": "reverse",
+    "aesthetics": 93,
+    "interpretability": 96,
+    "file": "attention-ranking-reverse.png"
+  },
+  {
+    "scene": "Attention Machine \u00b7 A hate-watch still leaves a signal",
+    "mode": "attention",
+    "kind": "ranking",
+    "view": "overhead",
+    "aesthetics": 93,
+    "interpretability": 96,
+    "file": "attention-ranking-overhead.png"
+  },
+  {
+    "scene": "Attention Machine \u00b7 A hate-watch still leaves a signal",
+    "mode": "attention",
+    "kind": "ranking",
+    "view": "phone",
+    "aesthetics": 92,
+    "interpretability": 95,
+    "file": "attention-ranking-phone.png"
+  },
+  {
+    "scene": "Attention Machine \u00b7 A hate-watch still leaves a signal",
+    "mode": "attention",
+    "kind": "ranking",
+    "view": "reflection",
+    "aesthetics": 94,
+    "interpretability": 97,
+    "file": "attention-ranking-reflection.png"
+  },
+  {
+    "scene": "Attention Machine \u00b7 A hate-watch still leaves a signal",
+    "mode": "attention",
+    "kind": "ranking",
+    "view": "reasoning-phone",
+    "aesthetics": 92,
+    "interpretability": 97,
+    "file": "attention-ranking-reasoning-phone.png"
+  },
+  {
+    "scene": "Attention Machine \u00b7 When approval trains the loop",
+    "mode": "attention",
+    "kind": "outrage",
+    "view": "perspective",
+    "aesthetics": 93,
+    "interpretability": 96,
+    "file": "attention-outrage-perspective.png"
+  },
+  {
+    "scene": "Attention Machine \u00b7 When approval trains the loop",
+    "mode": "attention",
+    "kind": "outrage",
+    "view": "reverse",
+    "aesthetics": 94,
+    "interpretability": 97,
+    "file": "attention-outrage-reverse.png"
+  },
+  {
+    "scene": "Attention Machine \u00b7 When approval trains the loop",
+    "mode": "attention",
+    "kind": "outrage",
+    "view": "overhead",
+    "aesthetics": 94,
+    "interpretability": 97,
+    "file": "attention-outrage-overhead.png"
+  },
+  {
+    "scene": "Attention Machine \u00b7 When approval trains the loop",
+    "mode": "attention",
+    "kind": "outrage",
+    "view": "phone",
+    "aesthetics": 92,
+    "interpretability": 96,
+    "file": "attention-outrage-phone.png"
+  },
+  {
+    "scene": "Attention Machine \u00b7 When approval trains the loop",
+    "mode": "attention",
+    "kind": "outrage",
+    "view": "neutral",
+    "aesthetics": 93,
+    "interpretability": 97,
+    "file": "attention-outrage-neutral.png"
+  },
+  {
+    "scene": "Attention Machine \u00b7 When approval trains the loop",
+    "mode": "attention",
+    "kind": "outrage",
+    "view": "reasoning-phone",
+    "aesthetics": 92,
+    "interpretability": 97,
+    "file": "attention-outrage-reasoning-phone.png"
+  },
+  {
+    "scene": "Attention Machine \u00b7 The surprise lives in the gap",
+    "mode": "attention",
+    "kind": "surprise",
+    "view": "perspective",
+    "aesthetics": 94,
+    "interpretability": 97,
+    "file": "attention-surprise-perspective.png"
+  },
+  {
+    "scene": "Attention Machine \u00b7 The surprise lives in the gap",
+    "mode": "attention",
+    "kind": "surprise",
+    "view": "reverse",
+    "aesthetics": 94,
+    "interpretability": 97,
+    "file": "attention-surprise-reverse.png"
+  },
+  {
+    "scene": "Attention Machine \u00b7 The surprise lives in the gap",
+    "mode": "attention",
+    "kind": "surprise",
+    "view": "overhead",
+    "aesthetics": 93,
+    "interpretability": 96,
+    "file": "attention-surprise-overhead.png"
+  },
+  {
+    "scene": "Attention Machine \u00b7 The surprise lives in the gap",
+    "mode": "attention",
+    "kind": "surprise",
+    "view": "phone",
+    "aesthetics": 92,
+    "interpretability": 95,
+    "file": "attention-surprise-phone.png"
+  },
+  {
+    "scene": "Attention Machine \u00b7 The surprise lives in the gap",
+    "mode": "attention",
+    "kind": "surprise",
+    "view": "unrevealed",
+    "aesthetics": 93,
+    "interpretability": 97,
+    "file": "attention-surprise-unrevealed.png"
+  },
+  {
+    "scene": "Attention Machine \u00b7 The surprise lives in the gap",
+    "mode": "attention",
+    "kind": "surprise",
+    "view": "reasoning-phone",
+    "aesthetics": 92,
+    "interpretability": 97,
+    "file": "attention-surprise-reasoning-phone.png"
+  },
+  {
+    "scene": "Attention Machine \u00b7 A feed can remove the finish line",
+    "mode": "attention",
+    "kind": "stopping",
+    "view": "perspective",
+    "aesthetics": 94,
+    "interpretability": 97,
+    "file": "attention-stopping-perspective.png"
+  },
+  {
+    "scene": "Attention Machine \u00b7 A feed can remove the finish line",
+    "mode": "attention",
+    "kind": "stopping",
+    "view": "reverse",
+    "aesthetics": 93,
+    "interpretability": 96,
+    "file": "attention-stopping-reverse.png"
+  },
+  {
+    "scene": "Attention Machine \u00b7 A feed can remove the finish line",
+    "mode": "attention",
+    "kind": "stopping",
+    "view": "overhead",
+    "aesthetics": 93,
+    "interpretability": 96,
+    "file": "attention-stopping-overhead.png"
+  },
+  {
+    "scene": "Attention Machine \u00b7 A feed can remove the finish line",
+    "mode": "attention",
+    "kind": "stopping",
+    "view": "phone",
+    "aesthetics": 92,
+    "interpretability": 95,
+    "file": "attention-stopping-phone.png"
+  },
+  {
+    "scene": "Attention Machine \u00b7 A feed can remove the finish line",
+    "mode": "attention",
+    "kind": "stopping",
+    "view": "no-friction",
+    "aesthetics": 93,
+    "interpretability": 97,
+    "file": "attention-stopping-no-friction.png"
+  },
+  {
+    "scene": "Attention Machine \u00b7 A feed can remove the finish line",
+    "mode": "attention",
+    "kind": "stopping",
+    "view": "reasoning-phone",
+    "aesthetics": 92,
+    "interpretability": 97,
+    "file": "attention-stopping-reasoning-phone.png"
+  },
+  {
+    "scene": "Attention Machine \u00b7 The feed teaches the feed",
+    "mode": "attention",
+    "kind": "exposure",
+    "view": "perspective",
+    "aesthetics": 94,
+    "interpretability": 98,
+    "file": "attention-exposure-perspective.png"
+  },
+  {
+    "scene": "Attention Machine \u00b7 The feed teaches the feed",
+    "mode": "attention",
+    "kind": "exposure",
+    "view": "reverse",
+    "aesthetics": 93,
+    "interpretability": 97,
+    "file": "attention-exposure-reverse.png"
+  },
+  {
+    "scene": "Attention Machine \u00b7 The feed teaches the feed",
+    "mode": "attention",
+    "kind": "exposure",
+    "view": "overhead",
+    "aesthetics": 94,
+    "interpretability": 98,
+    "file": "attention-exposure-overhead.png"
+  },
+  {
+    "scene": "Attention Machine \u00b7 The feed teaches the feed",
+    "mode": "attention",
+    "kind": "exposure",
+    "view": "phone",
+    "aesthetics": 92,
+    "interpretability": 97,
+    "file": "attention-exposure-phone.png"
+  },
+  {
+    "scene": "Attention Machine \u00b7 The feed teaches the feed",
+    "mode": "attention",
+    "kind": "exposure",
+    "view": "balanced",
+    "aesthetics": 94,
+    "interpretability": 98,
+    "file": "attention-exposure-balanced.png"
+  },
+  {
+    "scene": "Attention Machine \u00b7 The feed teaches the feed",
+    "mode": "attention",
+    "kind": "exposure",
+    "view": "reasoning-phone",
+    "aesthetics": 92,
+    "interpretability": 97,
+    "file": "attention-exposure-reasoning-phone.png"
+  },
+  {
+    "scene": "Attention Machine \u00b7 Choose the bowl before choosing the downhill step",
+    "mode": "attention",
+    "kind": "redesign",
+    "view": "perspective",
+    "aesthetics": 94,
+    "interpretability": 97,
+    "file": "attention-redesign-perspective.png"
+  },
+  {
+    "scene": "Attention Machine \u00b7 Choose the bowl before choosing the downhill step",
+    "mode": "attention",
+    "kind": "redesign",
+    "view": "reverse",
+    "aesthetics": 93,
+    "interpretability": 96,
+    "file": "attention-redesign-reverse.png"
+  },
+  {
+    "scene": "Attention Machine \u00b7 Choose the bowl before choosing the downhill step",
+    "mode": "attention",
+    "kind": "redesign",
+    "view": "overhead",
+    "aesthetics": 94,
+    "interpretability": 97,
+    "file": "attention-redesign-overhead.png"
+  },
+  {
+    "scene": "Attention Machine \u00b7 Choose the bowl before choosing the downhill step",
+    "mode": "attention",
+    "kind": "redesign",
+    "view": "phone",
+    "aesthetics": 92,
+    "interpretability": 96,
+    "file": "attention-redesign-phone.png"
+  },
+  {
+    "scene": "Attention Machine \u00b7 Choose the bowl before choosing the downhill step",
+    "mode": "attention",
+    "kind": "redesign",
+    "view": "best",
+    "aesthetics": 94,
+    "interpretability": 97,
+    "file": "attention-redesign-best.png"
+  },
+  {
+    "scene": "Attention Machine \u00b7 Choose the bowl before choosing the downhill step",
+    "mode": "attention",
+    "kind": "redesign",
+    "view": "reasoning-phone",
+    "aesthetics": 92,
+    "interpretability": 97,
+    "file": "attention-redesign-reasoning-phone.png"
   }
 ]

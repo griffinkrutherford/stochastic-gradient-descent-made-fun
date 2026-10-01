@@ -1,6 +1,6 @@
 # Worksheet visual review
 
-Original lessons reviewed September 30, 2026; Beyond 3D refreshed October 1, 2026. 92 reviewed screenshots: 48 original lesson views and 44 Beyond 3D views. Every reviewed view meets the 90/100 threshold for both criteria.
+Original lessons reviewed September 30, 2026; Beyond 3D refreshed October 1, 2026. 140 reviewed screenshots: 48 original lesson views, 44 Beyond 3D views, and 48 Attention Machine views. Every reviewed view meets the 90/100 threshold for both criteria.
 
 Scores are **subjective agent assessments**, not independent student/teacher validation. A 90-point view has readable controls and mathematical explanation, identifiable reference/current states, intentional framing, and no clipping or label collisions that obscure the lesson. Minor depth occlusion is acceptable when a labeled inset and numeric summary preserve the information.
 
@@ -50,3 +50,18 @@ Regenerate early-scene screenshots with `tests/visual-labs.browser.cjs` and bowl
 | A barrier depends on the allowed space | [94/97](dimensions-escape-perspective.png) | [93/97](dimensions-escape-reverse.png) | [93/96](dimensions-escape-overhead.png) | [93/97](dimensions-escape-phone.png) |
 
 The refreshed review also includes eight expanded-reasoning phone views and four volume experiment states. See [the bonus review notes](DIMENSIONS_REVIEW.md) for scores, corrections, and validation.
+
+## Attention Machine bonus lecture
+
+| Studio | Perspective | Reverse | Overhead | Phone |
+| --- | --- | --- | --- | --- |
+| Start with the bowl. What is learning? | [94/97](attention-language-perspective.png) | [93/96](attention-language-reverse.png) | [94/97](attention-language-overhead.png) | [92/96](attention-language-phone.png) |
+| Downhill toward… whose goal? | [94/97](attention-objective-perspective.png) | [93/96](attention-objective-reverse.png) | [94/97](attention-objective-overhead.png) | [92/96](attention-objective-phone.png) |
+| A hate-watch still leaves a signal | [94/97](attention-ranking-perspective.png) | [93/96](attention-ranking-reverse.png) | [93/96](attention-ranking-overhead.png) | [92/95](attention-ranking-phone.png) |
+| When approval trains the loop | [93/96](attention-outrage-perspective.png) | [94/97](attention-outrage-reverse.png) | [94/97](attention-outrage-overhead.png) | [92/96](attention-outrage-phone.png) |
+| The surprise lives in the gap | [94/97](attention-surprise-perspective.png) | [94/97](attention-surprise-reverse.png) | [93/96](attention-surprise-overhead.png) | [92/95](attention-surprise-phone.png) |
+| A feed can remove the finish line | [94/97](attention-stopping-perspective.png) | [93/96](attention-stopping-reverse.png) | [93/96](attention-stopping-overhead.png) | [92/95](attention-stopping-phone.png) |
+| The feed teaches the feed | [94/98](attention-exposure-perspective.png) | [93/97](attention-exposure-reverse.png) | [94/98](attention-exposure-overhead.png) | [92/97](attention-exposure-phone.png) |
+| Choose the bowl before choosing the downhill step | [94/97](attention-redesign-perspective.png) | [93/96](attention-redesign-reverse.png) | [94/97](attention-redesign-overhead.png) | [92/96](attention-redesign-phone.png) |
+
+Eight additional simulation states and eight expanded-reasoning phone views are included. See [the attention review](ATTENTION_REVIEW.md) for their scores, corrections, research boundaries, and validation.

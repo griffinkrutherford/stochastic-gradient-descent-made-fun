@@ -1,0 +1,53 @@
+body[data-worksheet-mode="attention"] { --worksheet-accent:#ffaa77; --worksheet-accent-rgb:255,170,119; --worksheet-panel:#131d2a; --worksheet-border:#516783; background:radial-gradient(ellipse at top,#17384c,#130f24 65%); }
+.mode-toggle label[for="mode-attention"] { border-color:#ffaa77; background:linear-gradient(120deg,#432d42,#183b46); }
+body[data-worksheet-mode="attention"] .mode-toggle input:checked + label { background:linear-gradient(110deg,#ffb784,#ffd481,#72e6ce); color:#14232c; }
+.att-hero,.att-ending { border:1px solid #657e94; border-radius:22px; padding:30px; margin:24px 0; background:linear-gradient(130deg,#173748,#252037); }
+.att-kicker { color:#9ee5df; font:700 12px/1.6 system-ui,sans-serif; letter-spacing:.14em; text-transform:uppercase; margin-bottom:12px; }
+.att-hero h2 { font-size:clamp(32px,5vw,52px); line-height:1.15; color:#ffe3b0; margin-bottom:20px; }
+.att-hero p,.att-card p,.att-ending p { font-size:18px; line-height:1.75; color:#e0e8ee; }
+.att-chips { display:flex; flex-wrap:wrap; gap:8px; margin-top:22px; }
+.att-chips a { border:1px solid #57748b; border-radius:20px; padding:6px 12px; color:#d9f5ff; font:600 12px/1.6 system-ui,sans-serif; text-decoration:none; }
+.att-card { --att-color:#72e6ce; border:1px solid color-mix(in srgb,var(--att-color) 50%,#294253); background:linear-gradient(145deg,#111b2a,#1c1c30); border-radius:22px; padding:30px; margin:32px 0; }
+.att-card h3 { color:#ffedc9; font-size:clamp(26px,3.3vw,36px); line-height:1.2; margin:0 0 18px; }
+.att-principle { border-left:3px solid var(--att-color); padding:12px 16px; background:#0b1725; margin:20px 0; color:#ddf8ff !important; }
+.att-stage { border:1px solid #536e8c; border-radius:14px; overflow:hidden; background:#071320; margin:24px 0 16px; }
+.att-stage canvas { display:block; width:100%; height:450px; touch-action:pan-y; }
+.att-stage canvas:focus-visible { outline:3px solid #ffd481; outline-offset:-5px; }
+.att-legend,.att-actions { display:flex; flex-wrap:wrap; gap:10px 18px; margin:16px 0; font:12px/1.6 system-ui,sans-serif; color:#e7efff; }
+.att-legend span::before { content:''; display:inline-block; width:8px; height:8px; background:var(--swatch); border-radius:50%; margin-right:7px; }
+.att-controls { display:grid; grid-template-columns:repeat(auto-fit,minmax(190px,1fr)); gap:14px; margin:20px 0; }
+.att-controls label { display:flex; flex-direction:column; gap:6px; font:600 13px/1.6 system-ui,sans-serif; color:#e2ebf5; min-width:0; }
+.att-controls output { color:var(--att-color); font-variant-numeric:tabular-nums; }
+.att-controls input { width:100%; accent-color:var(--att-color); min-height:36px; background:transparent; padding:8px 0; border:0; }
+.att-controls select { width:100%; background:#101d2c; border:1px solid #55738a; color:white; border-radius:8px; padding:10px; font:13px/1.5 system-ui,sans-serif; }
+.att-card button,.att-ending button { margin:0; min-height:42px; padding:10px 14px; border:1px solid #607f92; border-radius:9px; box-shadow:none; background:#162b3b; color:#e6f6ff; font:600 12px/1.5 system-ui,sans-serif; }
+.att-card button:hover,.att-card button[aria-pressed="true"] { background:#244a58; border-color:var(--att-color); }
+.att-summary { border-left:3px solid var(--att-color); background:#1f2d40; padding:14px 16px; border-radius:0 12px 12px 0; margin:20px 0 12px; font-variant-numeric:tabular-nums; }
+.att-note,.att-evidence { font-size:15px !important; line-height:1.75; color:#b9c6d7 !important; }
+.att-card a,.att-ending a { color:#9fe1fa; }
+.att-prediction { border:0; border-top:1px solid #556b7e; padding:16px 0 0; margin:20px 0; }
+.att-prediction legend { color:#ffe0a1; font:700 15px/1.7 system-ui,sans-serif; padding-right:12px; }
+.att-prediction .att-actions { margin:12px 0 0; }
+.att-feedback:empty { display:none; }
+.att-reasoning { border:1px solid #526b83; background:#0d1725; border-radius:12px; margin-top:20px; padding:0 16px; }
+.att-reasoning summary { cursor:pointer; padding:14px 0; color:#dff0ff; font:600 15px/1.6 system-ui,sans-serif; }
+.att-reasoning ol { padding-left:26px; margin:12px 0 22px; }
+.att-reasoning li { margin:20px 0; color:#ffdd9d; font-size:18px; line-height:1.6; }
+.att-reasoning li p { font-size:16px; margin:8px 0; }
+.att-prompt { border-top:1px dashed #536b7e; padding-top:16px; color:#ffdc9e !important; }
+.att-data { width:100%; border-collapse:collapse; font:13px/1.7 system-ui,sans-serif; margin-top:18px; }
+.att-data th,.att-data td { text-align:left; border-bottom:1px solid #425668; padding:9px 7px; }
+.att-data caption { text-align:left; color:#d9edf8; font-weight:600; padding:10px 0; }
+.att-meters { display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:12px; margin:20px 0; }
+.att-meter { padding:14px; border:1px solid #4a697d; border-radius:10px; background:#0d1c2a; font:13px/1.7 system-ui,sans-serif; }
+.att-meter strong { display:block; color:#ffe0a4; font-size:22px; }
+.att-ending h3 { color:#ffe0a1; margin:16px 0; }
+.att-ending textarea { width:100%; min-height:140px; resize:vertical; background:#0b1827; border:1px solid #5c798e; border-radius:10px; color:#f0f7ff; font:16px/1.7 system-ui,sans-serif; padding:14px; margin:14px 0; }
+.att-ending label { color:#dfefff; font:600 15px/1.8 system-ui,sans-serif; }
+@media(max-width:600px) { body[data-worksheet-mode="attention"] { padding:12px; } body[data-worksheet-mode="attention"] .container { padding:16px; } .att-card { padding:18px 12px; } .att-hero,.att-ending { padding:24px 16px; } .att-stage canvas { height:570px; } .att-card p { font-size:16px; } .att-meters { grid-template-columns:1fr; } .att-data { font-size:11px; } .att-data th,.att-data td { padding:8px 4px; } }
+@media(prefers-reduced-motion:reduce) { .att-card *, .att-hero * { transition:none !important; } }
+@media print { body[data-worksheet-mode="attention"],body[data-worksheet-mode="attention"] .container { background:white; color:black; } body[data-worksheet-mode="attention"] :is(.header,.home-link,.speaker-bio,.footer) { display:none; } #attention-worksheet :is(.att-stage,.att-controls,.att-actions,.att-chips,.att-prediction button,.att-meters) { display:none; } #attention-worksheet :is(.att-hero,.att-card,.att-ending,.att-summary,.att-principle,.att-reasoning) { background:white; box-shadow:none; color:black; border-color:#888; break-inside:avoid; } #attention-worksheet :is(h2,h3,p,li,summary,a,label,.att-kicker,textarea) { color:black !important; } }
+
+.att-example-rows { display:flex; flex-wrap:wrap; gap:8px; margin:18px 0; font:12px/1.6 system-ui,sans-serif; color:#d9edf7; }
+.att-example-rows span { padding:5px 9px; border:1px solid #4c647a; border-radius:7px; background:#112337; }
+.att-example-rows .is-selected { border:2px solid #ffd481; padding:4px 8px; color:#ffe1a2; background:#333525; }
