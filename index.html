@@ -669,6 +669,7 @@
     <link rel="stylesheet" href="worksheet-practice.css">
     <link rel="stylesheet" href="modeling.css">
     <link rel="stylesheet" href="visual-labs.css">
+    <link rel="stylesheet" href="dimensions.css">
 </head>
 <body>
     <a class="home-link" href="https://griffinrutherford.com/">← Back to Homepage</a>
@@ -689,6 +690,8 @@
                 <label for="mode-statistics">Statistics</label>
                 <input type="radio" id="mode-modeling" name="answer-mode" value="modeling">
                 <label for="mode-modeling">Modeling</label>
+                <input type="radio" id="mode-dimensions" name="answer-mode" value="dimensions">
+                <label for="mode-dimensions">Bonus · Beyond 3D</label>
             </div>
             <div class="shared-animation-controls">
                 <button type="button" id="shared-animations-toggle" aria-pressed="false">Pause bowl and word animations</button>
@@ -1382,8 +1385,8 @@
 
         <section id="modeling-worksheet" class="worksheet-panel" aria-labelledby="modeling-title" hidden>
             <div class="model-intro">
-                <div class="model-kicker">Santa Fe Prep · Grades 11–12 · Integrated III → real decisions</div>
-                <h2 id="modeling-title">The Prep Pop-Up Challenge ☕</h2>
+                <div class="model-kicker">Grades 11–12 · Integrated III → real decisions</div>
+                <h2 id="modeling-title">The Pop-Up Café Challenge ☕</h2>
                 <p>Arts night is coming. Your team gets one hour to run a pop-up café. Byte, your enthusiastic robot intern, suggests: “Charge $100 a cup. Problem solved.” You suspect Byte needs a better model.</p>
                 <p><strong>Your mission:</strong> choose a price that earns money for the event, keeps the café welcoming, and avoids a mountain of leftovers. Build a model, test its predictions, then pitch your plan.</p>
                 <p class="model-mission">Work in pairs: one person is the model builder, the other is the skeptical event organizer. Swap jobs halfway through. All events, prices, and data below are fictional—not school records.</p>
@@ -1532,10 +1535,30 @@
         </section>
 
         <!-- Speaker Bio -->
+        <section id="dimensions-worksheet" class="worksheet-panel" aria-labelledby="dimensions-title" hidden>
+            <div class="dim-hero">
+                <div class="dim-kicker">Bonus expedition · no homework · just curiosity</div>
+                <h2 id="dimensions-title">One more direction.<span>A whole new world.</span></h2>
+                <p>We live in three spatial dimensions. Mathematics can go further. Borrow the eyes of a Flatlander, slice through an invisible world, and turn a cube in a direction your hands cannot point.</p>
+                <p class="dim-note">Eight interactive stops. Move the sliders, drag the diagrams, and follow the analogies. These are mathematical spaces and projections—not a claim that we can travel through extra physical dimensions.</p>
+                <nav class="dim-chips" aria-label="Beyond 3D stops">
+                    <a href="#dim-ladder">01 · Build a dimension</a><a href="#dim-slice">02 · Flatland</a><a href="#dim-shadow">03 · Shadows</a><a href="#dim-tesseract">04 · The tesseract</a>
+                    <a href="#dim-net">05 · Unfold it</a><a href="#dim-hypersphere">06 · A 4D visitor</a><a href="#dim-features">07 · Six coordinates</a><a href="#dim-escape">08 · The extra-direction trick</a>
+                </nav>
+            </div>
+            <div id="dimensions-labs"></div>
+            <div class="dim-outro">
+                <h3>You do not have to picture everything to understand it.</h3>
+                <p>A slice reveals a section. A shadow forgets information. A net opens a boundary. Coordinates keep track of the whole object—even when a drawing cannot.</p>
+                <p>That is useful in AI, too: a model can work with hundreds of features without drawing a hundred-dimensional room. Geometry follows the coordinates; our pictures are carefully chosen windows.</p>
+                <p class="dim-note">Want to keep exploring? <a href="https://mathworld.wolfram.com/Tesseract.html">Tesseracts</a> · <a href="https://mathworld.wolfram.com/Hypersphere.html">Hyperspheres</a> · <a href="https://mathworld.wolfram.com/Hypercube.html">Hypercube counts</a> from Wolfram MathWorld.</p>
+            </div>
+        </section>
+
         <div class="speaker-bio">
             <h2 style="margin-bottom: 20px; text-align: center;">About the Speaker (Griffin Rutherford)</h2>
             <p>
-                I am a graduate of Santa Fe Prep and a Bachelor and Master of Science in Computer Science Graduate from Colorado School of Mines. People say I have "golden retriever energy", and I love being physically active. I am an avid weightlifter, trail cyclist, snowboarder, runner, and more. I moved back to Santa Fe to work a remote position as an AI Research Engineer. I was a member of the Alpha Tau Omega fraternity as Philanthropy Chair, and I lived in the frat house basement for two years (at the expense of my GPA). I also love to sing, write, and enjoy long conversations with friends and family.
+                I hold a Bachelor and Master of Science in Computer Science from Colorado School of Mines. People say I have "golden retriever energy", and I love being physically active. I am an avid weightlifter, trail cyclist, snowboarder, runner, and more. I moved back to Santa Fe to work a remote position as an AI Research Engineer. I was a member of the Alpha Tau Omega fraternity as Philanthropy Chair, and I lived in the frat house basement for two years (at the expense of my GPA). I also love to sing, write, and enjoy long conversations with friends and family.
             </p>
             <div class="ig-post">
                 <a href="https://www.instagram.com/p/Cvgq7rvOr7U/?img_index=1" target="_blank" rel="noopener noreferrer">
@@ -1595,30 +1618,35 @@
         const originalWorksheet = document.getElementById('original-worksheet');
         const statisticsWorksheet = document.getElementById('statistics-worksheet');
         const modelingWorksheet = document.getElementById('modeling-worksheet');
+        const dimensionsWorksheet = document.getElementById('dimensions-worksheet');
         const originalIntro = document.getElementById('worksheet-intro').textContent.trim();
 
         function syncWorksheetMode() {
             const isStatistics = currentMode === 'statistics';
             const isModeling = currentMode === 'modeling';
+            const isDimensions = currentMode === 'dimensions';
             document.body.dataset.worksheetMode = currentMode;
             const theme = getComputedStyle(document.body);
             worksheetAccent = theme.getPropertyValue('--worksheet-accent').trim();
             worksheetAccentRGB = theme.getPropertyValue('--worksheet-accent-rgb').trim();
             document.body.classList.toggle('statistics-mode', isStatistics);
-            originalWorksheet.hidden = isStatistics || isModeling;
+            originalWorksheet.hidden = isStatistics || isModeling || isDimensions;
             statisticsWorksheet.hidden = !isStatistics;
             modelingWorksheet.hidden = !isModeling;
+            dimensionsWorksheet.hidden = !isDimensions;
             document.getElementById('worksheet-subtitle').textContent = isStatistics
                 ? 'Statistics at the Meteor Munch Arcade'
-                : isModeling ? 'Mathematical Modeling: the Prep Pop-Up Challenge' : 'The Math Behind ChatGPT and AI';
+                : isDimensions ? 'Bonus: a visual expedition beyond three dimensions' : isModeling ? 'Mathematical Modeling: the Pop-Up Café Challenge' : 'The Math Behind ChatGPT and AI';
             document.getElementById('worksheet-intro').textContent = isStatistics
                 ? 'Help Byte turn arcade scorecards into smarter guesses—then follow the same ideas into AI. No calculus needed.'
-                : isModeling ? 'Build a model. Test a plot twist. Pitch your café plan—then connect your predictions to AI.' : originalIntro;
+                : isDimensions ? 'A playful tour through slices, shadows, tesseracts, and hidden coordinates. No calculus required.' : isModeling ? 'Build a model. Test a plot twist. Pitch your café plan—then connect your predictions to AI.' : originalIntro;
 
             window.syncWorksheetAnimations(currentMode);
             window.syncVisualLabs?.(currentMode);
+            window.syncDimensions?.(currentMode);
             if (!isStatistics) window.pauseStatisticsWorksheet?.();
             if (!isModeling) window.pauseModelingWorksheet?.();
+            if (isDimensions) return;
             if (isModeling) {
                 window.renderModelingWorksheet?.();
                 return;
@@ -4193,5 +4221,7 @@
     <script src="modeling-core.js"></script>
     <script src="modeling.js"></script>
     <script src="visual-labs.js"></script>
+    <script src="dimensions-core.js"></script>
+    <script src="dimensions.js"></script>
 </body>
 </html>

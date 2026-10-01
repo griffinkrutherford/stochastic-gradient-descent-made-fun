@@ -1,0 +1,68 @@
+body[data-worksheet-mode="dimensions"] {
+    --worksheet-accent: #ffcc70;
+    --worksheet-accent-rgb: 255, 204, 112;
+    --worksheet-button-ink: #160b25;
+    --worksheet-panel: #120e24;
+    background: radial-gradient(ellipse at top, #25113d, #060810 65%);
+}
+body[data-worksheet-mode="dimensions"] .home-link { position: absolute; }
+.mode-toggle label[for="mode-dimensions"] { border-color: #ffcc70; background: linear-gradient(120deg, #452040, #152c49); }
+body[data-worksheet-mode="dimensions"] .mode-toggle input:checked + label { background: linear-gradient(100deg, #ffb66f, #f091ff, #68e4ff); color: #140d25; }
+.dim-hero {
+    position: relative; overflow: hidden; padding: clamp(24px, 5vw, 56px); margin: 24px 0 30px;
+    border: 1px solid #8069b4; border-radius: 24px;
+    background: radial-gradient(ellipse at 90% 0, #54255699, transparent 50%), radial-gradient(ellipse at 0 100%, #14516c99, transparent 55%), #140f2b;
+}
+.dim-hero::after { content: ""; position: absolute; width: 290px; height: 290px; right: -125px; top: -130px; border: 28px solid #cf75ff1a; border-radius: 50%; box-shadow: 0 0 0 35px #66e4ff0d, 0 0 0 80px #ffc56a0a; pointer-events: none; }
+#dimensions-worksheet { --dim-ink: #e9eaff; }
+.dim-kicker { font-family: system-ui, sans-serif; font-size: 12px; letter-spacing: .14em; text-transform: uppercase; font-weight: 700; color: #ffd77f; }
+.dim-hero h2 { color: #fff; font-size: clamp(34px, 5vw, 58px); line-height: 1.1; max-width: 700px; margin: 16px 0 22px; letter-spacing: -.025em; }
+.dim-hero h2 span { display: block; color: #88e6ff; background: linear-gradient(90deg,#66e4ff,#b9a1ff,#ff94cf,#ffd77f); background-clip: text; -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+.dim-hero p { max-width: 750px; color: #e0dbed; }
+.dim-chips { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 24px; }
+.dim-chips a { color: #ece7ff; text-decoration: none; padding: 6px 13px; border: 1px solid #7d668f; border-radius: 999px; background: #110d2280; font: 600 12px/1.5 system-ui,sans-serif; }
+.dim-chips a:hover { background: #343055; border-color: #a2e8ff; }
+.dim-card { --dim-color: #68e4ff; margin: 30px 0; padding: clamp(16px, 3vw, 30px); border: 1px solid color-mix(in srgb,var(--dim-color) 45%,#2b2549); border-radius: 22px; background: radial-gradient(ellipse at 100% 0,color-mix(in srgb,var(--dim-color) 12%,transparent),transparent 55%),#111023; scroll-margin-top: 20px; }
+.dim-card h3 { color: #f9f4ff; font-size: clamp(25px, 3vw, 35px); line-height: 1.25; margin: 8px 0 14px; }
+.dim-card > p { color: #dfdbec; }
+.dim-card .dim-kicker { color: var(--dim-color); }
+.dim-stage { position: relative; margin: 22px 0 16px; border: 1px solid #49405f; border-radius: 16px; overflow: hidden; background: #080c1a; }
+.dim-stage canvas { display: block; width: 100%; height: clamp(310px, 40vw, 440px); border: 0; margin: 0; border-radius: 0; touch-action: pan-y; }
+.dim-stage canvas:focus-visible { outline: 3px solid var(--dim-color); outline-offset: -5px; }
+.dim-card :is(button,select,input,a):focus-visible, .dim-chips a:focus-visible { outline: 3px solid #ffdb85; outline-offset: 4px; }
+.dim-legend { display: flex; flex-wrap: wrap; gap: 8px 22px; color: #d7d4e7; font: 12px/1.6 system-ui,sans-serif; }
+.dim-legend span::before { content: ""; display: inline-block; background: var(--swatch,var(--dim-color)); width: 8px; height: 8px; border-radius: 50%; margin-right: 7px; }
+.dim-controls { display: grid; grid-template-columns: repeat(auto-fit,minmax(min(100%,215px),1fr)); gap: 14px; margin: 20px 0; }
+.dim-controls label { display: flex; flex-direction: column; gap: 5px; font: 600 13px/1.6 system-ui,sans-serif; color: #e7e2f2; min-width: 0; }
+.dim-controls output { color: var(--dim-color); font-variant-numeric: tabular-nums; }
+.dim-controls input[type="range"] { width: 100%; padding: 8px 0; margin: 0; border: 0; accent-color: var(--dim-color); min-height: 36px; background: transparent; }
+.dim-controls select { max-width: 100%; width: 100%; font: 13px/1.5 system-ui,sans-serif; padding: 10px; background: #19162e; border: 1px solid #716086; color: #fff; border-radius: 8px; }
+.dim-views { display: flex; flex-wrap: wrap; gap: 8px; margin: 14px 0; }
+.dim-card button { margin: 0; padding: 10px 14px; min-height: 42px; background: #1a1833; color: #f2eaff; border: 1px solid #786393; border-radius: 9px; box-shadow: none; font: 600 12px/1.4 system-ui,sans-serif; }
+.dim-card button:hover, .dim-card button[aria-pressed="true"] { background: color-mix(in srgb,var(--dim-color) 22%,#171327); border-color: var(--dim-color); }
+.dim-summary { margin: 16px 0 0; padding: 14px 16px; border-left: 3px solid var(--dim-color); border-radius: 0 10px 10px 0; background: #23213c; color: #f5edff !important; font-size: 17px; line-height: 1.65; font-variant-numeric: tabular-nums; }
+.dim-note { margin-top: 14px; font-size: 15px; line-height: 1.7; color: #bdb9d0 !important; }
+.dim-prompt { margin-top: 20px; padding-top: 14px; border-top: 1px dashed #625272; color: #ffdd93 !important; font-size: 17px; }
+.dim-outro { border: 1px solid #705c9a; border-radius: 20px; padding: 26px; background: linear-gradient(115deg,#193448,#352344); }
+.dim-outro h3 { color: #ffdba3; margin-bottom: 12px; }
+.dim-outro a { color: #a3edff; }
+@media(max-width:600px) {
+    body[data-worksheet-mode="dimensions"] { padding: 12px; }
+    body[data-worksheet-mode="dimensions"] .container { padding: 16px; }
+    .dim-hero { padding: 22px 18px; }
+    .dim-card { padding: 16px 12px; }
+    .dim-stage canvas { height: 390px; }
+    #dim-shadow-canvas { height: 460px; }
+    #dim-net-canvas { height: 540px; }
+    #dim-features-canvas { height: 540px; }
+    .dim-summary { font-size: 16px; padding: 12px; }
+    .dim-outro { padding: 20px 16px; }
+}
+@media print {
+    body[data-worksheet-mode="dimensions"], body[data-worksheet-mode="dimensions"] .container { background: white; color: black; }
+    body[data-worksheet-mode="dimensions"] :is(.header,.home-link,.speaker-bio,.footer) { display: none; }
+    #dimensions-worksheet :is(.dim-stage,.dim-controls,.dim-views,.dim-chips) { display: none; }
+    #dimensions-worksheet :is(.dim-hero,.dim-card,.dim-outro,.dim-summary) { background: white; color: black !important; box-shadow: none; border-color: #777; break-inside: avoid; }
+    #dimensions-worksheet :is(h2,h3,p,.dim-kicker,.dim-note,.dim-prompt,a) { color: black !important; }
+    .dim-hero h2 span { -webkit-text-fill-color: black; background: none; }
+}
