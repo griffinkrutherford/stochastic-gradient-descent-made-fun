@@ -1,6 +1,6 @@
 # Worksheet visual review
 
-Reviewed September 30, 2026. 80 reviewed screenshots: 48 original lesson views and 32 Beyond 3D bonus views. Every reviewed view meets the 90/100 threshold for both criteria.
+Original lessons reviewed September 30, 2026; Beyond 3D refreshed October 1, 2026. 92 reviewed screenshots: 48 original lesson views and 44 Beyond 3D views. Every reviewed view meets the 90/100 threshold for both criteria.
 
 Scores are **subjective agent assessments**, not independent student/teacher validation. A 90-point view has readable controls and mathematical explanation, identifiable reference/current states, intentional framing, and no clipping or label collisions that obscure the lesson. Minor depth occlusion is acceptable when a labeled inset and numeric summary preserve the information.
 
@@ -40,13 +40,13 @@ Regenerate early-scene screenshots with `tests/visual-labs.browser.cjs` and bowl
 
 | Stop | Perspective / reference | Reverse / hidden | Overhead / mixed | Phone |
 | --- | --- | --- | --- | --- |
-| Build a dimension | [94/95](dimensions-ladder-perspective.png) | [93/94](dimensions-ladder-reverse.png) | [92/93](dimensions-ladder-overhead.png) | [93/95](dimensions-ladder-phone.png) |
-| A visitor to Flatland | [94/96](dimensions-slice-perspective.png) | [93/95](dimensions-slice-reverse.png) | [92/95](dimensions-slice-overhead.png) | [93/96](dimensions-slice-phone.png) |
-| A shadow forgets something | [93/96](dimensions-shadow-perspective.png) | [93/96](dimensions-shadow-reverse.png) | [91/94](dimensions-shadow-overhead.png) | [93/96](dimensions-shadow-phone.png) |
-| Turn in a direction you cannot point | [95/96](dimensions-tesseract-perspective.png) | [94/95](dimensions-tesseract-reverse.png) | [93/94](dimensions-tesseract-overhead.png) | [93/95](dimensions-tesseract-phone.png) |
-| Open the box. Then open the next box. | [93/94](dimensions-net-perspective.png) | [92/93](dimensions-net-reverse.png) | [91/92](dimensions-net-overhead.png) | [92/94](dimensions-net-phone.png) |
-| A 4D visitor to our world | [92/95](dimensions-hypersphere-perspective.png) | [92/95](dimensions-hypersphere-reverse.png) | [91/94](dimensions-hypersphere-overhead.png) | [92/95](dimensions-hypersphere-phone.png) |
-| Six dimensions can taste like a smoothie | [92/95](dimensions-features-reference.png) | [93/96](dimensions-features-hidden.png) | [94/96](dimensions-features-mixed.png) | [92/95](dimensions-features-phone.png) |
-| The extra-direction trick | [94/95](dimensions-escape-perspective.png) | [93/94](dimensions-escape-reverse.png) | [92/94](dimensions-escape-overhead.png) | [93/95](dimensions-escape-phone.png) |
+| A dimension is a new freedom | [94/97](dimensions-ladder-perspective.png) | [93/96](dimensions-ladder-reverse.png) | [92/95](dimensions-ladder-overhead.png) | [93/96](dimensions-ladder-phone.png) |
+| An apparent transformation can be a slice | [94/97](dimensions-slice-perspective.png) | [93/96](dimensions-slice-reverse.png) | [92/96](dimensions-slice-overhead.png) | [93/96](dimensions-slice-phone.png) |
+| A shadow loses an address | [93/97](dimensions-shadow-perspective.png) | [93/97](dimensions-shadow-reverse.png) | [91/96](dimensions-shadow-overhead.png) | [93/97](dimensions-shadow-phone.png) |
+| Turn two coordinates; preserve the object | [95/98](dimensions-tesseract-perspective.png) | [94/97](dimensions-tesseract-reverse.png) | [93/97](dimensions-tesseract-overhead.png) | [93/96](dimensions-tesseract-phone.png) |
+| The boundary has one fewer freedom | [93/96](dimensions-net-perspective.png) | [92/95](dimensions-net-reverse.png) | [91/94](dimensions-net-overhead.png) | [92/95](dimensions-net-phone.png) |
+| The same budget, one dimension higher | [92/97](dimensions-hypersphere-perspective.png) | [92/97](dimensions-hypersphere-reverse.png) | [91/96](dimensions-hypersphere-overhead.png) | [92/96](dimensions-hypersphere-phone.png) |
+| A recipe is a point. An error is a height. | [93/97](dimensions-features-reference.png) | [94/98](dimensions-features-hidden.png) | [95/98](dimensions-features-mixed.png) | [92/97](dimensions-features-phone.png) |
+| A barrier depends on the allowed space | [94/97](dimensions-escape-perspective.png) | [93/97](dimensions-escape-reverse.png) | [93/96](dimensions-escape-overhead.png) | [93/97](dimensions-escape-phone.png) |
 
-See [the bonus review notes](DIMENSIONS_REVIEW.md) for states, corrections, and validation.
+The refreshed review also includes eight expanded-reasoning phone views and four volume experiment states. See [the bonus review notes](DIMENSIONS_REVIEW.md) for scores, corrections, and validation.

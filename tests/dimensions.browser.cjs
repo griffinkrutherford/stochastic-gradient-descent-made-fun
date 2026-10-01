@@ -48,6 +48,46 @@ const path = require('node:path');
         await page.locator('#dim-tesseract-canvas').scrollIntoViewIfNeeded();await page.waitForFunction(()=>document.getElementById('dim-tesseract-summary').textContent.includes('discards w'));
         await page.locator('#dim-features').getByRole('button',{name:'Reset all six coordinates'}).click();
         await page.locator('#dim-features-feature-2').fill('1');await page.waitForFunction(()=>document.getElementById('dim-features-summary').textContent.includes('points overlap'));
+        // The revealing experiments must change actual coordinates, not just explanatory captions.
+        await page.locator('#dim-ladder').getByRole('button',{name:'Start with overlapping copies'}).click();
+        await page.waitForFunction(()=>document.getElementById('dim-ladder-summary').textContent.includes('coincide geometrically'));
+        assert.equal(await page.locator('#dim-ladder-growth').inputValue(),'0');
+        await page.locator('#dim-ladder').getByRole('button',{name:'Pull them into a tesseract'}).click();
+        assert.equal(await page.locator('#dim-ladder-growth').inputValue(),'1');
+        await page.locator('#dim-tesseract').getByRole('button',{name:'Watch a quarter-turn'}).click();
+        await page.waitForFunction(()=>document.getElementById('dim-tesseract-summary').textContent.includes('(-1.00, 1.00, 1.00, 1.00)'));
+        assert((await page.locator('#dim-tesseract-summary').textContent()).includes('2.00 to 2.00'));
+        await page.locator('#dim-hypersphere').getByRole('button',{name:'Radius 0.8; volume 0.512'}).click();
+        await page.waitForFunction(()=>document.getElementById('dim-hypersphere-summary').textContent.includes('51.2%'));
+        await page.locator('#dim-features').getByRole('button',{name:'Try six nonzero coordinates'}).click();
+        await page.locator('#dim-features').getByRole('button',{name:'Move every knob 25% toward the reference'}).click();
+        assert(Math.abs(Number(await page.locator('#dim-features-feature-0').inputValue())-.525)<1e-12);
+        await page.locator('#dim-features').getByRole('button',{name:'Hide a crunch-only difference'}).click();
+        await page.locator('#dim-features').getByRole('button',{name:'Move every knob 25% toward the reference'}).click();
+        await page.waitForFunction(()=>document.querySelector('.dim-budget-total').textContent.includes('Last step: 0.5000 → 0.2813'));
+        assert((await page.locator('#dim-features-summary').textContent()).includes('points overlap'));
+        await page.locator('#dim-features-x').selectOption('2');await page.locator('#dim-features-y').selectOption('2');
+        await page.waitForFunction(()=>document.querySelector('.dim-budget-total').textContent.includes('hidden contribution 0.00'));
+        await page.locator('#dim-tesseract .dim-prediction button').first().click();
+        assert((await page.locator('#dim-tesseract-prediction-feedback').textContent()).includes('Compare that prediction'));
+        await page.locator('#dim-tesseract .dim-prediction button').last().click();
+        assert((await page.locator('#dim-tesseract-prediction-feedback').textContent()).includes('That follows from the geometry'));
+        for(const [value,text] of [['3','72.9%'],['100','0.0027%']]) {
+            await page.locator('#dim-volume-dimension').fill(value);assert((await page.locator('#dim-volume-summary').textContent()).includes(text));
+        }
+        await page.locator('#dim-volume').screenshot({path:path.join(out,'dimensions-volume-100.png')});
+        await page.locator('#dim-volume-dimension').fill('3');await page.locator('#dim-volume').screenshot({path:path.join(out,'dimensions-volume-3.png')});
+        await page.locator('#dim-volume-dimension').fill('10');await page.locator('#dim-volume').screenshot({path:path.join(out,'dimensions-volume-10.png')});
+        await page.locator('#dim-escape').getByRole('button',{name:'Pause above the ink crossing'}).click();
+        assert(Math.abs(Number(await page.locator('#dim-escape-progress').inputValue())-(.3+.4*.85/1.8))<1e-12);
+        await page.setViewportSize({width:390,height:844});await page.locator('#dim-volume').screenshot({path:path.join(out,'dimensions-volume-phone.png')});
+        for(const kind of ['ladder','slice','shadow','tesseract','net','hypersphere','features','escape']) {
+            await page.locator(`#dim-${kind} .dim-reasoning summary`).click();
+            assert(await page.locator(`#dim-${kind} .dim-reasoning`).evaluate(el=>el.open));
+            await page.locator(`#dim-${kind}`).screenshot({path:path.join(out,`dimensions-${kind}-reasoning-phone.png`)});
+            await page.locator(`#dim-${kind} .dim-reasoning summary`).click();
+        }
+        await page.setViewportSize({width:1440,height:1100});
         // Returning from the bonus must preserve lesson drafts and shared widget identities.
         await page.locator('label[for="mode-algebra"]').click();await page.locator('#practice-input-1').fill('preserve my draft');
         for(const version of ['dimensions','statistics','modeling','dimensions','algebra']) {
@@ -58,12 +98,13 @@ const path = require('node:path');
         await page.locator('#mode-modeling').focus();await page.keyboard.press('ArrowRight');assert(await page.locator('#mode-dimensions').isChecked());
         for(const width of [1440,768,390,320]) {await page.setViewportSize({width,height:900});assert(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth),'overflow at '+width);}
         await page.setViewportSize({width:1440,height:1100});const animated=page.locator('#dim-tesseract-canvas');await animated.scrollIntoViewIfNeeded();
+        const orbit=page.locator('#dim-tesseract [data-dim-action="orbit"]');if(await orbit.getAttribute('aria-pressed')==='false')await orbit.click();
         await page.locator('#shared-animations-toggle').click();await animated.scrollIntoViewIfNeeded();await page.waitForTimeout(100);
-        const moving=await animated.evaluate(e=>e.toDataURL());await page.waitForTimeout(180);assert.notEqual(await animated.evaluate(e=>e.toDataURL()),moving);
+        const moving=await animated.evaluate(e=>e.toDataURL());await page.waitForTimeout(180);assert((await animated.evaluate(e=>e.toDataURL()))!==moving,'global play rotates the enabled turntable');
         await page.locator('#shared-animations-toggle').click();await animated.scrollIntoViewIfNeeded();await page.waitForTimeout(80);
         const stopped=await animated.evaluate(e=>e.toDataURL());await page.waitForTimeout(180);assert.equal(await animated.evaluate(e=>e.toDataURL()),stopped);
         await page.emulateMedia({media:'print'});assert.equal(await page.locator('.dim-stage:visible').count(),0);assert(await page.locator('#dimensions-title').isVisible());
         assert.deepEqual(errors,[]);
-        console.log('PASS: fifth-tab deep link, eight studios, known geometry, camera controls, pause/reduced motion, lesson round trips, mobile and print. 32 captures await manual aesthetics/interpretability grading.');
+        console.log('PASS: fifth-tab deep link, eight studios, known geometry, camera controls, pause/reduced motion, lesson round trips, mobile and print. 44 captures await manual aesthetics/interpretability grading.');
     } finally {await browser.close();}
 })().catch(error=>{console.error(error);process.exitCode=1});

@@ -6,37 +6,13 @@
     const tau = Math.PI * 2, scenes = [], cube = C.hypercube(3), hypercube = C.hypercube(4);
     const clamp = (x,a,b) => Math.max(a,Math.min(b,x)), number = (x,d=2) => Number(x).toFixed(d);
     let active = document.body.dataset.worksheetMode === 'dimensions';
-    const stops = [
-        ['ladder','Build a dimension','A point becomes a line. Slide the line sideways: a square. Lift the square: a cube. Now repeat the rule in a fourth independent direction.',
-            'The fourth direction is w, independent of x, y, and z. We project it into a 3D viewer and then onto your 2D screen; the picture is not the full object.',
-            'Predict it: if every old corner gets a partner, how many corners would a 5D cube have?'],
-        ['slice','A visitor to Flatland','Imagine living on a perfectly flat sheet. A ball passes through your world. You never see the ball all at once—only a circle that appears, grows, and shrinks.',
-            'This is a section of a solid unit ball at z = a. Its circular boundary has radius √(1 − a²); the section includes the disk inside it. Beyond |a| = 1, there is no intersection.',
-            'Try it: move the sheet from −1.2 to +1.2. Does a disappearing slice mean the whole ball disappeared?'],
-        ['shadow','A shadow forgets something','Two corners can live at different depths and still land on exactly the same spot in a shadow. Move the cube and compare the 3D object with its flattened view.',
-            'The right-hand diagram uses the orthographic projection (x, y, z) → (x, y). Unlike a slice, a projection combines contributions from the whole object. The 3D viewer adds ordinary screen perspective.',
-            'Try it: at 0°, which differently colored corners overlap in the shadow? Can one shadow determine the whole object?'],
-        ['tesseract','Turn in a direction you cannot point','Meet a tesseract: the 4D cousin of a cube. Rotate in x–w, y–w, or z–w. The drawing changes dramatically; the shape’s connections stay exactly the same.',
-            'First: a genuine 4D rotation. Next: a 4D-to-3D projection. Finally: this 3D camera draws onto the screen. Crossing edges need not meet in 4D. Smaller-looking cubes are projection effects, not cubes physically nested inside one another.',
-            'Try it: switch to an orthographic 4D projection at 0°. The matching w layers overlap; the missing direction has been discarded.'],
-        ['net','Open the box. Then open the next box.','A cube unfolds into six squares on a sheet. A tesseract’s boundary unfolds into eight cubes in ordinary 3D space. Its faces are rooms!',
-            'These are nets of the boundaries, not projections of the solids. Separating the pieces is an exploded view for inspection; the gap slider does not simulate the 4D folding motion.',
-            'Try it: close the gaps. Why does the net of a 4D object need three dimensions rather than two?'],
-        ['hypersphere','A 4D visitor to our world','Repeat the Flatland story one dimension higher. A solid 4D ball meets our w = constant space as an ordinary 3D ball: tiny, enormous, tiny, then gone.',
-            'For x² + y² + z² + w² ≤ 1, fixing w = a gives a solid 3D ball with radius √(1 − a²). Dots illustrate points inside that ball; the wire boundary is not the whole volume. This is a mathematical slicing model, not a physical visitor.',
-            'Predict it: at w = 0.6, how large is the radius? Compare this to the circle at z = 0.6 in Flatland.'],
-        ['features','Six dimensions can taste like a smoothie','A coordinate need not be a direction in a room. Give your imaginary smoothie six independently adjustable scores. Two coordinates make a little map. The other four still matter.',
-            'These are six normalized toy features, not measured taste data. The radar chart encodes six values on a 2D diagram; it is not a literal view of 6D geometry. The distance weights all six features equally.',
-            'Try it: keep sweetness and sourness at zero; change only crunch. Two points stay together in the map, but their full 6D distance grows.'],
-        ['escape','The extra-direction trick','A Flatlander is stuck inside a closed ink boundary. You can lift them above the sheet, carry them across, and set them down outside—without crossing the ink.',
-            'The ink is a one-dimensional boundary in the z = 0 sheet, not a tall wall. This actual 3D path illustrates how an extra direction can bypass a lower-dimensional enclosure. The 4D room analogy is a thought experiment, not a travel method.',
-            'Try it: pause at the crossing. Which coordinate makes the escape possible? If z had to stay zero, what would change?']
-    ];
+    const stories = window.DimensionsStories;
+    const stops = Object.entries(stories).map(([kind, story]) => [kind, story.title, story.intro, story.limit, story.prompt]);
     function makeScene([kind,title,intro,note,prompt], index) {
         const section = document.createElement('section');
         section.id = `dim-${kind}`; section.className = 'dim-card'; section.style.setProperty('--dim-color',colors[index]);
         section.setAttribute('aria-labelledby',`dim-${kind}-title`);
-        section.innerHTML = `<div class="dim-kicker">${String(index+1).padStart(2,'0')} / 08 · ${kind === 'features' ? 'Hidden coordinates' : 'A new way to see'}</div><h3 id="dim-${kind}-title">${title}</h3><p>${intro}</p><div class="dim-stage"><canvas id="dim-${kind}-canvas" tabindex="0" role="img" aria-label="${title}. The legend, controls, and summary describe the diagram. Arrow keys rotate, plus and minus zoom, Home resets."></canvas></div><div class="dim-legend"></div><div class="dim-controls"></div><div class="dim-views"></div><p id="dim-${kind}-summary" class="dim-summary" aria-live="polite"></p><p class="dim-note">${note}</p><p class="dim-prompt">${prompt}</p>`;
+        section.innerHTML = `<div class="dim-kicker">${String(index+1).padStart(2,'0')} / 08 · ${kind === 'features' ? 'Hidden coordinates' : 'A new way to see'}</div><h3 id="dim-${kind}-title">${title}</h3><p>${intro}</p><p class="dim-principle">${stories[kind].principle}</p><div class="dim-stage"><canvas id="dim-${kind}-canvas" tabindex="0" role="img" aria-label="${title}. The legend, controls, and summary describe the diagram. Arrow keys rotate, plus and minus zoom, Home resets."></canvas></div><div class="dim-legend"></div><div class="dim-controls"></div><div class="dim-demos" aria-label="Revealing experiments"></div><div class="dim-views"></div><p id="dim-${kind}-summary" class="dim-summary" aria-live="polite"></p><p class="dim-note">${note}</p><p class="dim-prompt">${prompt}</p>`;
         root.appendChild(section);
         const s = { kind, index, section, canvas: section.querySelector('canvas'), ctx: section.querySelector('canvas').getContext('2d'), controls: section.querySelector('.dim-controls'), state: {}, yaw: -.65, pitch: .45, zoom: 1, orbit: true, visible: false, dirty: true, labels: [], lastSummary: '' };
         const views=section.querySelector('.dim-views');
@@ -61,12 +37,25 @@
         });
         new IntersectionObserver(entries=>{s.visible=entries[0].isIntersecting;s.dirty=true;},{rootMargin:'80px'}).observe(s.canvas);
         new ResizeObserver(()=>{s.dirty=true}).observe(s.canvas);
+        const story = stories[kind];
+        const argument = document.createElement('details'); argument.className = 'dim-reasoning';
+        argument.innerHTML = '<summary>Follow the reasoning</summary><ol>' + story.reasoning.map(([title, text]) => `<li><strong>${title}</strong><p>${text}</p></li>`).join('') + '</ol>';
+        section.append(argument);
+        const prediction = document.createElement('fieldset'); prediction.className = 'dim-prediction';
+        const question = document.createElement('legend'); question.textContent = 'Pause and predict · ' + story.quiz[0]; prediction.append(question);
+        const feedback = document.createElement('p'); feedback.id = `dim-${kind}-prediction-feedback`; feedback.className = 'dim-prediction-feedback'; feedback.setAttribute('aria-live', 'polite');
+        story.quiz[1].forEach((answer, index) => {
+            const button = document.createElement('button'); button.type = 'button'; button.textContent = answer;
+            button.addEventListener('click', () => { prediction.querySelectorAll('button').forEach(b => b.setAttribute('aria-pressed', 'false')); button.setAttribute('aria-pressed', 'true'); feedback.textContent = (index === story.quiz[2] ? 'That follows from the geometry. ' : 'Compare that prediction with the experiment. ') + story.quiz[3]; });
+            button.setAttribute('aria-pressed', 'false'); prediction.append(button);
+        });
+        prediction.append(feedback); section.querySelector('.dim-controls').before(prediction);
         scenes.push(s);return s;
     }
     function slider(s,key,label,min,max,step,value) {
         s.state[key]=value; const id=`dim-${s.kind}-${key}`, el=document.createElement('label');
         el.htmlFor=id;el.innerHTML=`<span>${label} · <output id="${id}-value">${value}</output></span><input id="${id}" type="range" min="${min}" max="${max}" step="${step}" value="${value}" aria-describedby="dim-${s.kind}-summary">`;
-        const input=el.querySelector('input');input.addEventListener('input',()=>{s.state[key]=Number(input.value);el.querySelector('output').value=input.value;s.dirty=true;});s.controls.append(el);
+        const input=el.querySelector('input');input.addEventListener('input',()=>{s.state[key]=Number(input.value);el.querySelector('output').value=input.step==='any'?number(Number(input.value),3):input.value;s.dirty=true;});s.controls.append(el);
     }
     function select(s,key,label,options,value) {
         s.state[key]=value;const el=document.createElement('label'),id=`dim-${s.kind}-${key}`;el.htmlFor=id;
@@ -78,7 +67,7 @@
     function summary(s,text) {if(s.lastSummary!==text){s.section.querySelector('.dim-summary').textContent=text;s.lastSummary=text;}}
     stops.forEach(makeScene);
     const find=kind=>scenes.find(s=>s.kind===kind);
-    slider(find('ladder'),'dimension','Independent directions',0,4,1,4);legend(find('ladder'),[['x direction',colors[0]],['y direction',colors[1]],['z direction',colors[2]],['w direction',colors[4]]]);
+    slider(find('ladder'),'dimension','Independent directions',0,4,1,4);slider(find('ladder'),'growth','Pull the matching copies apart',0,1,.01,1);legend(find('ladder'),[['x direction',colors[0]],['y direction',colors[1]],['z direction',colors[2]],['w direction',colors[4]]]);
     slider(find('slice'),'slice','Sheet position z',-1.2,1.2,.01,.3);legend(find('slice'),[['whole 3D ball','#94adff'],['flat sheet','#ffd477'],['intersection disk','#ff87c9']]);
     slider(find('shadow'),'angle','Cube rotation (degrees)',0,180,1,0);legend(find('shadow'),[['z = −1 corners','#68e4ff'],['z = +1 corners','#ff87c9'],['shadow edges (depth removed)','#ffd477']]);
     const t=find('tesseract');slider(t,'angle','4D rotation (degrees)',0,360,1,28);
@@ -87,13 +76,36 @@
     select(t,'cell','Highlight a boundary cell',[['all','Both w layers'],['-1','w = −1 cube'],['1','w = +1 cube']],'all');
     legend(t,[['original w = −1 layer','#68e4ff'],['original w = +1 layer','#ff87c9'],['edges in the original w direction','#ffd477']]);
     slider(find('net'),'gap','Separate the cells',0,1,.01,.15);legend(find('net'),[['left: six square faces','#68e4ff'],['right: eight cube cells','#ffd477'],...['center','−x','+x','−y','+y','−z','+z','next +z'].map((label,i)=>[`Cell ${i+1}: ${label}`,colors[i]])]);
-    slider(find('hypersphere'),'slice','Our space’s position w',-1.2,1.2,.01,.4);legend(find('hypersphere'),[['unit-radius reference','#94adff'],['points in the 3D slice','#69efc0'],['slices along w','#ffd477']]);
+    slider(find('hypersphere'),'slice','Our space’s position w',-1.2,1.2,.01,.4);legend(find('hypersphere'),[['largest possible 3D section','#94adff'],['points in the 3D slice','#69efc0'],['slices along w','#ffd477']]);
     const features=find('features');features.state.values=[0,0,0,0,0,0];
     const names=['Sweetness','Sourness','Crunch','Warmth','Fizz','Aroma'];
-    names.forEach((name,i)=>{slider(features,`feature-${i}`,name,-1,1,.05,0);const e=features.controls.lastElementChild;e.style.setProperty('--dim-color',colors[i]);e.querySelector('input').addEventListener('input',event=>{features.state.values[i]=Number(event.target.value)});});
+    names.forEach((name,i)=>{slider(features,`feature-${i}`,name,-1,1,'any',0);const e=features.controls.lastElementChild;e.style.setProperty('--dim-color',colors[i]);e.querySelector('input').addEventListener('input',event=>{features.state.values[i]=Number(event.target.value);delete features.state.lastStep});});
     select(features,'x','Map horizontal axis',names.map((n,i)=>[String(i),n]),'0');select(features,'y','Map vertical axis',names.map((n,i)=>[String(i),n]),'1');
     legend(features,[['your smoothie','#ff9479'],['reference: all six scores are zero','#68e4ff']]);
-    slider(find('escape'),'progress','Lift → travel → land',0,1,.01,.5);legend(find('escape'),[['ink boundary at z = 0','#ff9479'],['traveler above the sheet','#ffd477'],['landing place outside','#69efc0']]);
+    slider(find('escape'),'progress','Lift → travel → land',0,1,'any',.5);legend(find('escape'),[['ink boundary at z = 0','#ff9479'],['traveler above the sheet','#ffd477'],['landing place outside','#69efc0']]);
+
+    function preset(s, values) {
+        for (const [key, value] of Object.entries(values)) {
+            if (key === 'values') {
+                value.forEach((v,i) => { const input=s.controls.querySelector(`#dim-features-feature-${i}`); input.value=String(v); input.dispatchEvent(new Event('input')); });
+            } else {
+                const input=s.controls.querySelector(`#dim-${s.kind}-${key}`); input.value=String(value); input.dispatchEvent(new Event(input.tagName === 'SELECT' ? 'change' : 'input'));
+            }
+        }
+        s.orbit=false; const turntable=s.section.querySelector('[data-dim-action="orbit"]');
+        if(turntable){turntable.textContent='Turntable off';turntable.setAttribute('aria-pressed','false');}
+        s.yaw=-.65;s.pitch=.45;s.zoom=1;s.dirty=true;
+    }
+    scenes.forEach(s => stories[s.kind].demos.forEach(([label, values]) => {
+        const button=document.createElement('button'); button.type='button';button.textContent=label;button.dataset.dimDemo='true';
+        button.addEventListener('click',()=>preset(s,values));s.section.querySelector('.dim-demos').append(button);
+    }));
+    const budget=document.createElement('div');budget.className='dim-budget';budget.setAttribute('aria-label','Squared distance contributions from all six coordinates');
+    budget.innerHTML='<h4>Where did the squared distance go?</h4>'+names.map((name,i)=>`<div class="dim-budget-row"><span>${name}</span><span class="dim-budget-track"><span data-budget-bar="${i}" style="--budget-color:${colors[i]}"></span></span><output data-budget-value="${i}">0.00</output></div>`).join('')+'<p class="dim-budget-total"></p>';
+    features.section.querySelector('.dim-summary').after(budget);
+    const improve=document.createElement('button');improve.type='button';improve.textContent='Move every knob 25% toward the reference';improve.dataset.dimAction='improve';
+    improve.addEventListener('click',()=>{const before=C.distanceBudget(features.state.values,Number(features.state.x),Number(features.state.y));preset(features,{values:C.recipeStep(features.state.values)});features.state.lastStep=before.loss;});
+    features.section.querySelector('.dim-demos').append(improve);
 
     function begin(s) {
         const rect=s.canvas.getBoundingClientRect(), dpr=Math.min(window.devicePixelRatio||1,2),W=rect.width,H=rect.height;
@@ -131,10 +143,10 @@
         for(let j=0;j<8;j++){const phi=j*Math.PI/8,points=Array.from({length:65},(_,i)=>project([r*Math.sin(i*tau/64)*Math.cos(phi),r*Math.sin(i*tau/64)*Math.sin(phi),r*Math.cos(i*tau/64)]));for(let i=0;i<64;i++)line(s,points[i],points[i+1],color+'90',1.2);}
     }
     function renderLadder(s,W,H) {
-        const n=s.state.dimension,data=C.hypercube(n),points=data.vertices.map(p=>[p[0]||0,p[1]||0,p[2]||0,p[3]||0]).map(p=>C.project4(p,4));
+        const n=s.state.dimension,data=C.hypercube(n),growth=s.state.growth,points=data.vertices.map(p=>p.map((v,i)=>i===n-1?v*growth:v)).map(p=>[p[0]||0,p[1]||0,p[2]||0,p[3]||0]).map(p=>C.project4(p,4));
         const project=camera(s,[...points,...bounds(1.1)],{x:0,y:0,w:W,h:H});wire(s,points,data.edges,project,axis=>colors[axis===3?4:axis]);
         const name=['point','line segment','square','cube','tesseract'][n];text(s,`${n}D · ${name.toUpperCase()}`,18,28);
-        summary(s,`${n} independent ${n===1?'direction':'directions'} → ${data.vertices.length} ${data.vertices.length===1?'corner':'corners'} and ${data.edges.length} edges. ${n===0?'A point has no extent.':`Adding a direction makes two copies and joins matching corners. Corners = 2^${n} = ${2**n}.`}${n===4?' The gold connectors are edges along w, not a fifth direction.':''}`);
+        summary(s,`${n} independent ${n===1?'direction':'directions'} → ${data.vertices.length} ${data.vertices.length===1?'corner':'corners'} and ${data.edges.length} edges. ${n===0?'A point has no extent.':`Adding a direction makes two copies and joins matching corners. Corners = 2^${n} = ${2**n}.`}${n===4?' The gold connectors are edges along w, not a fifth direction.':''} ${n>0?(growth===0?'The two labeled copies coincide geometrically at separation zero; pull them apart to complete the object.':`Newest-coordinate separation: ${number(2*growth)}.`):''}`);
     }
     function renderSlice(s,W,H) {
         const [a,b]=panels(W,H),z=s.state.slice,r=C.sliceRadius(z),project=camera(s,bounds(1.4),a);sphere(s,1,project,'#94adff');
@@ -158,20 +170,34 @@
         summary(s,`Cube rotation ${s.state.angle}°. Eight corners in 3D become ${distinct} distinct positions in the (x, y) shadow. ${distinct<8?'Blue and pink depth layers share positions: circles mark overlapping corners.':'The shadow separates these corners, but their z coordinates are still missing.'} A shadow is not a cross-section.`);
     }
     function renderTesseract(s,W,H) {
-        const axis=Number(s.state.plane),angle=s.state.angle*Math.PI/180,orthographic=s.state.projection==='orthographic';
-        const points=hypercube.vertices.map(p=>C.project4(C.rotate(p,axis,3,angle),4,orthographic)),project=camera(s,[...points,...bounds(1.5)],{x:0,y:0,w:W,h:H});
-        // Faces of the two original w layers, with the cross-w edges drawn separately.
+        const [view,inset]=panels(W,H),axis=Number(s.state.plane),angle=s.state.angle*Math.PI/180,orthographic=s.state.projection==='orthographic';
+        const rotated=hypercube.vertices.map(p=>C.rotate(p,axis,3,angle));
+        const points=rotated.map(p=>C.project4(p,4,orthographic)),project=camera(s,[...points,...bounds(1.5)],view);
         const faces=[];
         for(const w of [-1,1])for(let fixed=0;fixed<3;fixed++)for(const sign of [-1,1]){
             const axes=[0,1,2].filter(x=>x!==fixed),indices=[[-1,-1],[1,-1],[1,1],[-1,1]].map(pair=>hypercube.vertices.findIndex(p=>p[3]===w&&p[fixed]===sign&&p[axes[0]]===pair[0]&&p[axes[1]]===pair[1]));
-            faces.push({points:indices.map(i=>project(points[i])),color:w<0?'#68e4ff13':'#ff87c913'});
+            if(s.state.cell==='all'||w===Number(s.state.cell))faces.push({points:indices.map(i=>project(points[i])),color:w<0?'#68e4ff13':'#ff87c913'});
         }
         faces.sort((a,b)=>a.points.reduce((x,p)=>x+p[2],0)-b.points.reduce((x,p)=>x+p[2],0)).forEach(f=>fill(s,f.points,f.color));
         const edges=hypercube.edges.filter(([a,b])=>s.state.cell==='all'||(hypercube.vertices[a][3]===Number(s.state.cell)&&hypercube.vertices[b][3]===Number(s.state.cell)));
         edges.map(([a,b,dimension])=>({a:project(points[a]),b:project(points[b]),dimension,w:hypercube.vertices[a][3]})).sort((a,b)=>a.a[2]+a.b[2]-b.a[2]-b.b[2]).forEach(e=>line(s,e.a,e.b,e.dimension===3?'#ffd477':e.w<0?'#68e4ff':'#ff87c9',e.dimension===3?1.7:2.8));
         points.forEach((p,i)=>{if(s.state.cell==='all'||hypercube.vertices[i][3]===Number(s.state.cell))dot(s,project(p),hypercube.vertices[i][3]<0?'#68e4ff':'#ff87c9',4)});
-        text(s,`${['x','y','z'][axis]}–w ROTATION · ${s.state.angle}°`,18,28);
-        summary(s,`Always 16 vertices · 32 edges · 24 square faces · 8 cube cells. Rotation in ${['x','y','z'][axis]}–w: ${s.state.angle}°. ${orthographic?'Orthographic projection discards w; layers can overlap.':'Perspective projection uses (x, y, z) × 4 / (4 − w), after rotation.'} ${s.state.cell==='all'?'Both original w layers are visible.':`Highlighting the original w = ${s.state.cell} boundary cube; it still has 8 corners and 12 edges.`}`);
+        const trackedIndex=s.state.cell==='-1'?7:15,tracked=rotated[trackedIndex],before=hypercube.vertices[trackedIndex];
+        dot(s,project(points[trackedIndex]),'#ffffff',6);
+        const center=[inset.x+inset.w/2,inset.y+inset.h*.46],radius=Math.min(inset.w*.31,inset.h*.27),scale=radius/Math.sqrt(2);
+        text(s,'TRACK ONE CORNER',inset.x+inset.w/2,inset.y+25,'#ffffff',11,'center');
+        circle(s,center,radius,'#a5b7d5',false,true);
+        line(s,[center[0]-radius,center[1]],[center[0]+radius,center[1]],'#68e4ff80',1);
+        line(s,[center[0],center[1]-radius],[center[0],center[1]+radius],'#ffd47780',1);
+        const q=[center[0]+tracked[axis]*scale,center[1]-tracked[3]*scale],start=[center[0]+before[axis]*scale,center[1]-before[3]*scale];
+        line(s,center,q,'#ffffff',2);dot(s,start,'#7e8da9',3);dot(s,q,'#ffffff',5);
+        text(s,`${['x','y','z'][axis]} →`,center[0]+radius,inset.y+inset.h*.46+18,'#68e4ff',11,'right');
+        text(s,'w',center[0]+8,center[1]-radius*.55,'#ffd477',12);
+        text(s,`${['x','y','z'][axis]}² + w² = ${number(tracked[axis]**2+tracked[3]**2)}`,center[0],inset.y+inset.h-38,'#ffffff',12,'center');
+        text(s,'the other two coordinates stay fixed',center[0],inset.y+inset.h-18,'#b9c6da',W<500?10:11,'center');
+        text(s,`4D TURN → ${orthographic?'DROP w':'PERSPECTIVE'} → SCREEN`,view.x+14,view.y+27,'#dde8ff',W<500?10:11);
+        const lengths=hypercube.edges.map(([a,b])=>C.distance(rotated[a],rotated[b]));
+        summary(s,`Always 16 vertices · 32 edges · 24 square faces · 8 cube cells. Rotation in ${['x','y','z'][axis]}–w: ${s.state.angle}°. ${orthographic?'Orthographic projection discards w; layers can overlap.':'Perspective projection uses (x, y, z) × 4 / (4 − w), after rotation.'} Tracked corner: (${tracked.map(v=>number(v)).join(', ')}). Full 4D distance from origin = ${number(C.distance(tracked,[0,0,0,0]))}. All 32 actual edge lengths range from ${number(Math.min(...lengths))} to ${number(Math.max(...lengths))}; displayed lengths can differ. ${s.state.cell==='all'?'Both original w layers are visible.':`Highlighting the original w = ${s.state.cell} boundary cube.`}`);
     }
     function renderNet(s,W,H) {
         const [a,b]=panels(W,H),gap=s.state.gap,unit=Math.min(a.w*.14,a.h*.15),center=[a.x+a.w*.5,a.y+a.h*.59];
@@ -188,11 +214,11 @@
     function renderHypersphere(s,W,H) {
         const [a,b]=panels(W,H),w=s.state.slice,r=C.sliceRadius(w),project=camera(s,bounds(1.35),a);sphere(s,1,project,'#94adff');
         if(r!==null){sphere(s,r,project,'#69efc0');for(let i=0;i<260;i++){const z=1-2*(i+.5)/260,phi=i*2.399963,rr=r*Math.cbrt(((i*73)%260+.5)/260),radial=Math.sqrt(1-z*z);dot(s,project([rr*radial*Math.cos(phi),rr*radial*Math.sin(phi),rr*z]),colors[i%6],1.6);}}
-        text(s,'3D SECTION OF A 4D BALL',a.x+16,a.y+27,'#69efc0',11);
+        text(s,'A 3D SECTION · NOT THE WHOLE 4D BALL',a.x+16,a.y+27,'#69efc0',11);
         text(s,'SLICE SIZE ALONG w',b.x+b.w/2,b.y+27,'#ffd477',11,'center');
         const coordinates=[-1,-.5,0,.5,1],horizontal=true;
         coordinates.forEach((value,i)=>{const x=horizontal?b.x+b.w*(.13+i*.185):b.x+b.w/2,y=horizontal?b.y+b.h*.5:b.y+58+i*(b.h-98)/4,scale=horizontal?b.w*.063:Math.min(24,b.w*.12);circle(s,[x,y],scale*C.sliceRadius(value),colors[i],true);dot(s,[x,y],colors[i],1);text(s,number(value,1),x+(horizontal?0:scale+12),y+(horizontal?scale+22:4),'#e5ddf0',11,horizontal?'center':'left');});
-        summary(s,`Our slice is w = ${number(w)}. ${r===null?'No intersection: the 4D ball is beyond our slice.':`The visible solid 3D ball has radius √(1 − ${number(w)}²) = ${number(r)}.`} At w = 0 it reaches radius 1. This is the same slicing rule as Flatland, one dimension up; a fourth spatial coordinate is not time in this example.`);
+        summary(s,`Our slice is w = ${number(w)}. ${r===null?'No intersection: the 4D ball is beyond our slice.':`The visible solid 3D ball has radius √(1 − ${number(w)}²) = ${number(r)}. Its volume is ${(100*r**3).toFixed(1)}% of the central 3D section's volume.`} At w = 0 it reaches radius 1. This is the same slicing rule as Flatland, one dimension up; a fourth spatial coordinate is not time in this example.`);
     }
     function renderFeatures(s,W,H) {
         const [a,b]=panels(W,H),values=s.state.values,x=Number(s.state.x),y=Number(s.state.y),scale=Math.min(a.w*.33,a.h*.3),center=[a.x+a.w/2,a.y+a.h*.5];
@@ -206,18 +232,31 @@
         fill(s,polygon,'#ff94793a');polygon.forEach((p,i)=>line(s,p,polygon[(i+1)%6],colors[i],2.3));
         names.forEach((name,i)=>{const angle=-Math.PI/2+i*tau/6,p=[rc[0]+Math.cos(angle)*radius,rc[1]+Math.sin(angle)*radius];line(s,rc,p,colors[i]+'80',1);dot(s,polygon[i],colors[i],3);text(s,name,rc[0]+Math.cos(angle)*(radius+18),rc[1]+Math.sin(angle)*(radius+18)+4,colors[i],11,'center');});
         text(s,'SIX SCORES, ONE RECIPE',b.x+b.w/2,b.y+24,'#ff9479',11,'center');
-        const full=C.distance(values,[0,0,0,0,0,0]),map=Math.hypot(values[x],values[y]);
-        summary(s,`Coordinates: (${values.map(v=>number(v,1)).join(', ')}). Full 6D distance from the reference = ${number(full)}. Radar: center = −1, halfway = 0 (dashed cyan), rim = +1. ${x===y?`Both map axes show ${names[x]}, so this window displays only one independent feature.`:`The ${names[x].toLowerCase()}–${names[y].toLowerCase()} window shows distance ${number(map)}.`} ${full>0&&map===0?'The map points overlap even though the smoothies differ in hidden features!':'A two-feature map cannot show the entire six-feature difference.'}`);
+        const accounting=C.distanceBudget(values,x,y),full=Math.sqrt(accounting.total),map=Math.sqrt(accounting.visible);
+        budget.querySelectorAll('[data-budget-bar]').forEach((bar,i)=>{bar.style.width=`${accounting.squared[i]*100}%`;});
+        budget.querySelectorAll('[data-budget-value]').forEach((out,i)=>{out.value=number(accounting.squared[i]);});
+        budget.querySelector('.dim-budget-total').textContent=`Full distance² ${number(accounting.total)} = shown-coordinate contribution ${number(accounting.visible)} + hidden contribution ${number(accounting.hidden)}. Toy error L = ½ × ${number(accounting.total)} = ${number(accounting.loss,4)}.${s.state.lastStep!==undefined?` Last step: ${number(s.state.lastStep,4)} → ${number(accounting.loss,4)}.`:''}`;
+        summary(s,`Coordinates: (${values.map(v=>number(v,3)).join(', ')}). Full 6D distance from the reference = ${number(full)}. Radar: center = −1, halfway = 0 (dashed cyan), rim = +1. ${x===y?`Both map axes show ${names[x]}, so this window displays only one independent feature; its geometric diagonal is not an extra distance contribution.`:`The ${names[x].toLowerCase()}–${names[y].toLowerCase()} window shows distance ${number(map)}.`} ${full>0&&map===0?'The map points overlap even though the smoothies differ in hidden features!':'A two-feature map cannot show the entire six-feature difference.'}`);
     }
     function renderEscape(s,W,H) {
-        const p=C.bypass(s.state.progress),ground=[[-.85,0,-.85],[.85,0,-.85],[.85,0,.85],[-.85,0,.85]],project=camera(s,[...ground,[1.8,0,0],[0,1.2,0]],{x:0,y:0,w:W,h:H});
+        const p=C.bypass(s.state.progress),ground=[[-.85,0,-.85],[.85,0,-.85],[.85,0,.85],[-.85,0,.85]],rawPath=Array.from({length:81},(_,i)=>{const v=C.bypass(i/80);return [v[0],v[2],v[1]];}),project=camera(s,[...ground,...rawPath],{x:0,y:30,w:W,h:H-60});
         fill(s,ground.map(project),'#ff94791a');ground.forEach((v,i)=>line(s,project(v),project(ground[(i+1)%4]),'#ff9479',3));
-        const path=Array.from({length:81},(_,i)=>{const v=C.bypass(i/80);return project([v[0],v[2],v[1]])});for(let i=0;i<80;i++)line(s,path[i],path[i+1],'#ffd47775',1.6,true);
+        const path=rawPath.map(project);for(let i=0;i<80;i++)line(s,path[i],path[i+1],'#ffd47775',1.6,true);
         const point=project([p[0],p[2],p[1]]),foot=project([p[0],0,p[1]]);line(s,point,foot,'#69efc0',1.5,true);dot(s,foot,'#8cb5c0',3);circle(s,project([1.8,0,0]),9,'#69efc0',true);dot(s,point,'#ffd477',8);
         text(s,'INK BOUNDARY · z = 0 SHEET',18,28,'#ff9479',11);
         const phase=s.state.progress<.3?'LIFT':s.state.progress<.7?'TRAVEL ABOVE THE SHEET':'LAND OUTSIDE';text(s,phase,18,H-20,'#ffd477',13);
         summary(s,`${phase}: position (x, y, z) = (${p.map(v=>number(v)).join(', ')}). ${p[2]>0?'The traveler leaves the sheet: z is positive, so it can pass above the ink boundary.':p[0]===0?'The traveler starts inside the ink boundary on the sheet.':'The traveler is back on the sheet, beyond the boundary.'} The flat shadow can cross the ink while the actual 3D path never touches it.`);
     }
+    const volumeDimension=document.getElementById('dim-volume-dimension');
+    function updateVolume() {
+        const n=Number(volumeDimension.value),fraction=C.innerVolumeFraction(n),innerPercent=100*fraction;
+        document.getElementById('dim-volume-dimension-value').value=n;
+        document.getElementById('dim-volume-inner').style.flexGrow=fraction;
+        document.getElementById('dim-volume-shell').style.flexGrow=1-fraction;
+        document.getElementById('dim-volume-summary').textContent=`In ${n} dimensions: inner radius 0.9 contains ${innerPercent.toFixed(innerPercent<1?4:1)}% of the volume. The outer shell contains ${(100-innerPercent).toFixed(innerPercent<1?4:1)}%. Inner volume fraction = 0.9^${n}. The radius ratio stays fixed; only the dimension changes.`;
+        document.querySelector('.dim-volume-bar').setAttribute('aria-label',`Inner ball ${innerPercent.toFixed(4)} percent; outer shell ${(100-innerPercent).toFixed(4)} percent of volume in ${n} dimensions.`);
+    }
+    volumeDimension.addEventListener('input',updateVolume);updateVolume();
     const renderers={ladder:renderLadder,slice:renderSlice,shadow:renderShadow,tesseract:renderTesseract,net:renderNet,hypersphere:renderHypersphere,features:renderFeatures,escape:renderEscape};
     window.syncDimensions=mode=>{active=mode==='dimensions';scenes.forEach(s=>{s.dirty=true});};
     let last=performance.now();

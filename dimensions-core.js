@@ -30,6 +30,21 @@
         if (a.length !== b.length) throw new RangeError('Vectors must have matching dimensions.');
         return Math.hypot(...a.map((value, i) => value - b[i]));
     }
+    function distanceBudget(values, axisX, axisY) {
+        if (!Number.isInteger(axisX) || !Number.isInteger(axisY) || axisX < 0 || axisY < 0 || axisX >= values.length || axisY >= values.length) throw new RangeError('Choose valid coordinate indices.');
+        const squared = values.map(v => v * v), total = squared.reduce((a,b) => a + b, 0);
+        // Repeating an axis displays only one independent coordinate, not its contribution twice.
+        const visible = squared[axisX] + (axisX === axisY ? 0 : squared[axisY]);
+        return { squared, total, visible, hidden: Math.max(0, total - visible), loss: total / 2 };
+    }
+    function recipeStep(values, fraction = .25) {
+        if (!Number.isFinite(fraction) || fraction < 0 || fraction > 1) throw new RangeError('Use a fraction between zero and one.');
+        return values.map(v => (1 - fraction) * v);
+    }
+    function innerVolumeFraction(dimension, radius = .9) {
+        if (!Number.isInteger(dimension) || dimension < 1 || !Number.isFinite(radius) || radius < 0 || radius > 1) throw new RangeError('Use a positive integer dimension and a radius from zero to one.');
+        return radius ** dimension;
+    }
     function bypass(progress) {
         const p = Math.max(0, Math.min(1, progress));
         if (p < .3) return [0, 0, p / .3 * 1.2];
@@ -38,5 +53,5 @@
     }
     const cubeNet = [[0,0],[-1,0],[1,0],[0,-1],[0,1],[0,2]];
     const tesseractNet = [[0,0,0],[-1,0,0],[1,0,0],[0,-1,0],[0,1,0],[0,0,-1],[0,0,1],[0,0,2]];
-    return { hypercube, rotate, project4, sliceRadius, distance, bypass, cubeNet, tesseractNet };
+    return { hypercube, rotate, project4, sliceRadius, distance, distanceBudget, recipeStep, innerVolumeFraction, bypass, cubeNet, tesseractNet };
 });

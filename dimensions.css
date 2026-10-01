@@ -66,3 +66,47 @@ body[data-worksheet-mode="dimensions"] .mode-toggle input:checked + label { back
     #dimensions-worksheet :is(h2,h3,p,.dim-kicker,.dim-note,.dim-prompt,a) { color: black !important; }
     .dim-hero h2 span { -webkit-text-fill-color: black; background: none; }
 }
+/* Visual arguments: one principle, a revealing experiment, then optional depth. */
+.dim-principle { border-left: 3px solid var(--dim-color); padding: 10px 14px; background: #101827; color: #dff3ff !important; font-size: 16px; line-height: 1.55; margin: 18px 0; }
+.dim-demos { display: flex; flex-wrap: wrap; gap: 8px; margin: 18px 0; }
+.dim-demos button { background: #152536; border-color: #51758d; color: #d9f1ff; }
+.dim-reasoning { border: 1px solid #56657c; border-radius: 10px; background: #0d1524; margin-top: 20px; padding: 0 16px; }
+.dim-reasoning summary { cursor: pointer; padding: 14px 0; color: #d7eaff; font: 600 15px/1.6 system-ui,sans-serif; }
+.dim-reasoning ol { padding-left: 26px; margin: 8px 0 22px; }
+.dim-reasoning li { margin: 16px 0; padding-left: 6px; color: #c4d3e4; }
+.dim-reasoning strong { color: #ffe5a8; font-size: 17px; }
+.dim-reasoning p { color: #d5deed !important; font-size: 16px; line-height: 1.8; margin: 8px 0 16px; }
+.dim-prediction { border: 0; border-top: 1px solid #455b70; margin-top: 24px; padding: 18px 0 0; min-width: 0; }
+.dim-prediction legend { color: #f6dfad; font: 600 16px/1.6 system-ui,sans-serif; max-width: 100%; padding: 0 8px 0 0; }
+.dim-prediction button { display: inline-block; margin: 6px 8px 6px 0; text-align: left; max-width: 100%; white-space: normal; font-size: 13px; }
+.dim-prediction-feedback { color: #cde6f4 !important; font-size: 16px; line-height: 1.7; margin: 12px 0 0; }
+.dim-prediction-feedback:empty { display: none; }
+.dim-budget { margin-top: 18px; padding: 18px; border: 1px solid #45627a; border-radius: 10px; background: #0d1625; }
+.dim-budget h4 { color: #f1e7cf; font-size: 16px; margin: 0 0 18px; }
+.dim-budget-row { display: grid; grid-template-columns: 95px 1fr 55px; align-items: center; gap: 12px; margin: 12px 0; font: 13px/1.5 system-ui,sans-serif; color: #dce7f3; }
+.dim-budget-track { display: block; height: 9px; background: #28384d; border-radius: 6px; overflow: hidden; }
+.dim-budget-track > span { display: block; width: 0; height: 100%; background: var(--budget-color); }
+.dim-budget-row output { text-align: right; font-variant-numeric: tabular-nums; }
+.dim-budget-total { color: #dfedfb !important; font-size: 15px; line-height: 1.65; margin-top: 18px; }
+.dim-volume { margin: 30px 0; padding: 28px; border: 1px solid #6489a2; border-radius: 18px; background: #101b2a; }
+.dim-volume h3 { color: #a5f3df; font-size: clamp(22px,3vw,30px); margin: 16px 0; }
+.dim-volume > p { color: #dae5f2 !important; font-size: 17px; line-height: 1.8; }
+.dim-volume label { display: block; color: #e1f5ff; margin: 24px 0 14px; font: 600 15px/1.5 system-ui,sans-serif; }
+.dim-volume input { display: block; width: 100%; margin: 10px 0; accent-color: #80e4bd; }
+.dim-volume-bar { display: flex; height: 28px; margin: 20px 0; background: #eaaf6a; border-radius: 6px; overflow: hidden; }
+#dim-volume-inner { background: #79d9c3; flex-basis: 0; }
+#dim-volume-shell { background: #edb16b; flex-basis: 0; }
+.dim-volume-bar::after { content: ''; position: absolute; pointer-events: none; }
+#dim-tesseract-canvas { height: 460px; }
+@media(max-width:600px) {
+    #dim-tesseract-canvas { height: 530px; }
+    .dim-volume { padding: 20px 14px; }
+    .dim-reasoning { padding: 0 12px; }
+    .dim-reasoning p { font-size: 15px; }
+    .dim-budget { padding: 14px 10px; }
+    .dim-budget-row { grid-template-columns: 76px 1fr 45px; gap: 8px; font-size: 12px; }
+}
+@media print {
+    #dimensions-worksheet :is(.dim-demos,.dim-prediction button,.dim-volume label,.dim-volume-bar) { display: none; }
+    #dimensions-worksheet :is(.dim-principle,.dim-reasoning,.dim-volume,.dim-budget) { color: black !important; background: white; border-color: #777; }
+}

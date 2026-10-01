@@ -1022,7 +1022,7 @@
                 <br><br>
                 Here, we can see how we can perform math operations between word concepts in the way ChatGPT thinks. If we go by the coordinate pairs, we can calculate: Monarch = Queen - Woman.
                 <br><br>
-                Before we jump into four dimensions, it helps to think about <em>Flatland</em>, written by Edwin Abbott Abbott: a world where the inhabitants can only see two dimensions. Its class depictions are also a satire of the rigidity of Victorian-era social hierarchy. A 3D object passing through their world would look like a changing 2D slice or shadow, because they can only observe its projection into their space.
+                Before we jump into four dimensions, it helps to think about <em>Flatland</em>, written by Edwin Abbott Abbott: a world whose inhabitants live on a two-dimensional plane. Its class depictions are also a satire of the rigidity of Victorian-era social hierarchy. A 3D object passing through that plane creates a changing 2D section where the object meets it. A shadow is a different kind of view: a projection can merge points at different depths. The Beyond 3D bonus lets you experiment with both.
                 <div class="flatland-prelude-assets">
                     <img class="question-asset" src="assets/rob-hocking-math-flatland-projection-thumbnail.jpg" alt="Flatland projection illustration showing a higher-dimensional object as a lower-dimensional view">
                     <img class="question-asset" src="assets/inhabitants-flatland-class-critique.jpg" alt="Flatland inhabitants discussing how a higher-dimensional object appears in their two-dimensional world">
@@ -1539,18 +1539,28 @@
             <div class="dim-hero">
                 <div class="dim-kicker">Bonus expedition · no homework · just curiosity</div>
                 <h2 id="dimensions-title">One more direction.<span>A whole new world.</span></h2>
-                <p>We live in three spatial dimensions. Mathematics can go further. Borrow the eyes of a Flatlander, slice through an invisible world, and turn a cube in a direction your hands cannot point.</p>
-                <p class="dim-note">Eight interactive stops. Move the sliders, drag the diagrams, and follow the analogies. These are mathematical spaces and projections—not a claim that we can travel through extra physical dimensions.</p>
+                <p>We live in three spatial dimensions. Mathematics can go further. Start with a bead that gains one freedom. Follow what a slice reveals, what a projection hides, and what a rotation must preserve. Then use the same reasoning to understand many-coordinate models.</p>
+                <p class="dim-note">Eight visual arguments. Make a prediction, try a revealing experiment, and open the reasoning when you want the next layer. These are mathematical spaces and projections—not a claim that we can travel through extra physical dimensions.</p>
                 <nav class="dim-chips" aria-label="Beyond 3D stops">
                     <a href="#dim-ladder">01 · Build a dimension</a><a href="#dim-slice">02 · Flatland</a><a href="#dim-shadow">03 · Shadows</a><a href="#dim-tesseract">04 · The tesseract</a>
                     <a href="#dim-net">05 · Unfold it</a><a href="#dim-hypersphere">06 · A 4D visitor</a><a href="#dim-features">07 · Six coordinates</a><a href="#dim-escape">08 · The extra-direction trick</a>
                 </nav>
             </div>
             <div id="dimensions-labs"></div>
+            <section id="dim-volume" class="dim-volume" aria-labelledby="dim-volume-title">
+                <div class="dim-kicker">One surprise to take with you</div>
+                <h3 id="dim-volume-title">A thin shell can hold almost all the room.</h3>
+                <p>Keep a ball’s radius at 1. Mark the inner ball with radius 0.9. In a line, that inner region takes 90% of the length. In a disk, it takes 0.9² = 81% of the area. In a 3D ball, it takes 0.9³ = 72.9% of the volume. What should happen if there are more independent directions?</p>
+                <label for="dim-volume-dimension">Number of dimensions: <output id="dim-volume-dimension-value">3</output><input id="dim-volume-dimension" type="range" min="1" max="100" step="1" value="3"></label>
+                <div class="dim-volume-bar" role="img" aria-label="Share of ball volume in the radius-0.9 inner ball versus the outer shell"><span id="dim-volume-inner"></span><span id="dim-volume-shell"></span></div>
+                <div class="dim-legend"><span style="--swatch:#79d9c3">Inner ball: radius 0.9</span><span style="--swatch:#edb16b">Outer shell: final 10% of the radius</span></div>
+                <p id="dim-volume-summary" class="dim-summary" aria-live="polite"></p>
+                <details class="dim-reasoning"><summary>Why this scales as 0.9ⁿ</summary><p>Shrink each of n coordinates by the same factor r. An n-dimensional volume scales by r once for each independent coordinate: r × r × ⋯ × r = rⁿ. We compare two balls of the same dimension, so their shared volume constant cancels. No formula for the absolute volume is needed.</p><p>In 100 dimensions the inner 90% of the radius contains only about 0.0027% of the ball’s volume. Most of the volume is in the outer 10% of the radius. This is a statement about volume in Euclidean balls. It does not say every dataset is uniform in a ball, or that points lie exactly on its boundary.</p></details>
+            </section>
             <div class="dim-outro">
                 <h3>You do not have to picture everything to understand it.</h3>
                 <p>A slice reveals a section. A shadow forgets information. A net opens a boundary. Coordinates keep track of the whole object—even when a drawing cannot.</p>
-                <p>That is useful in AI, too: a model can work with hundreds of features without drawing a hundred-dimensional room. Geometry follows the coordinates; our pictures are carefully chosen windows.</p>
+                <p>That is useful in AI, too: a model can work with hundreds of features without drawing a hundred-dimensional room. The six-knob experiment already showed how error can improve in directions a 2D map hides. Geometry follows the coordinates; our pictures are carefully chosen windows.</p>
                 <p class="dim-note">Want to keep exploring? <a href="https://mathworld.wolfram.com/Tesseract.html">Tesseracts</a> · <a href="https://mathworld.wolfram.com/Hypersphere.html">Hyperspheres</a> · <a href="https://mathworld.wolfram.com/Hypercube.html">Hypercube counts</a> from Wolfram MathWorld.</p>
             </div>
         </section>
@@ -4222,6 +4232,7 @@
     <script src="modeling.js"></script>
     <script src="visual-labs.js"></script>
     <script src="dimensions-core.js"></script>
+    <script src="dimensions-stories.js"></script>
     <script src="dimensions.js"></script>
 </body>
 </html>
